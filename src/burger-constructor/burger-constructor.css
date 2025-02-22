@@ -1,0 +1,26 @@
+.burgerConstructor {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	justify-content: flex-end;
+}
+.myBurger {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	justify-content: center;
+	overflow-y: auto;
+}
+.total {
+	display: flex;
+	flex-direction: row;
+	gap: 40px;
+	justify-content: flex-end;
+	align-items: center;
+}
+.bragedItem {
+	display: flex;
+}
+.hidden {
+	visibility: hidden;
+}

@@ -12,14 +12,10 @@ import cheese from './img/cheese.png';
 import salad from './img/salad.png';
 import sp from './img/sp.png';
 import mineralRings from "./img/mineral rings.png";
+import { Ingredient } from '../types';
 
-export type IItem = {
-    img: string,
-    price: Number,
-    name: string
-}
 
-export const itemsBread: IItem[] = [{
+export const itemsBread: Ingredient[] = [{
     img: bun1, 
     price: 20,
     name: 'Краторная булка N- 200i'
@@ -29,7 +25,7 @@ export const itemsBread: IItem[] = [{
     name: 'Флуоресцентная булка К2 - В3'
 }];
 
-export const itemsSause: IItem[] = [{
+export const itemsSause: Ingredient[] = [{
     img: sauce2, 
     price: 30,
     name: 'Соус Spicy-X'
@@ -48,7 +44,7 @@ export const itemsSause: IItem[] = [{
 
 }];
 
-export const itemsFilling: IItem[] = [{
+export const itemsFilling: Ingredient[] = [{
     img: meat2,
     price: 300,
     name: 'Мясо бессмертных моллюсков Protostomia'
