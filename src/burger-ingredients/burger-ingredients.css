@@ -1,0 +1,60 @@
+.burgerIngredient {
+	display: flex;
+	flex-direction: column;
+	width: 600px;
+	height: 912px;
+	overflow: auto;
+}
+
+.tab {
+	display: flex;
+}
+
+.items {
+	display: flex;
+	flex-direction: column;
+}
+.itemCard {
+	display: flex;
+	flex-wrap: wrap;
+}
+.mainMenu {
+	display: flex;
+	flex-direction: column;
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.cardImg {
+	width: 240px;
+	height: 120px;
+}
+.chapter {
+	display: flex;
+	flex-direction: column;
+}
+.cardsList {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.price {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: center;
+}
+.card {
+	display: flex;
+	flex-direction: column;
+	width: 272px;
+	height: 208px;
+	align-items: center;
+}
+.cardsList {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}

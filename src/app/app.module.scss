@@ -25,3 +25,8 @@
 		transform: rotate(360deg);
 	}
 }
+.app {
+	display: flex;
+	flex-direction: column;
+	min-width: 1240px;
+}

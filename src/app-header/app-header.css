@@ -1,0 +1,19 @@
+.appHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 88px;
+}
+
+.appHeaderLeft {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+	height: 56px;
+}
+
+.itemFlex {
+	display: flex;
+	align-items: center;
+}
