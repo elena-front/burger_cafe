@@ -20,7 +20,7 @@
 .mainMenu {
 	display: flex;
 	flex-direction: column;
-	overflow: scroll;
+	overflow-y: scroll;
 }
 ul {
 	list-style-type: none;
@@ -47,6 +47,7 @@ ul {
 	justify-content: center;
 }
 .card {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: 272px;
@@ -57,4 +58,8 @@ ul {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+}
+.counter {
+	position: absolute;
+	float: right;
 }
