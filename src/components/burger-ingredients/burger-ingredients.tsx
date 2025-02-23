@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
 	Tab,
 	CurrencyIcon,
 	Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import './burger-ingredients.css';
-import { itemsBread, itemsFilling, itemsSause } from '../../data';
 import { Ingredient } from '../../types';
-import { myBurger } from '../../data';
 
-type ListProps = {
+function List({
+	items,
+	selectedIds,
+}: {
 	items: Ingredient[];
-	selectedItems: Ingredient[];
-};
-
-function List({ items, selectedItems }: ListProps) {
+	selectedIds: string[];
+}) {
 	const listItems = items.map((item, index) => {
-		const count = selectedItems.filter(
-			(selectedItem) => item.name === selectedItem.name
+		const count = selectedIds.filter(
+			(selectedId) => item._id === selectedId
 		).length;
 
 		return (
@@ -26,7 +25,7 @@ function List({ items, selectedItems }: ListProps) {
 					<Counter count={count} size='default' extraClass='m-1 counter' />
 				)}
 
-				<img src={item.img} className='cardImg'></img>
+				<img src={item.image} className='cardImg'></img>
 				<div className='text text_type_digits-default price'>
 					<div>{item.price.toString()}</div>
 					<CurrencyIcon type='primary' />
@@ -38,40 +37,51 @@ function List({ items, selectedItems }: ListProps) {
 	return <ul className='cardsList pl-4 pt-6 pb-2'>{listItems}</ul>;
 }
 
-export const BurgerIngredients = () => {
-	const [current, setCurrent] = useState('Булки');
+export const BurgerIngredients = ({
+	items,
+	selectedIds,
+}: {
+	items: Ingredient[];
+	selectedIds: string[];
+}) => {
+	const [current, setCurrent] = useState('bun');
+	const types = [
+		{
+			value: 'bun',
+			title: 'Булки',
+		},
+		{
+			value: 'sauce',
+			title: 'Соусы',
+		},
+		{
+			value: 'main',
+			title: 'Начинки',
+		},
+	];
 
 	return (
 		<div className='burgerIngredient mt-10'>
 			<h1 className='text text_type_main-large mb-5'>Соберите бургер</h1>
-
 			<div className='tab'>
-				<Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
-					Булки
-				</Tab>
-				<Tab value='Соусы' active={current === 'Соусы'} onClick={setCurrent}>
-					Соусы
-				</Tab>
-				<Tab
-					value='Начинки'
-					active={current === 'Начинки'}
-					onClick={setCurrent}>
-					Начинки
-				</Tab>
+				{types.map((type) => (
+					<Tab
+						value={type.value}
+						active={current == type.value}
+						onClick={setCurrent}>
+						{type.title}
+					</Tab>
+				))}
 			</div>
 			<div className='mainMenu custom-scroll mt-10'>
-				<div className='chapter'>
-					<h2 className='text text_type_main-medium'>Булки</h2>
-					<List items={itemsBread} selectedItems={myBurger}></List>
-				</div>
-				<div className='chapter'>
-					<h2 className='text text_type_main-medium'>Соусы</h2>
-					<List items={itemsSause} selectedItems={myBurger}></List>
-				</div>
-				<div className='chapter'>
-					<h2 className='text text_type_main-medium'>Начинки</h2>
-					<List items={itemsFilling} selectedItems={myBurger}></List>
-				</div>
+				{types.map((type) => (
+					<div className='chapter'>
+						<h2 className='text text_type_main-medium'>{type.title}</h2>
+						<List
+							items={items.filter((item) => item.type === type.value)}
+							selectedIds={selectedIds}></List>
+					</div>
+				))}
 			</div>
 		</div>
 	);

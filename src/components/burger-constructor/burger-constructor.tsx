@@ -5,14 +5,9 @@ import {
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
-import { myBurger } from '../../data';
 import './burger-constructor.css';
 
-export const BurgerConstructor = ({
-	items = myBurger,
-}: {
-	items?: Ingredient[];
-}) => {
+export const BurgerConstructor = ({ items }: { items: Ingredient[] }) => {
 	const myBurgerItems = items.map((item, index) => {
 		const isFirst = index === 0;
 		const isLast = index === items.length - 1;
@@ -27,7 +22,7 @@ export const BurgerConstructor = ({
 					isLocked={isLocked}
 					text={item.name}
 					price={item.price}
-					thumbnail={item.img}
+					thumbnail={item.image}
 				/>
 			</li>
 		);
