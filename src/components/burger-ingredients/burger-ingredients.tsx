@@ -5,13 +5,9 @@ import {
 	Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import './burger-ingredients.css';
-import {
-	itemsBread,
-	itemsFilling,
-	itemsSause,
-} from './burger-ingredients-data';
-import { Ingredient } from '../types';
-import { myBurger } from '../burger-constructor/burger-constructor-data';
+import { itemsBread, itemsFilling, itemsSause } from '../../data';
+import { Ingredient } from '../../types';
+import { myBurger } from '../../data';
 
 type ListProps = {
 	items: Ingredient[];

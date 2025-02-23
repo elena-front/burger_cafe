@@ -5,7 +5,7 @@
 	align-items: center;
 }
 
-.appHeader__left {
+.appHeaderLeft {
 	display: flex;
 	flex-grow: 1;
 	flex-basis: 0;
@@ -13,28 +13,15 @@
 	justify-content: flex-start;
 }
 
-.appHeader__right {
+.appHeaderRight {
 	display: flex;
 	flex-grow: 1;
 	flex-basis: 0;
 	justify-content: flex-end;
 }
 
-.appHeader__item {
+.appHeaderItem {
 	display: flex;
 	gap: 8px;
 	padding: 20px;
-}
-
-.appHeaderLeft {
-	display: flex;
-	gap: 8px;
-	justify-content: center;
-	align-items: center;
-	height: 56px;
-}
-
-.itemFlex {
-	display: flex;
-	align-items: center;
 }

@@ -2,26 +2,26 @@ import {
 	ConstructorElement,
 	CurrencyIcon,
 	Button,
+	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient } from '../types';
-import { myBurger } from './burger-constructor-data';
+import { Ingredient } from '../../types';
+import { myBurger } from '../../data';
 import './burger-constructor.css';
-import drag from './img/drag.svg';
-
-type BurgerConstructorProps = {
-	items?: Ingredient[];
-};
 
 export const BurgerConstructor = ({
 	items = myBurger,
-}: BurgerConstructorProps) => {
+}: {
+	items?: Ingredient[];
+}) => {
 	const myBurgerItems = items.map((item, index) => {
 		const isFirst = index === 0;
 		const isLast = index === items.length - 1;
 		const isLocked = isFirst || isLast;
 		return (
 			<li key={index} className='constructorItem'>
-				<div className='dragIcon'>{!isLocked && <img src={drag}></img>}</div>
+				<div className='dragIcon'>
+					{!isLocked && <DragIcon type='primary' />}
+				</div>
 				<ConstructorElement
 					type={isFirst ? 'top' : isLast ? 'bottom' : undefined}
 					isLocked={isLocked}
