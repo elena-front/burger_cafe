@@ -31,15 +31,15 @@ function List({ items, selectedItems }: ListProps) {
 				)}
 
 				<img src={item.img} className='cardImg'></img>
-				<p className='text text_type_main-small price'>
+				<div className='text text_type_digits-default price'>
 					<div>{item.price.toString()}</div>
 					<CurrencyIcon type='primary' />
-				</p>
-				<p className='text text_type_main-small'>{item.name}</p>
+				</div>
+				<div className='text text_type_main-default'>{item.name}</div>
 			</li>
 		);
 	});
-	return <ul className='cardsList'>{listItems}</ul>;
+	return <ul className='cardsList pl-4 pt-6 pb-2'>{listItems}</ul>;
 }
 
 export const BurgerIngredients = () => {
@@ -47,7 +47,7 @@ export const BurgerIngredients = () => {
 
 	return (
 		<div className='burgerIngredient mt-10'>
-			<h1 className='text text_type_main-large mt-5'>Соберите бургер</h1>
+			<h1 className='text text_type_main-large mb-5'>Соберите бургер</h1>
 
 			<div className='tab'>
 				<Tab value='Булки' active={current === 'Булки'} onClick={setCurrent}>
@@ -63,17 +63,16 @@ export const BurgerIngredients = () => {
 					Начинки
 				</Tab>
 			</div>
-
-			<div className='mainMenu custom-scroll'>
-				<div className='chapter mt-10'>
+			<div className='mainMenu custom-scroll mt-10'>
+				<div className='chapter'>
 					<h2 className='text text_type_main-medium'>Булки</h2>
 					<List items={itemsBread} selectedItems={myBurger}></List>
 				</div>
-				<div className='chapter mt-10'>
+				<div className='chapter'>
 					<h2 className='text text_type_main-medium'>Соусы</h2>
 					<List items={itemsSause} selectedItems={myBurger}></List>
 				</div>
-				<div className='chapter mt-10'>
+				<div className='chapter'>
 					<h2 className='text text_type_main-medium'>Начинки</h2>
 					<List items={itemsFilling} selectedItems={myBurger}></List>
 				</div>

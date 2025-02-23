@@ -20,8 +20,8 @@ export const BurgerConstructor = ({
 		const isLast = index === items.length - 1;
 		const isLocked = isFirst || isLast;
 		return (
-			<li className='bragedItem'>
-				<img src={drag} className={isLocked ? 'hidden' : ''}></img>
+			<li key={index} className='constructorItem'>
+				<div className='dragIcon'>{!isLocked && <img src={drag}></img>}</div>
 				<ConstructorElement
 					type={isFirst ? 'top' : isLast ? 'bottom' : undefined}
 					isLocked={isLocked}
@@ -34,12 +34,12 @@ export const BurgerConstructor = ({
 	});
 
 	return (
-		<div className='burgerConstructor pb-12 pt-12'>
-			<ul className='myBurger'>{myBurgerItems}</ul>
-			<div className='total'>
-				<div>
+		<div className='burgerConstructor'>
+			<ul className='myBurger custom-scroll'>{myBurgerItems}</ul>
+			<div className='footer'>
+				<div className='total'>
 					<span className='text text_type_main-large pr-2'>610</span>
-					<CurrencyIcon type='primary' />
+					<CurrencyIcon type='primary' className='currencyIcon' />
 				</div>
 				<Button htmlType='button' type='primary' size='large'>
 					Оформить заказ

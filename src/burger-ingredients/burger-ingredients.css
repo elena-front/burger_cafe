@@ -7,6 +7,7 @@
 
 .tab {
 	display: flex;
+	justify-content: center;
 }
 
 .items {
@@ -21,6 +22,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow-y: scroll;
+	gap: 24px;
 }
 ul {
 	list-style-type: none;
@@ -39,6 +41,8 @@ ul {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	row-gap: 32px;
+	column-gap: 24px;
 }
 .price {
 	display: flex;
@@ -53,12 +57,9 @@ ul {
 	width: 272px;
 	height: 208px;
 	align-items: center;
+	gap: 4px;
 }
-.cardsList {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-}
+
 .counter {
 	position: absolute;
 	float: right;

@@ -1,8 +1,29 @@
 .appHeader {
 	display: flex;
 	justify-content: space-between;
+	background: #1c1c21;
 	align-items: center;
-	height: 88px;
+}
+
+.appHeader__left {
+	display: flex;
+	flex-grow: 1;
+	flex-basis: 0;
+	gap: 8px;
+	justify-content: flex-start;
+}
+
+.appHeader__right {
+	display: flex;
+	flex-grow: 1;
+	flex-basis: 0;
+	justify-content: flex-end;
+}
+
+.appHeader__item {
+	display: flex;
+	gap: 8px;
+	padding: 20px;
 }
 
 .appHeaderLeft {
