@@ -2,19 +2,37 @@ import AppHeader from '../app-header/app-header';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import './app.css';
-import { ingredients, myBurger } from '../../utils/data';
+import { useEffect, useState } from 'react';
+import { Ingredient } from '../../types';
+
+const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
+
+type AppState = {
+	ingredients: Ingredient[];
+};
 
 export const App = () => {
-	const selectedIngredients = myBurger.map(
-		(id) => ingredients.find((ingredient) => ingredient._id === id)!
-	);
+	const [state, setState] = useState<AppState>({
+		ingredients: [],
+	});
+
+	useEffect(() => {
+		const getIngredients = async () => {
+			const res = await fetch(API_URL);
+			const json = await res.json();
+			setState({
+				ingredients: json.data,
+			});
+		};
+		getIngredients();
+	}, []);
 
 	return (
 		<div className='app'>
 			<AppHeader />
 			<div className='burgerSet'>
-				<BurgerIngredients items={ingredients} selectedIds={myBurger} />
-				<BurgerConstructor items={selectedIngredients} />
+				<BurgerIngredients items={state.ingredients} selectedIds={[]} />
+				<BurgerConstructor items={state.ingredients} />
 			</div>
 		</div>
 	);

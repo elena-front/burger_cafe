@@ -20,9 +20,9 @@ export const BurgerConstructor = ({ items }: { items: Ingredient[] }) => {
 				<ConstructorElement
 					type={isFirst ? 'top' : isLast ? 'bottom' : undefined}
 					isLocked={isLocked}
-					text={item.name}
-					price={item.price}
-					thumbnail={item.image}
+					text={item!.name}
+					price={item!.price}
+					thumbnail={item!.image}
 				/>
 			</li>
 		);
