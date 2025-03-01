@@ -1,0 +1,18 @@
+.ingredientDetails {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.details {
+	display: flex;
+	gap: 20px;
+}
+
+.detailsColumn {
+	display: flex;
+	flex-direction: column;
+	min-width: 120px;
+	align-items: center;
+	gap: 8px;
+}

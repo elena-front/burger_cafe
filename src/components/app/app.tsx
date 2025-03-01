@@ -11,7 +11,7 @@ type AppState = {
 	ingredients: Ingredient[];
 };
 
-export const App = () => {
+const App = () => {
 	const [state, setState] = useState<AppState>({
 		ingredients: [],
 	});
@@ -21,9 +21,11 @@ export const App = () => {
 			const res = await fetch(API_URL);
 			const json = await res.json();
 			setState({
+				...state,
 				ingredients: json.data,
 			});
 		};
+
 		getIngredients();
 	}, []);
 
@@ -37,3 +39,5 @@ export const App = () => {
 		</div>
 	);
 };
+
+export default App;
