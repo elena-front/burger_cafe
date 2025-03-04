@@ -18,12 +18,18 @@ const App = () => {
 
 	useEffect(() => {
 		const getIngredients = async () => {
-			const res = await fetch(apiURL);
-			const json = await res.json();
-			setState({
-				...state,
-				ingredients: json.data,
-			});
+			try {
+				const res = await fetch(apiURL);
+				if (res.status === 200) {
+					const json = await res.json();
+					setState({
+						...state,
+						ingredients: json.data,
+					});
+				}
+			} catch (exception) {
+				console.error('error fetching API', exception);
+			}
 		};
 
 		getIngredients();
