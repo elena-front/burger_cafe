@@ -6,8 +6,15 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
 import './burger-constructor.css';
+import Modal from '../modal/modal';
+import { useState } from 'react';
+import OrderDetails from '../order-details/order-details';
 
-export const BurgerConstructor = ({ items }: { items: Ingredient[] }) => {
+type BurgerConstructorProps = {
+	items: Ingredient[];
+};
+
+export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
 	const myBurgerItems = items.map((item, index) => {
 		const isFirst = index === 0;
 		const isLast = index === items.length - 1;
@@ -28,18 +35,39 @@ export const BurgerConstructor = ({ items }: { items: Ingredient[] }) => {
 		);
 	});
 
+	const [state, setState] = useState(false);
+
+	const handlePlaceOrder = () => {
+		setState(true);
+	};
+	const handlePlaceOrderClose = () => {
+		setState(false);
+	};
+
 	return (
-		<div className='burgerConstructor'>
-			<ul className='myBurger custom-scroll'>{myBurgerItems}</ul>
-			<div className='footer'>
-				<div className='total'>
-					<span className='text text_type_main-large pr-2'>610</span>
-					<CurrencyIcon type='primary' className='currencyIcon' />
+		<>
+			{state && (
+				<Modal onClose={handlePlaceOrderClose} title=''>
+					<OrderDetails orderId='034536' />
+				</Modal>
+			)}
+
+			<div className='burgerConstructor'>
+				<ul className='myBurger custom-scroll'>{myBurgerItems}</ul>
+				<div className='footer'>
+					<div className='total'>
+						<span className='text text_type_main-large pr-2'>610</span>
+						<CurrencyIcon type='primary' className='currencyIcon' />
+					</div>
+					<Button
+						htmlType='button'
+						type='primary'
+						size='large'
+						onClick={handlePlaceOrder}>
+						Оформить заказ
+					</Button>
 				</div>
-				<Button htmlType='button' type='primary' size='large'>
-					Оформить заказ
-				</Button>
 			</div>
-		</div>
+		</>
 	);
 };

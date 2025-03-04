@@ -1,20 +1,8 @@
 import { Ingredient } from '../../types';
 import './ingredient-details.css';
+import NutritionValue from './nutrition-value';
 
-type NutritionValueProps = { name: string; value: Number };
-
-const NutritionValue = ({ name, value }: NutritionValueProps) => {
-	return (
-		<div className='detailsColumn'>
-			<div className='text text_type_main-default text_color_inactive'>
-				{name}
-			</div>
-			<div className='text text_type_digits-default text_color_inactive'>
-				{value.toString()}
-			</div>
-		</div>
-	);
-};
+export type NutritionValueProps = { name: string; value: Number };
 
 type IngredientDetailsProps = { ingredient: Ingredient };
 

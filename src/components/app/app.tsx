@@ -5,7 +5,7 @@ import './app.css';
 import { useEffect, useState } from 'react';
 import { Ingredient } from '../../types';
 
-const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
+const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
 
 type AppState = {
 	ingredients: Ingredient[];
@@ -18,7 +18,7 @@ const App = () => {
 
 	useEffect(() => {
 		const getIngredients = async () => {
-			const res = await fetch(API_URL);
+			const res = await fetch(apiURL);
 			const json = await res.json();
 			setState({
 				...state,

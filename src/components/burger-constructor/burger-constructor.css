@@ -39,3 +39,9 @@
 	width: 36px;
 	height: 36px;
 }
+
+.placeOrderModal {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

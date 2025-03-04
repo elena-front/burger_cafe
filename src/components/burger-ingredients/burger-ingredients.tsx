@@ -1,13 +1,10 @@
 import { useCallback, useState } from 'react';
-import {
-	Tab,
-	CurrencyIcon,
-	Counter,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import './burger-ingredients.css';
 import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import IngredientsList from './ingredients-list';
 
 const categories = [
 	{
@@ -23,36 +20,6 @@ const categories = [
 		title: 'Начинки',
 	},
 ];
-
-type ListProps = {
-	items: Ingredient[];
-	selectedIds: string[];
-	onItemClick: (item: Ingredient) => void;
-};
-
-const List = ({ items, selectedIds, onItemClick }: ListProps) => {
-	const listItems = items.map((item, index) => {
-		const count = selectedIds.filter(
-			(selectedId) => item._id === selectedId
-		).length;
-
-		return (
-			<li key={index} className='card' onClick={() => onItemClick(item)}>
-				{count > 0 && (
-					<Counter count={count} size='default' extraClass='m-1 counter' />
-				)}
-
-				<img src={item.image} className='cardImg'></img>
-				<div className='text text_type_digits-default price'>
-					<div>{item.price.toString()}</div>
-					<CurrencyIcon type='primary' />
-				</div>
-				<div className='text text_type_main-default'>{item.name}</div>
-			</li>
-		);
-	});
-	return <ul className='cardsList pl-4 pt-6 pb-2'>{listItems}</ul>;
-};
 
 type BurgerIngredientsState = {
 	current: string;
@@ -104,7 +71,7 @@ export const BurgerIngredients = ({
 					{categories.map((type) => (
 						<div className='chapter'>
 							<h2 className='text text_type_main-medium'>{type.title}</h2>
-							<List
+							<IngredientsList
 								items={items.filter((item) => item.type === type.value)}
 								selectedIds={selectedIds}
 								onItemClick={handleItemClick}

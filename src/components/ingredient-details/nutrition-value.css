@@ -1,10 +1,7 @@
-.ingredientDetails {
+.detailsColumn {
 	display: flex;
 	flex-direction: column;
+	min-width: 120px;
 	align-items: center;
-}
-
-.details {
-	display: flex;
-	gap: 20px;
+	gap: 8px;
 }

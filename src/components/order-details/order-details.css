@@ -1,10 +1,5 @@
-.ingredientDetails {
+.modalOrderModal {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
-
-.details {
-	display: flex;
-	gap: 20px;
 }
