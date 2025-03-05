@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import './burger-ingredients.css';
+import styles from './burger-ingredients.module.css';
 import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -55,11 +55,12 @@ export const BurgerIngredients = ({
 					<IngredientDetails ingredient={state.selected}></IngredientDetails>
 				</Modal>
 			)}
-			<div className='burgerIngredient mt-10'>
+			<div className={styles.burgerIngredient + ' mt-10'}>
 				<h1 className='text text_type_main-large mb-5'>Соберите бургер</h1>
-				<div className='tab'>
-					{categories.map((type) => (
+				<div className={styles.tab}>
+					{categories.map((type, index) => (
 						<Tab
+							key={index}
 							value={type.value}
 							active={state.current == type.value}
 							onClick={(v) => setState({ ...state, current: v })}>
@@ -67,9 +68,9 @@ export const BurgerIngredients = ({
 						</Tab>
 					))}
 				</div>
-				<div className='mainMenu custom-scroll mt-10'>
-					{categories.map((type) => (
-						<div className='chapter'>
+				<div className={styles.mainMenu + ' custom-scroll mt-10'}>
+					{categories.map((type, index) => (
+						<div className={styles.chapter} key={index}>
 							<h2 className='text text_type_main-medium'>{type.title}</h2>
 							<IngredientsList
 								items={items.filter((item) => item.type === type.value)}

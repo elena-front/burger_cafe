@@ -5,7 +5,7 @@ import {
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
-import './burger-constructor.css';
+import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import { useState } from 'react';
 import OrderDetails from '../order-details/order-details';
@@ -20,8 +20,8 @@ export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
 		const isLast = index === items.length - 1;
 		const isLocked = isFirst || isLast;
 		return (
-			<li key={index} className='constructorItem'>
-				<div className='dragIcon'>
+			<li key={index} className={styles.constructorItem}>
+				<div className={styles.dragIcon}>
 					{!isLocked && <DragIcon type='primary' />}
 				</div>
 				<ConstructorElement
@@ -52,12 +52,12 @@ export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
 				</Modal>
 			)}
 
-			<div className='burgerConstructor'>
-				<ul className='myBurger custom-scroll'>{myBurgerItems}</ul>
-				<div className='footer'>
-					<div className='total'>
+			<div className={styles.burgerConstructor}>
+				<ul className={styles.myBurger + ' custom-scroll'}>{myBurgerItems}</ul>
+				<div className={styles.footer}>
+					<div className={styles.total}>
 						<span className='text text_type_main-large pr-2'>610</span>
-						<CurrencyIcon type='primary' className='currencyIcon' />
+						<CurrencyIcon type='primary' className={styles.currencyIcon} />
 					</div>
 					<Button
 						htmlType='button'

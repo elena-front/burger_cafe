@@ -3,7 +3,7 @@ import {
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
-import './ingredients-list.css';
+import styles from './ingredients-list.module.css';
 
 type IngredientsListProps = {
 	items: Ingredient[];
@@ -22,12 +22,12 @@ const IngredientsList = ({
 		).length;
 
 		return (
-			<li key={index} className='card' onClick={() => onItemClick(item)}>
+			<li key={index} className={styles.card} onClick={() => onItemClick(item)}>
 				{count > 0 && (
 					<Counter count={count} size='default' extraClass='m-1 counter' />
 				)}
 
-				<img src={item.image}></img>
+				<img src={item.image} alt={item.name}></img>
 				<div className='text text_type_digits-default price'>
 					<div>{item.price.toString()}</div>
 					<CurrencyIcon type='primary' />
@@ -36,7 +36,7 @@ const IngredientsList = ({
 			</li>
 		);
 	});
-	return <ul className='cardsList pl-4 pt-6 pb-2'>{listItems}</ul>;
+	return <ul className={styles.cardsList + ' pl-4 pt-6 pb-2'}>{listItems}</ul>;
 };
 
 export default IngredientsList;
