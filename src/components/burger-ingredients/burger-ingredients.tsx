@@ -1,10 +1,18 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import './burger-ingredients.css';
 import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientsList from './ingredients-list';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+	hideIngredientDetails,
+	loadIngredients,
+	showIngredientDetails,
+} from '../../services/actions';
+import { shallowEqual } from 'react-redux';
 
 const categories = [
 	{
@@ -23,43 +31,66 @@ const categories = [
 
 type BurgerIngredientsState = {
 	current: string;
-	selected?: Ingredient;
 };
 
 type BurgerIngredientsProps = {
-	items: Ingredient[];
 	selectedIds: string[];
 };
 
-export const BurgerIngredients = ({
-	items,
-	selectedIds,
-}: BurgerIngredientsProps) => {
+const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
+
+const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
+	const { ingredients, ingredientDetails } = useSelector(
+		(store) => ({
+			ingredients: (store as any).ingredients as Ingredient[],
+			ingredientDetails: (store as any).ingredientDetails as Ingredient | null,
+		}),
+		shallowEqual
+	);
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const getIngredients = async () => {
+			try {
+				const res = await fetch(apiURL);
+				if (res.status === 200) {
+					const json = await res.json();
+					dispatch(loadIngredients(json.data));
+				}
+			} catch (exception) {
+				console.error('error fetching API', exception);
+			}
+		};
+
+		getIngredients();
+	}, []);
+
 	const [state, setState] = useState<BurgerIngredientsState>({
 		current: 'bun',
-		selected: undefined,
 	});
 
 	const handleItemClick = useCallback((item: Ingredient) => {
-		setState({ ...state, selected: item });
+		dispatch(showIngredientDetails(item));
 	}, []);
 
 	const handleDetailClose = useCallback(() => {
-		setState({ ...state, selected: undefined });
+		dispatch(hideIngredientDetails());
 	}, []);
 
 	return (
 		<>
-			{state.selected != null && (
+			{ingredientDetails != null && (
 				<Modal onClose={handleDetailClose} title='Детали ингредиента'>
-					<IngredientDetails ingredient={state.selected}></IngredientDetails>
+					<IngredientDetails ingredient={ingredientDetails}></IngredientDetails>
 				</Modal>
 			)}
 			<div className='burgerIngredient mt-10'>
 				<h1 className='text text_type_main-large mb-5'>Соберите бургер</h1>
 				<div className='tab'>
-					{categories.map((type) => (
+					{categories.map((type, index) => (
 						<Tab
+							key={index}
 							value={type.value}
 							active={state.current == type.value}
 							onClick={(v) => setState({ ...state, current: v })}>
@@ -68,11 +99,11 @@ export const BurgerIngredients = ({
 					))}
 				</div>
 				<div className='mainMenu custom-scroll mt-10'>
-					{categories.map((type) => (
-						<div className='chapter'>
+					{categories.map((type, index) => (
+						<div key={index} className='chapter'>
 							<h2 className='text text_type_main-medium'>{type.title}</h2>
 							<IngredientsList
-								items={items.filter((item) => item.type === type.value)}
+								items={ingredients.filter((item) => item.type === type.value)}
 								selectedIds={selectedIds}
 								onItemClick={handleItemClick}
 							/>
@@ -83,3 +114,5 @@ export const BurgerIngredients = ({
 		</>
 	);
 };
+
+export default BurgerIngredients;
