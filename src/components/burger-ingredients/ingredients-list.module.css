@@ -15,3 +15,15 @@
 	row-gap: 32px;
 	column-gap: 24px;
 }
+
+.price {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: center;
+}
+
+.counter {
+	position: absolute;
+	float: right;
+}

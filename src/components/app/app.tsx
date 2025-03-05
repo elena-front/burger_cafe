@@ -37,12 +37,19 @@ const App = () => {
 		getIngredients();
 	}, []);
 
+	const myBun = state.ingredients.find((item) => item.type === 'bun');
+	const myFilling = state.ingredients.filter((item) => item.type !== 'bun');
+
 	return (
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={styles.burgerSet}>
 				<BurgerIngredients items={state.ingredients} selectedIds={[]} />
-				<BurgerConstructor items={state.ingredients} />
+				<BurgerConstructor
+					bun={myBun}
+					filling={myFilling}
+					items={state.ingredients}
+				/>
 			</main>
 		</div>
 	);

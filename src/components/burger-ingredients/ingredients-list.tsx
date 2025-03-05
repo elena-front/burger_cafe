@@ -24,11 +24,15 @@ const IngredientsList = ({
 		return (
 			<li key={index} className={styles.card} onClick={() => onItemClick(item)}>
 				{count > 0 && (
-					<Counter count={count} size='default' extraClass='m-1 counter' />
+					<Counter
+						count={count}
+						size='default'
+						extraClass={styles.counter + ' m-1'}
+					/>
 				)}
 
 				<img src={item.image} alt={item.name}></img>
-				<div className='text text_type_digits-default price'>
+				<div className={styles.price + ' text text_type_digits-default'}>
 					<div>{item.price.toString()}</div>
 					<CurrencyIcon type='primary' />
 				</div>

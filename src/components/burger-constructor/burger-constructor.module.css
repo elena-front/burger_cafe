@@ -19,8 +19,7 @@
 	flex-direction: column;
 	gap: 16px;
 	overflow-y: auto;
-	max-height: 656px;
-	padding-top: 100px;
+	max-height: 464px;
 }
 .footer {
 	display: flex;

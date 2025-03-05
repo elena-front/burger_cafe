@@ -37,15 +37,3 @@ ul {
 	display: flex;
 	flex-direction: column;
 }
-
-.price {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	justify-content: center;
-}
-
-.counter {
-	position: absolute;
-	float: right;
-}
