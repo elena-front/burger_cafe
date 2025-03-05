@@ -5,28 +5,30 @@ import {
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
-import './burger-constructor.css';
+import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import { useState } from 'react';
 import OrderDetails from '../order-details/order-details';
 
 type BurgerConstructorProps = {
 	items: Ingredient[];
+	bun: Ingredient | undefined;
+	filling: Ingredient[];
 };
 
-export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
-	const myBurgerItems = items.map((item, index) => {
-		const isFirst = index === 0;
-		const isLast = index === items.length - 1;
-		const isLocked = isFirst || isLast;
+export const BurgerConstructor = ({
+	items,
+	bun,
+	filling,
+}: BurgerConstructorProps) => {
+	const myBurgerItems = filling.map((item, index) => {
 		return (
-			<li key={index} className='constructorItem'>
-				<div className='dragIcon'>
-					{!isLocked && <DragIcon type='primary' />}
+			<li key={index} className={styles.constructorItem}>
+				<div className={styles.dragIcon}>
+					<DragIcon type='primary' />
 				</div>
 				<ConstructorElement
-					type={isFirst ? 'top' : isLast ? 'bottom' : undefined}
-					isLocked={isLocked}
+					isLocked={false}
 					text={item!.name}
 					price={item!.price}
 					thumbnail={item!.image}
@@ -34,6 +36,36 @@ export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
 			</li>
 		);
 	});
+
+	const content = (
+		<div>
+			{bun && (
+				<div className={styles.constructorItem + ' pt-25 pb-4'}>
+					<div className={styles.dragIcon}></div>
+					<ConstructorElement
+						type='top'
+						isLocked={true}
+						text={bun.name}
+						price={bun.price}
+						thumbnail={bun.image}
+					/>
+				</div>
+			)}
+			<ul className={styles.myBurger + ' custom-scroll'}>{myBurgerItems}</ul>
+			{bun && (
+				<div className={styles.constructorItem + ' pt-4'}>
+					<div className={styles.dragIcon}></div>
+					<ConstructorElement
+						type='bottom'
+						isLocked={true}
+						text={bun.name}
+						price={bun.price}
+						thumbnail={bun.image}
+					/>
+				</div>
+			)}
+		</div>
+	);
 
 	const [state, setState] = useState(false);
 
@@ -52,12 +84,12 @@ export const BurgerConstructor = ({ items }: BurgerConstructorProps) => {
 				</Modal>
 			)}
 
-			<div className='burgerConstructor'>
-				<ul className='myBurger custom-scroll'>{myBurgerItems}</ul>
-				<div className='footer'>
-					<div className='total'>
+			<div className={styles.burgerConstructor}>
+				{content}
+				<div className={styles.footer}>
+					<div className={styles.total}>
 						<span className='text text_type_main-large pr-2'>610</span>
-						<CurrencyIcon type='primary' className='currencyIcon' />
+						<CurrencyIcon type='primary' className={styles.currencyIcon} />
 					</div>
 					<Button
 						htmlType='button'

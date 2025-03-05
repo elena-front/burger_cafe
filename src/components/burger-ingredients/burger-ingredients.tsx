@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import './burger-ingredients.css';
+import styles from './burger-ingredients.module.css';
 import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -54,9 +54,11 @@ const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
 		const getIngredients = async () => {
 			try {
 				const res = await fetch(apiURL);
-				if (res.status === 200) {
+				if (res.ok) {
 					const json = await res.json();
 					dispatch(loadIngredients(json.data));
+				} else {
+					throw new Error(`Error status ${res.status}`);
 				}
 			} catch (exception) {
 				console.error('error fetching API', exception);
@@ -85,9 +87,9 @@ const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
 					<IngredientDetails ingredient={ingredientDetails}></IngredientDetails>
 				</Modal>
 			)}
-			<div className='burgerIngredient mt-10'>
+			<div className={styles.burgerIngredient + ' mt-10'}>
 				<h1 className='text text_type_main-large mb-5'>Соберите бургер</h1>
-				<div className='tab'>
+				<div className={styles.tab}>
 					{categories.map((type, index) => (
 						<Tab
 							key={index}
@@ -98,9 +100,9 @@ const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
 						</Tab>
 					))}
 				</div>
-				<div className='mainMenu custom-scroll mt-10'>
+				<div className={styles.mainMenu + ' custom-scroll mt-10'}>
 					{categories.map((type, index) => (
-						<div key={index} className='chapter'>
+						<div className={styles.chapter} key={index}>
 							<h2 className='text text_type_main-medium'>{type.title}</h2>
 							<IngredientsList
 								items={ingredients.filter((item) => item.type === type.value)}
