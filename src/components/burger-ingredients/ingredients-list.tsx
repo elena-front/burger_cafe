@@ -4,25 +4,37 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
 import styles from './ingredients-list.module.css';
+import { useDrag } from 'react-dnd';
 
 type IngredientsListProps = {
 	items: Ingredient[];
-	selectedIds: string[];
+	counts: any;
 	onItemClick: (item: Ingredient) => void;
 };
 
 const IngredientsList = ({
 	items,
-	selectedIds,
+	counts,
 	onItemClick,
 }: IngredientsListProps) => {
 	const listItems = items.map((item, index) => {
-		const count = selectedIds.filter(
-			(selectedId) => item._id === selectedId
-		).length;
+		const itemId = item._id;
+		const count = counts[itemId] || 0;
+
+		const [{ isDrag }, drag] = useDrag({
+			type: 'ingredient',
+			item: { id: itemId },
+			collect: (monitor) => ({
+				isDrag: monitor.isDragging(),
+			}),
+		});
 
 		return (
-			<li key={index} className={styles.card} onClick={() => onItemClick(item)}>
+			<li
+				ref={drag}
+				key={index}
+				className={styles.card}
+				onClick={() => onItemClick(item)}>
 				{count > 0 && (
 					<Counter
 						count={count}

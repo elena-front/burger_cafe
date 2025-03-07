@@ -2,31 +2,18 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import styles from './app.module.css';
-import { useState } from 'react';
-import { Ingredient } from '../../types';
-
-type AppState = {
-	ingredients: Ingredient[];
-};
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const App = () => {
-	const [state] = useState<AppState>({
-		ingredients: [],
-	});
-
-	const myBun = state.ingredients.find((item) => item.type === 'bun');
-	const myFilling = state.ingredients.filter((item) => item.type !== 'bun');
-
 	return (
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={styles.burgerSet}>
-				<BurgerIngredients selectedIds={[]} />
-				<BurgerConstructor
-					bun={myBun}
-					filling={myFilling}
-					items={state.ingredients}
-				/>
+				<DndProvider backend={HTML5Backend}>
+					<BurgerIngredients />
+					<BurgerConstructor />
+				</DndProvider>
 			</main>
 		</div>
 	);

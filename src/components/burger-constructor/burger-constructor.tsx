@@ -4,34 +4,57 @@ import {
 	Button,
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient } from '../../types';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import OrderDetails from '../order-details/order-details';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'react-redux';
+import { FillingItem, Ingredient } from '../../types';
+import { addIngredient, removeFilling } from '../../services/actions';
+import { useDrop } from 'react-dnd';
 
-type BurgerConstructorProps = {
-	items: Ingredient[];
-	bun: Ingredient | undefined;
-	filling: Ingredient[];
-};
+export const BurgerConstructor = () => {
+	const { bun, filling, getIngredientById } = useSelector(
+		(store) => ({
+			bun: (store as any).burger.bun,
+			filling: (store as any).burger.filling as FillingItem[],
+			getIngredientById: (id: string) =>
+				(store as any).ingredients.find((item: Ingredient) => item._id === id),
+		}),
+		shallowEqual
+	);
 
-export const BurgerConstructor = ({
-	items,
-	bun,
-	filling,
-}: BurgerConstructorProps) => {
-	const myBurgerItems = filling.map((item, index) => {
+	const dispatch = useDispatch();
+
+	const [{ isHover }, drop] = useDrop({
+		accept: 'ingredient',
+		collect: (monitor) => ({
+			isHover: monitor.isOver(),
+		}),
+		drop: (item) => {
+			const id = (item as any).id;
+			const ingredient = getIngredientById(id);
+			dispatch(addIngredient(ingredient));
+		},
+	});
+
+	const onCloseClick = useCallback((uid: string) => {
+		dispatch(removeFilling(uid));
+	}, []);
+
+	const myBurgerItems = filling.map((item) => {
 		return (
-			<li key={index} className={styles.constructorItem}>
+			<li key={item.uid} className={styles.constructorItem}>
 				<div className={styles.dragIcon}>
 					<DragIcon type='primary' />
 				</div>
 				<ConstructorElement
 					isLocked={false}
-					text={item!.name}
-					price={item!.price}
-					thumbnail={item!.image}
+					text={item.ingredient.name}
+					price={item.ingredient.price}
+					thumbnail={item.ingredient.image}
+					handleClose={() => onCloseClick(item.uid)}
 				/>
 			</li>
 		);
@@ -76,6 +99,12 @@ export const BurgerConstructor = ({
 		setState(false);
 	};
 
+	const total =
+		((bun && bun.price * 2) || 0) +
+		filling
+			.map((item) => item.ingredient.price)
+			.reduce((acc, item) => acc + item, 0);
+
 	return (
 		<>
 			{state && (
@@ -84,11 +113,11 @@ export const BurgerConstructor = ({
 				</Modal>
 			)}
 
-			<div className={styles.burgerConstructor}>
+			<div ref={drop} className={styles.burgerConstructor}>
 				{content}
 				<div className={styles.footer}>
 					<div className={styles.total}>
-						<span className='text text_type_main-large pr-2'>610</span>
+						<span className='text text_type_main-large pr-2'>{total}</span>
 						<CurrencyIcon type='primary' className={styles.currencyIcon} />
 					</div>
 					<Button
@@ -103,3 +132,6 @@ export const BurgerConstructor = ({
 		</>
 	);
 };
+function useCallBack(arg0: () => void) {
+	throw new Error('Function not implemented.');
+}

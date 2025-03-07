@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { Ingredient } from '../../types';
+import { FillingItem, Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientsList from './ingredients-list';
@@ -33,20 +33,25 @@ type BurgerIngredientsState = {
 	current: string;
 };
 
-type BurgerIngredientsProps = {
-	selectedIds: string[];
-};
-
 const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
 
-const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
-	const { ingredients, ingredientDetails } = useSelector(
-		(store) => ({
+const BurgerIngredients = () => {
+	const { ingredients, ingredientDetails, counts } = useSelector((store) => {
+		const counts: any = {};
+		if ((store as any).burger.bun != null) {
+			counts[(store as any).burger.bun._id] = 2;
+		}
+		for (const fillingItem of (store as any).burger.filling) {
+			counts[fillingItem.ingredient._id] =
+				(counts[fillingItem.ingredient._id] || 0) + 1;
+		}
+
+		return {
 			ingredients: (store as any).ingredients as Ingredient[],
 			ingredientDetails: (store as any).ingredientDetails as Ingredient | null,
-		}),
-		shallowEqual
-	);
+			counts: counts,
+		};
+	}, shallowEqual);
 
 	const dispatch = useDispatch();
 
@@ -106,7 +111,7 @@ const BurgerIngredients = ({ selectedIds }: BurgerIngredientsProps) => {
 							<h2 className='text text_type_main-medium'>{type.title}</h2>
 							<IngredientsList
 								items={ingredients.filter((item) => item.type === type.value)}
-								selectedIds={selectedIds}
+								counts={counts}
 								onItemClick={handleItemClick}
 							/>
 						</div>

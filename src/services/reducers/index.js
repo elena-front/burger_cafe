@@ -1,10 +1,14 @@
 import { combineReducers } from 'redux';
-import { HIDE_INGREDIENT_DETAILS, LOAD_INGREDIENTS, SHOW_INGREDIENT_DETAILS } from '../actions';
+import { v4 as uuidv4 } from 'uuid';
+import { ADD_INGREDIENT, HIDE_INGREDIENT_DETAILS, LOAD_INGREDIENTS, REMOVE_FILLING, SHOW_INGREDIENT_DETAILS } from '../actions';
 
 
 export const initialState = {
 	ingredients: [],
-	burger: [],
+	burger: {
+		bun: undefined,
+		filling: []
+	},
 	ingredientDetails: null,
 	orderId: null,
 };
@@ -20,8 +24,26 @@ const ingredientsReducer = (state = [], action) => {
 	}
 };
 
-const burgerReducer = (state = [], action) => {
-	return state
+const burgerReducer = (state = { bun: undefined, filling: [] }, action) => {
+	switch (action.type) {
+		case ADD_INGREDIENT: {
+			if (action.ingredient.type === 'bun') {
+				return { ...state, bun: action.ingredient };
+			} else {
+				const newFilling = {
+					uid: uuidv4(),
+					ingredient: action.ingredient
+				};
+				return { ...state, filling: [...state.filling, newFilling] }
+			}
+		}
+		case REMOVE_FILLING: {
+			return { ...state, filling: state.filling.filter(item => item.uid !== action.uid) }
+		}
+		default: {
+			return state;
+		}
+	}
 }
 
 const ingredientDetailsReducer = (state = null, action) => {
