@@ -5,37 +5,49 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'react-redux';
-import { DraggingIngredient, FillingItem, Ingredient } from '../../types';
-import { addIngredient, removeFilling } from '../../services/actions';
+import {
+	DraggingIngredient,
+	FillingItem,
+	Ingredient,
+	Order,
+} from '../../types';
+import {
+	addIngredient,
+	closeOrderDetails,
+	placeOrder,
+	removeFilling,
+} from '../../services/actions';
 import { useDrop } from 'react-dnd';
 import { FillingBar } from './filling-bar';
-import { RootState } from '../../services/store';
+import { AppDispatch, RootState } from '../../services/store';
 
 type SelectedState = {
 	bun: Ingredient | null;
 	filling: FillingItem[];
 	ingredients: Ingredient[];
+	order: Order | null;
 };
 
+const orderAPI = 'https://norma.nomoreparties.space/api/orders';
+
 export const BurgerConstructor = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
-	const [state, setState] = useState(false);
-
-	const { bun, filling, ingredients } = useSelector<RootState, SelectedState>(
-		(store) => {
-			return {
-				bun: store.burger.bun,
-				filling: store.burger.filling,
-				ingredients: store.ingredients,
-			};
-		},
-		shallowEqual
-	);
+	const { bun, filling, ingredients, order } = useSelector<
+		RootState,
+		SelectedState
+	>((store) => {
+		return {
+			bun: store.burger.bun,
+			filling: store.burger.filling,
+			ingredients: store.ingredients,
+			order: store.order,
+		};
+	}, shallowEqual);
 
 	const [, drop] = useDrop<DraggingIngredient>(
 		{
@@ -93,10 +105,15 @@ export const BurgerConstructor = () => {
 	);
 
 	const handlePlaceOrder = () => {
-		setState(true);
+		if (bun) {
+			const ids = [bun, ...filling.map((item) => item.ingredient), bun].map(
+				(item) => item._id
+			);
+			dispatch(placeOrder({ api: orderAPI, ids: ids }));
+		}
 	};
 	const handlePlaceOrderClose = () => {
-		setState(false);
+		dispatch(closeOrderDetails());
 	};
 
 	const total = useMemo(
@@ -110,9 +127,9 @@ export const BurgerConstructor = () => {
 
 	return (
 		<>
-			{state && (
+			{order && (
 				<Modal onClose={handlePlaceOrderClose} title=''>
-					<OrderDetails orderId='034536' />
+					<OrderDetails orderId={order.order.number} />
 				</Modal>
 			)}
 
@@ -135,6 +152,3 @@ export const BurgerConstructor = () => {
 		</>
 	);
 };
-function useCallBack(arg0: () => void) {
-	throw new Error('Function not implemented.');
-}

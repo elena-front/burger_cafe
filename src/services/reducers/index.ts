@@ -2,13 +2,15 @@ import { combineReducers } from 'redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
 	addIngredient,
+	closeOrderDetails,
 	hideIngredientDetails,
 	loadIngredients,
 	moveFilling,
+	placeOrder,
 	removeFilling,
 	showIngredientDetails,
 } from '../actions';
-import { BurgerState, Ingredient } from '../../types';
+import { BurgerState, Ingredient, Order } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
 
 const ingredientsReducer = createReducer<Ingredient[]>([], (builder) =>
@@ -58,11 +60,15 @@ const ingredientDetailsReducer = createReducer<Ingredient | null>(
 			.addCase(hideIngredientDetails, () => null)
 );
 
-const orderIdReducer = createReducer<string | null>(null, () => {});
+const orderReducer = createReducer<Order | null>(null, (builder) =>
+	builder
+		.addCase(closeOrderDetails, () => null)
+		.addCase(placeOrder.fulfilled, (_state, action) => action.payload)
+);
 
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
 	ingredientDetails: ingredientDetailsReducer,
-	orderId: orderIdReducer,
+	order: orderReducer,
 });

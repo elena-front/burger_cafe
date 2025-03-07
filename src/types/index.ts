@@ -13,6 +13,14 @@ export type Ingredient = {
 	__v: number;
 };
 
+export type Order = {
+	name: string;
+	order: {
+		number: number;
+	};
+	success: boolean;
+};
+
 export type FillingItem = {
 	uid: string;
 	ingredient: Ingredient;
