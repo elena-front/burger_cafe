@@ -1,7 +1,22 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Ingredient } from '../../types';
 
-export const loadIngredients = createAction<Ingredient[]>('LOAD_INGREDIENTS');
+export const loadIngredients = createAsyncThunk<Ingredient[], string>(
+	'LOAD_INGREDIENTS',
+	async (apiURL) => {
+		try {
+			const res = await fetch(apiURL);
+			if (res.ok) {
+				const json = await res.json();
+				return json.data;
+			} else {
+				throw new Error(`Error status ${res.status}`);
+			}
+		} catch (exception) {
+			console.error('error fetching API', exception);
+		}
+	}
+);
 
 export const showIngredientDetails = createAction<Ingredient>(
 	'SHOW_INGREDIENT_DETAILS'

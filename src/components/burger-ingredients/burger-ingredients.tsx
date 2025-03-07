@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { FillingItem, Ingredient, RootState } from '../../types';
+import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientsList from './ingredients-list';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {
-	hideIngredientDetails,
 	loadIngredients,
+	hideIngredientDetails,
 	showIngredientDetails,
 } from '../../services/actions';
 import { shallowEqual } from 'react-redux';
+import { AppDispatch, RootState } from '../../services/store';
 
 const categories = [
 	{
@@ -62,24 +63,10 @@ const BurgerIngredients = () => {
 		};
 	}, shallowEqual);
 
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
-		const getIngredients = async () => {
-			try {
-				const res = await fetch(apiURL);
-				if (res.ok) {
-					const json = await res.json();
-					dispatch(loadIngredients(json.data));
-				} else {
-					throw new Error(`Error status ${res.status}`);
-				}
-			} catch (exception) {
-				console.error('error fetching API', exception);
-			}
-		};
-
-		getIngredients();
+		dispatch(loadIngredients(apiURL));
 	}, []);
 
 	const [state, setState] = useState<BurgerIngredientsState>({

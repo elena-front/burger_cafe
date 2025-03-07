@@ -8,27 +8,15 @@ import {
 	removeFilling,
 	showIngredientDetails,
 } from '../actions';
-import { BurgerState, Ingredient, RootState } from '../../types';
+import { BurgerState, Ingredient } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
 
-export const initialState: RootState = {
-	ingredients: [],
-	burger: {
-		bun: null,
-		filling: [],
-	},
-	ingredientDetails: null,
-	orderId: null,
-};
-
-const ingredientsReducer = createReducer<Ingredient[]>(
-	initialState.ingredients,
-	(builder) =>
-		builder.addCase(loadIngredients, (_state, action) => action.payload)
+const ingredientsReducer = createReducer<Ingredient[]>([], (builder) =>
+	builder.addCase(loadIngredients.fulfilled, (_state, action) => action.payload)
 );
 
 const burgerReducer = createReducer<BurgerState>(
-	initialState.burger,
+	{ bun: null, filling: [] },
 	(builder) =>
 		builder
 			.addCase(addIngredient, (state, action) => {
@@ -63,17 +51,14 @@ const burgerReducer = createReducer<BurgerState>(
 );
 
 const ingredientDetailsReducer = createReducer<Ingredient | null>(
-	initialState.ingredientDetails,
+	null,
 	(builder) =>
 		builder
 			.addCase(showIngredientDetails, (_state, action) => action.payload)
 			.addCase(hideIngredientDetails, () => null)
 );
 
-const orderIdReducer = createReducer<string | null>(
-	initialState.orderId,
-	() => {}
-);
+const orderIdReducer = createReducer<string | null>(null, () => {});
 
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,

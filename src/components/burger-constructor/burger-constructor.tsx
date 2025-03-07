@@ -9,15 +9,11 @@ import { useState, useCallback, useMemo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'react-redux';
-import {
-	DraggingIngredient,
-	FillingItem,
-	Ingredient,
-	RootState,
-} from '../../types';
+import { DraggingIngredient, FillingItem, Ingredient } from '../../types';
 import { addIngredient, removeFilling } from '../../services/actions';
 import { useDrop } from 'react-dnd';
 import { FillingBar } from './filling-bar';
+import { RootState } from '../../services/store';
 
 type SelectedState = {
 	bun: Ingredient | null;
@@ -55,15 +51,12 @@ export const BurgerConstructor = () => {
 				}
 			},
 		},
-		[dispatch, ingredients]
+		[ingredients]
 	);
 
-	const onCloseClick = useCallback(
-		(uid: string) => {
-			dispatch(removeFilling(uid));
-		},
-		[dispatch]
-	);
+	const onCloseClick = useCallback((uid: string) => {
+		dispatch(removeFilling(uid));
+	}, []);
 
 	const myBurgerItems = filling.map((item) => (
 		<FillingBar key={item.uid} item={item} onClose={onCloseClick} />
