@@ -2,7 +2,7 @@ import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient } from '../../types';
+import { DraggingIngredient, Ingredient } from '../../types';
 import styles from './ingredients-list.module.css';
 import { useDrag } from 'react-dnd';
 
@@ -18,15 +18,10 @@ const IngredientsList = ({
 	onItemClick,
 }: IngredientsListProps) => {
 	const listItems = items.map((item, index) => {
-		const itemId = item._id;
-		const count = counts[itemId] || 0;
-
-		const [{ isDrag }, drag] = useDrag({
+		const count = counts[item._id];
+		const [, drag] = useDrag<DraggingIngredient>({
 			type: 'ingredient',
-			item: { id: itemId },
-			collect: (monitor) => ({
-				isDrag: monitor.isDragging(),
-			}),
+			item: { id: item._id },
 		});
 
 		return (
@@ -35,7 +30,7 @@ const IngredientsList = ({
 				key={index}
 				className={styles.card}
 				onClick={() => onItemClick(item)}>
-				{count > 0 && (
+				{count && (
 					<Counter
 						count={count}
 						size='default'

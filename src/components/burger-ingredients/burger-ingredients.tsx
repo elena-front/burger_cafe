@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { FillingItem, Ingredient } from '../../types';
+import { FillingItem, Ingredient, RootState } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientsList from './ingredients-list';
@@ -35,20 +35,29 @@ type BurgerIngredientsState = {
 
 const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
 
+type SelectedState = {
+	ingredients: Ingredient[];
+	ingredientDetails: Ingredient | null;
+	counts: { [id: string]: number };
+};
+
 const BurgerIngredients = () => {
-	const { ingredients, ingredientDetails, counts } = useSelector((store) => {
+	const { ingredients, ingredientDetails, counts } = useSelector<
+		RootState,
+		SelectedState
+	>((store) => {
 		const counts: any = {};
-		if ((store as any).burger.bun != null) {
-			counts[(store as any).burger.bun._id] = 2;
+		if (store.burger.bun != null) {
+			counts[store.burger.bun._id] = 2;
 		}
-		for (const fillingItem of (store as any).burger.filling) {
+		for (const fillingItem of store.burger.filling) {
 			counts[fillingItem.ingredient._id] =
 				(counts[fillingItem.ingredient._id] || 0) + 1;
 		}
 
 		return {
-			ingredients: (store as any).ingredients as Ingredient[],
-			ingredientDetails: (store as any).ingredientDetails as Ingredient | null,
+			ingredients: store.ingredients,
+			ingredientDetails: store.ingredientDetails,
 			counts: counts,
 		};
 	}, shallowEqual);

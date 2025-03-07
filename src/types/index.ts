@@ -17,3 +17,23 @@ export type FillingItem = {
 	uid: string;
 	ingredient: Ingredient;
 };
+
+export type BurgerState = {
+	bun: Ingredient | null;
+	filling: FillingItem[];
+};
+
+export type RootState = {
+	ingredients: Ingredient[];
+	burger: BurgerState;
+	ingredientDetails: Ingredient | null;
+	orderId: string | null;
+};
+
+export type DraggingIngredient = {
+	id: string;
+};
+
+export type DraggingFilling = {
+	uid: string;
+};
