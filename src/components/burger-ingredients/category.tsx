@@ -3,10 +3,7 @@ import styles from './category.module.css';
 import { Ingredient } from '../../types';
 import IngredientCard from './ingredient-card';
 import { RootState } from '../../services/store';
-
-type SelectedState = {
-	items: Ingredient[];
-};
+import { shallowEqual } from 'react-redux';
 
 type CategoryProps = {
 	title: string;
@@ -14,11 +11,10 @@ type CategoryProps = {
 };
 
 const Category = ({ title, value }: CategoryProps) => {
-	const { items } = useSelector<RootState, SelectedState>((state) => {
-		return {
-			items: state.ingredients.filter((item) => item.type === value),
-		};
-	});
+	const items = useSelector<RootState, Ingredient[]>(
+		(state) => state.ingredients.filter((item) => item.type === value),
+		shallowEqual
+	);
 
 	return (
 		<div className={styles.chapter} data-category={value}>

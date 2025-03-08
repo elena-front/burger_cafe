@@ -64,6 +64,7 @@ const orderReducer = createReducer<Order | null>(null, (builder) =>
 	builder
 		.addCase(closeOrderDetails, () => null)
 		.addCase(placeOrder.fulfilled, (_state, action) => action.payload)
+		.addCase(placeOrder.rejected, () => null)
 );
 
 export const rootReducer = combineReducers({

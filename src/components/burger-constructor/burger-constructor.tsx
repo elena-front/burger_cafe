@@ -4,9 +4,7 @@ import {
 	Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import Modal from '../modal/modal';
 import { useCallback, useMemo } from 'react';
-import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'react-redux';
 import {
@@ -17,7 +15,6 @@ import {
 } from '../../types';
 import {
 	addIngredient,
-	closeOrderDetails,
 	placeOrder,
 	removeFilling,
 } from '../../services/actions';
@@ -29,7 +26,6 @@ type SelectedState = {
 	bun: Ingredient | null;
 	filling: FillingItem[];
 	ingredients: Ingredient[];
-	order: Order | null;
 };
 
 const orderAPI = 'https://norma.nomoreparties.space/api/orders';
@@ -37,17 +33,16 @@ const orderAPI = 'https://norma.nomoreparties.space/api/orders';
 export const BurgerConstructor = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	const { bun, filling, ingredients, order } = useSelector<
-		RootState,
-		SelectedState
-	>((store) => {
-		return {
-			bun: store.burger.bun,
-			filling: store.burger.filling,
-			ingredients: store.ingredients,
-			order: store.order,
-		};
-	}, shallowEqual);
+	const { bun, filling, ingredients } = useSelector<RootState, SelectedState>(
+		(store) => {
+			return {
+				bun: store.burger.bun,
+				filling: store.burger.filling,
+				ingredients: store.ingredients,
+			};
+		},
+		shallowEqual
+	);
 
 	const [, drop] = useDrop<DraggingIngredient>(
 		{
@@ -112,9 +107,6 @@ export const BurgerConstructor = () => {
 			dispatch(placeOrder({ api: orderAPI, ids: ids }));
 		}
 	};
-	const handlePlaceOrderClose = () => {
-		dispatch(closeOrderDetails());
-	};
 
 	const total = useMemo(
 		() =>
@@ -126,29 +118,21 @@ export const BurgerConstructor = () => {
 	);
 
 	return (
-		<>
-			{order && (
-				<Modal onClose={handlePlaceOrderClose} title=''>
-					<OrderDetails orderId={order.order.number} />
-				</Modal>
-			)}
-
-			<div ref={drop} className={styles.burgerConstructor}>
-				{content}
-				<div className={styles.footer}>
-					<div className={styles.total}>
-						<span className='text text_type_main-large pr-2'>{total}</span>
-						<CurrencyIcon type='primary' className={styles.currencyIcon} />
-					</div>
-					<Button
-						htmlType='button'
-						type='primary'
-						size='large'
-						onClick={handlePlaceOrder}>
-						Оформить заказ
-					</Button>
+		<div ref={drop} className={styles.burgerConstructor}>
+			{content}
+			<div className={styles.footer}>
+				<div className={styles.total}>
+					<span className='text text_type_main-large pr-2'>{total}</span>
+					<CurrencyIcon type='primary' className={styles.currencyIcon} />
 				</div>
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handlePlaceOrder}>
+					Оформить заказ
+				</Button>
 			</div>
-		</>
+		</div>
 	);
 };
