@@ -1,19 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Ingredient } from '../../types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import IngredientsList from './ingredients-list';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-	loadIngredients,
-	hideIngredientDetails,
-	showIngredientDetails,
-} from '../../services/actions';
+import { loadIngredients, hideIngredientDetails } from '../../services/actions';
 import { shallowEqual } from 'react-redux';
 import { AppDispatch, RootState } from '../../services/store';
+import Category from './category';
 
 const categories = [
 	{
@@ -21,12 +17,12 @@ const categories = [
 		title: 'Булки',
 	},
 	{
-		value: 'sauce',
-		title: 'Соусы',
-	},
-	{
 		value: 'main',
 		title: 'Начинки',
+	},
+	{
+		value: 'sauce',
+		title: 'Соусы',
 	},
 ];
 
@@ -37,44 +33,53 @@ type BurgerIngredientsState = {
 const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
 
 type SelectedState = {
-	ingredients: Ingredient[];
 	ingredientDetails: Ingredient | null;
-	counts: { [id: string]: number };
 };
 
 const BurgerIngredients = () => {
-	const { ingredients, ingredientDetails, counts } = useSelector<
-		RootState,
-		SelectedState
-	>((store) => {
-		const counts: any = {};
-		if (store.burger.bun != null) {
-			counts[store.burger.bun._id] = 2;
-		}
-		for (const fillingItem of store.burger.filling) {
-			counts[fillingItem.ingredient._id] =
-				(counts[fillingItem.ingredient._id] || 0) + 1;
-		}
-
-		return {
-			ingredients: store.ingredients,
-			ingredientDetails: store.ingredientDetails,
-			counts: counts,
-		};
-	}, shallowEqual);
+	const { ingredientDetails } = useSelector<RootState, SelectedState>(
+		(store) => {
+			return {
+				ingredientDetails: store.ingredientDetails,
+			};
+		},
+		shallowEqual
+	);
 
 	const dispatch = useDispatch<AppDispatch>();
 
-	useEffect(() => {
-		dispatch(loadIngredients(apiURL));
-	}, []);
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	const [state, setState] = useState<BurgerIngredientsState>({
-		current: 'bun',
+		current: categories[0].value,
 	});
 
-	const handleItemClick = useCallback((item: Ingredient) => {
-		dispatch(showIngredientDetails(item));
+	const handleScroll = useCallback(() => {
+		const currentTop = scrollRef.current!.scrollTop;
+		let minDist = Number.MAX_VALUE;
+		let selectedCategory = state.current;
+		scrollRef.current!.childNodes.forEach((node) => {
+			const childElement = node as Element;
+			const dist = Math.abs(
+				currentTop - childElement.getBoundingClientRect().top
+			);
+			if (dist < minDist) {
+				minDist = dist;
+				const category = childElement.getAttribute('data-category');
+				if (category) {
+					selectedCategory = category;
+				}
+			}
+		});
+		setState({ current: selectedCategory });
+	}, [state, setState]);
+
+	useEffect(() => {
+		dispatch(loadIngredients(apiURL));
+		scrollRef.current?.addEventListener('scroll', handleScroll);
+		return () => {
+			scrollRef.current?.removeEventListener('scroll', handleScroll);
+		};
 	}, []);
 
 	const handleDetailClose = useCallback(() => {
@@ -101,16 +106,15 @@ const BurgerIngredients = () => {
 						</Tab>
 					))}
 				</div>
-				<div className={styles.mainMenu + ' custom-scroll mt-10'}>
-					{categories.map((type, index) => (
-						<div className={styles.chapter} key={index}>
-							<h2 className='text text_type_main-medium'>{type.title}</h2>
-							<IngredientsList
-								items={ingredients.filter((item) => item.type === type.value)}
-								counts={counts}
-								onItemClick={handleItemClick}
-							/>
-						</div>
+				<div
+					ref={scrollRef}
+					className={styles.mainMenu + ' custom-scroll mt-10'}>
+					{categories.map((category) => (
+						<Category
+							key={category.value}
+							title={category.title}
+							value={category.value}
+						/>
 					))}
 				</div>
 			</div>
