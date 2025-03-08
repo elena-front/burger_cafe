@@ -24,7 +24,7 @@ const burgerReducer = createReducer<BurgerState>(
 			.addCase(addIngredient, (state, action) => {
 				if (action.payload.type === 'bun') {
 					return { ...state, bun: action.payload };
-				} else {
+				} else if (state.bun != null) {
 					const newFilling = { uid: uuidv4(), ingredient: action.payload };
 					return { ...state, filling: [...state.filling, newFilling] };
 				}

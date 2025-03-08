@@ -120,19 +120,21 @@ export const BurgerConstructor = () => {
 	return (
 		<div ref={drop} className={styles.burgerConstructor}>
 			{content}
-			<div className={styles.footer}>
-				<div className={styles.total}>
-					<span className='text text_type_main-large pr-2'>{total}</span>
-					<CurrencyIcon type='primary' className={styles.currencyIcon} />
+			{bun != null && (
+				<div className={styles.footer}>
+					<div className={styles.total}>
+						<span className='text text_type_main-large pr-2'>{total}</span>
+						<CurrencyIcon type='primary' className={styles.currencyIcon} />
+					</div>
+					<Button
+						htmlType='button'
+						type='primary'
+						size='large'
+						onClick={handlePlaceOrder}>
+						Оформить заказ
+					</Button>
 				</div>
-				<Button
-					htmlType='button'
-					type='primary'
-					size='large'
-					onClick={handlePlaceOrder}>
-					Оформить заказ
-				</Button>
-			</div>
+			)}
 		</div>
 	);
 };
