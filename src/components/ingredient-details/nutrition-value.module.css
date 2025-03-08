@@ -1,0 +1,7 @@
+.detailsColumn {
+	display: flex;
+	flex-direction: column;
+	min-width: 120px;
+	align-items: center;
+	gap: 8px;
+}

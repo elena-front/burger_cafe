@@ -1,0 +1,39 @@
+.burgerIngredient {
+	display: flex;
+	flex-direction: column;
+	width: 600px;
+	max-height: 912px;
+}
+
+.tab {
+	display: flex;
+	justify-content: center;
+}
+
+.items {
+	display: flex;
+	flex-direction: column;
+}
+.itemCard {
+	display: flex;
+	flex-wrap: wrap;
+}
+.mainMenu {
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	gap: 24px;
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.cardImg {
+	width: 240px;
+	height: 120px;
+}
+.chapter {
+	display: flex;
+	flex-direction: column;
+}
