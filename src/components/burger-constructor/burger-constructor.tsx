@@ -2,40 +2,67 @@ import {
 	ConstructorElement,
 	CurrencyIcon,
 	Button,
-	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient } from '../../types';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
-import Modal from '../modal/modal';
-import { useState } from 'react';
-import OrderDetails from '../order-details/order-details';
+import { useCallback, useMemo } from 'react';
+import { shallowEqual } from 'react-redux';
+import { DraggingIngredient, FillingItem, Ingredient } from '../../types';
+import {
+	addIngredient,
+	placeOrder,
+	removeFilling,
+} from '../../services/actions';
+import { useDrop } from 'react-dnd';
+import { FillingBar } from './filling-bar';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
-type BurgerConstructorProps = {
-	items: Ingredient[];
-	bun: Ingredient | undefined;
-	filling: Ingredient[];
+type SelectedState = {
+	bun: Ingredient | null;
+	filling: FillingItem[];
+	ingredients: Ingredient[];
 };
 
-export const BurgerConstructor = ({
-	items,
-	bun,
-	filling,
-}: BurgerConstructorProps) => {
-	const myBurgerItems = filling.map((item, index) => {
-		return (
-			<li key={index} className={styles.constructorItem}>
-				<div className={styles.dragIcon}>
-					<DragIcon type='primary' />
-				</div>
-				<ConstructorElement
-					isLocked={false}
-					text={item!.name}
-					price={item!.price}
-					thumbnail={item!.image}
-				/>
-			</li>
-		);
-	});
+const orderAPI = '/orders';
+
+export const BurgerConstructor = () => {
+	const dispatch = useAppDispatch();
+
+	const { bun, filling, ingredients } = useAppSelector<SelectedState>(
+		(store) => {
+			return {
+				bun: store.burger.bun,
+				filling: store.burger.filling,
+				ingredients: store.ingredients,
+			};
+		},
+		shallowEqual
+	);
+
+	const [, drop] = useDrop<DraggingIngredient>(
+		{
+			accept: 'ingredient',
+			collect: (monitor) => ({
+				isHover: monitor.isOver(),
+			}),
+			drop: (item) => {
+				const id = item.id;
+				const ingredient = ingredients.find((item) => item._id === id);
+				if (ingredient) {
+					dispatch(addIngredient({ ingredient, uid: uuidv4() }));
+				}
+			},
+		},
+		[ingredients]
+	);
+
+	const onCloseClick = useCallback((uid: string) => {
+		dispatch(removeFilling(uid));
+	}, []);
+
+	const myBurgerItems = filling.map((item) => (
+		<FillingBar key={item.uid} item={item} onClose={onCloseClick} />
+	));
 
 	const content = (
 		<div>
@@ -45,7 +72,7 @@ export const BurgerConstructor = ({
 					<ConstructorElement
 						type='top'
 						isLocked={true}
-						text={bun.name}
+						text={`${bun.name} (верх)`}
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
@@ -58,7 +85,7 @@ export const BurgerConstructor = ({
 					<ConstructorElement
 						type='bottom'
 						isLocked={true}
-						text={bun.name}
+						text={`${bun.name} (низ)`}
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
@@ -67,28 +94,31 @@ export const BurgerConstructor = ({
 		</div>
 	);
 
-	const [state, setState] = useState(false);
-
 	const handlePlaceOrder = () => {
-		setState(true);
+		if (bun) {
+			const ids = [bun, ...filling.map((item) => item.ingredient), bun].map(
+				(item) => item._id
+			);
+			dispatch(placeOrder(ids));
+		}
 	};
-	const handlePlaceOrderClose = () => {
-		setState(false);
-	};
+
+	const total = useMemo(
+		() =>
+			((bun && bun.price * 2) || 0) +
+			filling
+				.map((item) => item.ingredient.price)
+				.reduce((acc, item) => acc + item, 0),
+		[bun, filling]
+	);
 
 	return (
-		<>
-			{state && (
-				<Modal onClose={handlePlaceOrderClose} title=''>
-					<OrderDetails orderId='034536' />
-				</Modal>
-			)}
-
-			<div className={styles.burgerConstructor}>
-				{content}
+		<div ref={drop} className={styles.burgerConstructor}>
+			{content}
+			{bun != null && (
 				<div className={styles.footer}>
 					<div className={styles.total}>
-						<span className='text text_type_main-large pr-2'>610</span>
+						<span className='text text_type_main-large pr-2'>{total}</span>
 						<CurrencyIcon type='primary' className={styles.currencyIcon} />
 					</div>
 					<Button
@@ -99,7 +129,7 @@ export const BurgerConstructor = ({
 						Оформить заказ
 					</Button>
 				</div>
-			</div>
-		</>
+			)}
+		</div>
 	);
 };

@@ -6,7 +6,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 type ModalProps = {
 	children: React.ReactNode;
-	title: string;
+	title?: string;
 	onClose: () => void;
 };
 

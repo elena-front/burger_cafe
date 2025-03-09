@@ -8,14 +8,6 @@
 	gap: 4px;
 }
 
-.cardsList {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	row-gap: 32px;
-	column-gap: 24px;
-}
-
 .price {
 	display: flex;
 	gap: 8px;
