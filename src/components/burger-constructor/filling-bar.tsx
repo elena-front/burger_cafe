@@ -6,7 +6,7 @@ import {
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { moveFilling } from '../../services/actions';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../hooks';
 
 type FillingBarProps = {
 	item: FillingItem;
@@ -29,7 +29,7 @@ export const FillingBar = ({ item, onClose }: FillingBarProps) => {
 		[item]
 	);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const [, drop] = useDrop<DraggingFilling>({
 		accept: 'filling',

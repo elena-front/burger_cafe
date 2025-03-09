@@ -2,22 +2,21 @@ import { useCallback } from 'react';
 import { DraggingIngredient, Ingredient } from '../../types';
 import styles from './ingredient-card.module.css';
 import { showIngredientDetails } from '../../services/actions';
-import { useDispatch, useSelector } from 'react-redux';
 import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
-import { RootState } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 type IngredientCardProps = {
 	ingredient: Ingredient;
 };
 
 const IngredientCard = ({ ingredient }: IngredientCardProps) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
-	const count = useSelector<RootState, number>((state) => {
+	const count = useAppSelector<number>((state) => {
 		if (
 			ingredient.type === 'bun' &&
 			state.burger.bun != null &&

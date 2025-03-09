@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { useDispatch } from 'react-redux';
 import { loadIngredients } from '../../services/actions';
-import { AppDispatch } from '../../services/store';
 import Category from './category';
+import { useAppDispatch } from '../hooks';
 
 const categories = [
 	{
@@ -26,7 +25,7 @@ type BurgerIngredientsState = {
 };
 
 const BurgerIngredients = () => {
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 
 	const scrollRef = useRef<HTMLDivElement>(null);
 

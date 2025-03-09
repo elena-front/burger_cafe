@@ -3,17 +3,11 @@ import {
 	CurrencyIcon,
 	Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { v4 as uuidv4, v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'react-redux';
-import {
-	DraggingIngredient,
-	FillingItem,
-	Ingredient,
-	Order,
-} from '../../types';
+import { DraggingIngredient, FillingItem, Ingredient } from '../../types';
 import {
 	addIngredient,
 	placeOrder,
@@ -21,7 +15,7 @@ import {
 } from '../../services/actions';
 import { useDrop } from 'react-dnd';
 import { FillingBar } from './filling-bar';
-import { AppDispatch, RootState } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 type SelectedState = {
 	bun: Ingredient | null;
@@ -32,9 +26,9 @@ type SelectedState = {
 const orderAPI = '/orders';
 
 export const BurgerConstructor = () => {
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 
-	const { bun, filling, ingredients } = useSelector<RootState, SelectedState>(
+	const { bun, filling, ingredients } = useAppSelector<SelectedState>(
 		(store) => {
 			return {
 				bun: store.burger.bun,

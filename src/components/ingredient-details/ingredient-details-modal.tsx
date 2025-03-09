@@ -1,20 +1,18 @@
-import { RootState } from '../../services/store';
-import { useSelector } from 'react-redux';
 import { Ingredient } from '../../types';
 import { shallowEqual } from 'react-redux';
 import Modal from '../modal/modal';
 import IngredientDetails from './ingredient-details';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { hideIngredientDetails } from '../../services/actions';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 const IngredientDetailsModal = () => {
-	const ingredientDetails = useSelector<RootState, Ingredient | null>(
+	const ingredientDetails = useAppSelector<Ingredient | null>(
 		(state) => state.ingredientDetails,
 		shallowEqual
 	);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const handleClose = useCallback(() => {
 		dispatch(hideIngredientDetails());

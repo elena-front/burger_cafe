@@ -1,9 +1,8 @@
-import { useSelector } from 'react-redux';
 import styles from './category.module.css';
 import { Ingredient } from '../../types';
 import IngredientCard from './ingredient-card';
-import { RootState } from '../../services/store';
 import { shallowEqual } from 'react-redux';
+import { useAppSelector } from '../hooks';
 
 type CategoryProps = {
 	title: string;
@@ -11,7 +10,7 @@ type CategoryProps = {
 };
 
 const Category = ({ title, value }: CategoryProps) => {
-	const items = useSelector<RootState, Ingredient[]>(
+	const items = useAppSelector<Ingredient[]>(
 		(state) => state.ingredients.filter((item) => item.type === value),
 		shallowEqual
 	);

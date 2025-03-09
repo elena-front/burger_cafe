@@ -1,20 +1,18 @@
-import { RootState } from '../../services/store';
-import { useSelector } from 'react-redux';
 import { Order } from '../../types';
 import { shallowEqual } from 'react-redux';
 import Modal from '../modal/modal';
 import OrderDetails from './order-details';
-import { useDispatch } from 'react-redux';
 import { useCallback } from 'react';
 import { closeOrderDetails } from '../../services/actions';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 const OrderDetailsModal = () => {
-	const order = useSelector<RootState, Order | null>(
+	const order = useAppSelector<Order | null>(
 		(state) => state.order,
 		shallowEqual
 	);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const handleClose = useCallback(() => {
 		dispatch(closeOrderDetails());
