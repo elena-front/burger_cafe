@@ -52,6 +52,9 @@ const burgerReducer = createReducer<BurgerState>(
 					filling: filtered.toSpliced(destIndex, 0, sourceItem),
 				};
 			})
+			.addCase(placeOrder.fulfilled, () => {
+				return { bun: null, filling: [] };
+			})
 );
 
 const ingredientDetailsReducer = createReducer<Ingredient | null>(
