@@ -25,8 +25,6 @@ type BurgerIngredientsState = {
 	current: string;
 };
 
-const apiURL = 'https://norma.nomoreparties.space/api/ingredients';
-
 const BurgerIngredients = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -57,7 +55,7 @@ const BurgerIngredients = () => {
 	}, [state, setState]);
 
 	useEffect(() => {
-		dispatch(loadIngredients(apiURL));
+		dispatch(loadIngredients());
 		scrollRef.current?.addEventListener('scroll', handleScroll);
 		return () => {
 			scrollRef.current?.removeEventListener('scroll', handleScroll);

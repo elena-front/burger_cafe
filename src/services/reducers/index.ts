@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { v4 as uuidv4 } from 'uuid';
 import {
 	addIngredient,
 	closeOrderDetails,
@@ -22,10 +21,13 @@ const burgerReducer = createReducer<BurgerState>(
 	(builder) =>
 		builder
 			.addCase(addIngredient, (state, action) => {
-				if (action.payload.type === 'bun') {
-					return { ...state, bun: action.payload };
+				if (action.payload.ingredient.type === 'bun') {
+					return { ...state, bun: action.payload.ingredient };
 				} else if (state.bun != null) {
-					const newFilling = { uid: uuidv4(), ingredient: action.payload };
+					const newFilling = {
+						uid: action.payload.uid,
+						ingredient: action.payload.ingredient,
+					};
 					return { ...state, filling: [...state.filling, newFilling] };
 				}
 			})

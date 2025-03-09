@@ -3,6 +3,7 @@ import {
 	CurrencyIcon,
 	Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { v4 as uuidv4, v4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +29,7 @@ type SelectedState = {
 	ingredients: Ingredient[];
 };
 
-const orderAPI = 'https://norma.nomoreparties.space/api/orders';
+const orderAPI = '/orders';
 
 export const BurgerConstructor = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +55,7 @@ export const BurgerConstructor = () => {
 				const id = item.id;
 				const ingredient = ingredients.find((item) => item._id === id);
 				if (ingredient) {
-					dispatch(addIngredient(ingredient));
+					dispatch(addIngredient({ ingredient, uid: uuidv4() }));
 				}
 			},
 		},
@@ -104,7 +105,7 @@ export const BurgerConstructor = () => {
 			const ids = [bun, ...filling.map((item) => item.ingredient), bun].map(
 				(item) => item._id
 			);
-			dispatch(placeOrder({ api: orderAPI, ids: ids }));
+			dispatch(placeOrder(ids));
 		}
 	};
 
