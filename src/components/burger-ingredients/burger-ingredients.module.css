@@ -33,7 +33,3 @@ ul {
 	width: 240px;
 	height: 120px;
 }
-.chapter {
-	display: flex;
-	flex-direction: column;
-}

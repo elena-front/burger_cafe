@@ -2,13 +2,15 @@ import styles from './order-details.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 type OrderDetailsProps = {
-	orderId: string;
+	orderId: number;
 };
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {
 	return (
 		<div className={styles.modalOrderModal}>
-			<div className='text text_type_digits-large mt-20'>{orderId}</div>
+			<div className='text text_type_digits-large mt-20'>
+				{orderId.toString().padStart(6, '0')}
+			</div>
 			<div className='text text_type_main-default mt-8'>
 				идентификатор заказа
 			</div>

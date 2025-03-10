@@ -12,3 +12,29 @@ export type Ingredient = {
 	image_large: string;
 	__v: number;
 };
+
+export type Order = {
+	name: string;
+	order: {
+		number: number;
+	};
+	success: boolean;
+};
+
+export type FillingItem = {
+	uid: string;
+	ingredient: Ingredient;
+};
+
+export type BurgerState = {
+	bun: Ingredient | null;
+	filling: FillingItem[];
+};
+
+export type DraggingIngredient = {
+	id: string;
+};
+
+export type DraggingFilling = {
+	uid: string;
+};
