@@ -1,10 +1,11 @@
 import {
 	Button,
-	EmailInput,
+	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ChangeEvent, useState } from 'react';
 import styles from './login.module.css';
+import { Link } from 'react-router-dom';
 
 export function LoginPage() {
 	const [value, setValue] = useState('');
@@ -23,7 +24,7 @@ export function LoginPage() {
 		<div className={styles.loginPage}>
 			<div className={styles.inputs}>
 				<div className='text text_type_main-medium'>Вход</div>
-				<EmailInput
+				<Input
 					onChange={onChangeEmail}
 					value={value}
 					name={'email'}
@@ -47,14 +48,18 @@ export function LoginPage() {
 					<span className='text text_type_main-default text_color_inactive'>
 						Вы - новый пользователь?{' '}
 					</span>
-					<a className='text text_type_main-default'>Зарегистрироваться</a>
+					<Link to='/register' className='text text_type_main-default'>
+						Зарегистрироваться
+					</Link>
 				</div>
 
 				<div>
 					<span className='text text_type_main-default text_color_inactive'>
 						Забыли пароль?{' '}
 					</span>
-					<a className='text text_type_main-default'>Восстановить пароль</a>
+					<Link to='/forgot-password' className='text text_type_main-default'>
+						Восстановить пароль
+					</Link>
 				</div>
 			</div>
 		</div>

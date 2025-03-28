@@ -1,0 +1,14 @@
+.registerPage {
+	display: flex;
+	flex-direction: column;
+	margin-top: 180px;
+	align-items: center;
+	gap: 80px;
+}
+.inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 480px;
+	align-items: center;
+}
