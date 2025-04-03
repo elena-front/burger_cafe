@@ -1,8 +1,8 @@
 const baseURL = 'https://norma.nomoreparties.space/api';
 
-export const request = async (url: string, options?: RequestInit) => {
+export const request = async (path: string, options?: RequestInit) => {
 	try {
-		const res = await fetch(`${baseURL}/${url}`, options);
+		const res = await fetch(`${baseURL}/${path}`, options);
 		if (res.ok) {
 			return await res.json();
 		} else {
@@ -10,5 +10,6 @@ export const request = async (url: string, options?: RequestInit) => {
 		}
 	} catch (exception) {
 		console.error('error fetching API', exception);
+		throw exception;
 	}
 };

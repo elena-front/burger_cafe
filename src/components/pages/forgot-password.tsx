@@ -1,32 +1,47 @@
 import {
 	Button,
-	Input,
-	PasswordInput,
+	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './forgot-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks';
+import { passwordReset } from '../../services/actions';
 
 export function ForgotPassword() {
-	const [forgotPassword, setForgotPassword] = useState('');
+	const [email, setEmail] = useState('');
 
-	const onChangeForgotPassword = (e: ChangeEvent<HTMLInputElement>) => {
-		setForgotPassword(e.target.value);
+	const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+		setEmail(e.target.value);
 	};
+
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+
+	const handleClick = useCallback(() => {
+		dispatch(passwordReset(email))
+			.unwrap()
+			.then(() => navigate('/reset-password'))
+			.catch(() => console.error('не удалось'));
+	}, []);
 
 	return (
 		<div className={styles.forgotPassword}>
 			<div className={styles.input}>
 				<div className='text text_type_main-medium'>Восстановление пароля</div>
 
-				<PasswordInput
-					onChange={onChangeForgotPassword}
-					value={forgotPassword}
+				<EmailInput
+					onChange={onChangeEmail}
+					value={email}
 					name={'forgotPassword'}
 					extraClass='mb-2'
 				/>
 
-				<Button htmlType='button' type='primary' size='large'>
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handleClick}>
 					Восстановить
 				</Button>
 			</div>

@@ -2,14 +2,20 @@ import { combineReducers } from 'redux';
 import {
 	addIngredient,
 	closeOrderDetails,
+	getUserInfo,
 	hideIngredientDetails,
 	loadIngredients,
+	login,
+	logout,
 	moveFilling,
 	placeOrder,
+	refresh,
+	register,
 	removeFilling,
 	showIngredientDetails,
+	updateUserInfo,
 } from '../actions';
-import { BurgerState, Ingredient, Order } from '../../types';
+import { BurgerState, Ingredient, Order, User } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
 
 const ingredientsReducer = createReducer<Ingredient[]>([], (builder) =>
@@ -72,9 +78,55 @@ const orderReducer = createReducer<Order | null>(null, (builder) =>
 		.addCase(placeOrder.rejected, () => null)
 );
 
+const userReducer = createReducer<User | null>(null, (builder) => {
+	builder
+		.addCase(logout.fulfilled, (state, action) => {
+			return action.payload.success ? null : state;
+		})
+		.addCase(login.fulfilled, (state, action) => {
+			return action.payload.success
+				? {
+						email: action.payload.user.email,
+						login: action.payload.user.name,
+				  }
+				: state;
+		})
+		.addCase(refresh.fulfilled, (state, action) => {
+			if (state != null && action.payload.success) {
+				return { ...state, accessToken: action.payload.accessToken };
+			}
+			return state;
+		})
+		.addCase(register.fulfilled, (state, action) => {
+			return action.payload.success
+				? {
+						email: action.payload.user.email,
+						login: action.payload.user.name,
+				  }
+				: state;
+		})
+		.addCase(getUserInfo.fulfilled, (state, action) => {
+			return action.payload.success
+				? {
+						email: action.payload.user.email,
+						login: action.payload.user.name,
+				  }
+				: state;
+		})
+		.addCase(updateUserInfo.fulfilled, (state, action) => {
+			return action.payload.success
+				? {
+						email: action.payload.user.email,
+						login: action.payload.user.name,
+				  }
+				: state;
+		});
+});
+
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
 	ingredientDetails: ingredientDetailsReducer,
 	order: orderReducer,
+	user: userReducer,
 });

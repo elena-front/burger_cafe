@@ -1,0 +1,27 @@
+.profilePage {
+	display: flex;
+	gap: 60px;
+	margin-top: 180px;
+}
+.inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
+	width: 480px;
+}
+.navigation {
+	width: 320px;
+}
+.bar {
+	display: flex;
+	flex-direction: column;
+}
+
+.barItem {
+	height: 64px;
+	width: 320px;
+}
+.buttons {
+	align-self: flex-end;
+}

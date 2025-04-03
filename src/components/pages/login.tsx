@@ -3,22 +3,35 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './login.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks';
+import { useAuth } from '../../services/auth';
 
 export function LoginPage() {
-	const [value, setValue] = useState('');
+	const [email, setEmail] = useState('');
 
-	const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-		setValue(e.target.value);
-	};
+	const onChangeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+		setEmail(e.target.value);
+	}, []);
 
 	const [password, setPassword] = useState('');
 
-	const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+	const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
-	};
+	}, []);
+
+	const dispatch = useAppDispatch();
+	const { signIn } = useAuth(dispatch);
+
+	const navigate = useNavigate();
+
+	const handleClick = useCallback(() => {
+		signIn(email, password)
+			.then(() => navigate('/'))
+			.catch(() => console.error('не удалось войти'));
+	}, []);
 
 	return (
 		<div className={styles.loginPage}>
@@ -26,7 +39,7 @@ export function LoginPage() {
 				<div className='text text_type_main-medium'>Вход</div>
 				<Input
 					onChange={onChangeEmail}
-					value={value}
+					value={email}
 					name={'email'}
 					placeholder='Логин'
 					extraClass='mb-2'
@@ -38,7 +51,11 @@ export function LoginPage() {
 					extraClass='mb-2'
 				/>
 
-				<Button htmlType='button' type='primary' size='large'>
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handleClick}>
 					Войти
 				</Button>
 			</div>

@@ -4,9 +4,11 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './register.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks';
+import { useAuth } from '../../services/auth';
 
 export function Register() {
 	const [name, setName] = useState('');
@@ -23,6 +25,17 @@ export function Register() {
 	const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
 	};
+
+	const dispatch = useAppDispatch();
+	const { signUp } = useAuth(dispatch);
+
+	const navigate = useNavigate();
+
+	const handleClick = useCallback(() => {
+		signUp(name, email, password)
+			.then(() => navigate('/'))
+			.catch(() => console.error('не удалось зарегистрироваться'));
+	}, []);
 
 	return (
 		<div className={styles.registerPage}>
@@ -54,7 +67,11 @@ export function Register() {
 					extraClass='mb-2'
 				/>
 
-				<Button htmlType='button' type='primary' size='large'>
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handleClick}>
 					Зарегистрироваться
 				</Button>
 			</div>

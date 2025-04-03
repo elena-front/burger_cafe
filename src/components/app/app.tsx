@@ -17,11 +17,11 @@ import { NotFound } from '../pages/not-found';
 const App = () => {
 	return (
 		<div className={styles.app}>
-			<AppHeader />
-			<OrderDetailsModal />
-			<IngredientDetailsModal />
-
 			<Router>
+				<AppHeader />
+				<OrderDetailsModal />
+				<IngredientDetailsModal />
+
 				<Routes>
 					<Route path='/forgot-password' element={<ForgotPassword />} />
 					<Route path='/ingredients/:id' element={<Ingredient />} />

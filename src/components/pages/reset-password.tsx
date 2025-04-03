@@ -3,20 +3,28 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './reset-password.module.css';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../hooks';
+import { setNewPassword } from '../../services/actions';
 
 export function ResetPassword() {
-	const [newPassword, setNewPassword] = useState('');
+	const [password, setPassword] = useState('');
 	const onChangeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
-		setNewPassword(e.target.value);
+		setPassword(e.target.value);
 	};
+
+	const dispatch = useAppDispatch();
 
 	const [code, setCode] = useState('');
 	const onChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
 		setCode(e.target.value);
 	};
+
+	const handleClick = useCallback(() => {
+		dispatch(setNewPassword({ password: password, token: code }));
+	}, []);
 
 	return (
 		<div className={styles.page}>
@@ -25,7 +33,7 @@ export function ResetPassword() {
 
 				<PasswordInput
 					onChange={onChangeNewPassword}
-					value={newPassword}
+					value={password}
 					name={'newPassword'}
 					extraClass='mb-2'
 					placeholder='Введите новый пароль'
@@ -39,7 +47,11 @@ export function ResetPassword() {
 					extraClass='mb-2'
 				/>
 
-				<Button htmlType='button' type='primary' size='large'>
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handleClick}>
 					Сохранить
 				</Button>
 			</div>

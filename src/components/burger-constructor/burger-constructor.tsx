@@ -23,8 +23,6 @@ type SelectedState = {
 	ingredients: Ingredient[];
 };
 
-const orderAPI = '/orders';
-
 export const BurgerConstructor = () => {
 	const dispatch = useAppDispatch();
 

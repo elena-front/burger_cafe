@@ -5,6 +5,7 @@ import {
 	ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
+import { Link } from 'react-router-dom';
 
 const AppHeader = () => {
 	return (
@@ -28,9 +29,11 @@ const AppHeader = () => {
 			<div className={styles.appHeaderRight}>
 				<div className={styles.appHeaderItem}>
 					<ProfileIcon type='secondary' />
-					<span className='text text_type_main-default text_color_inactive '>
+					<Link
+						to='/profile'
+						className='text text_type_main-default text_color_inactive '>
 						Личный кабинет
-					</span>
+					</Link>
 				</div>
 			</div>
 		</header>
