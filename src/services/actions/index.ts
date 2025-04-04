@@ -25,12 +25,6 @@ export const loadIngredients = createAsyncThunk<Ingredient[]>(
 	async () => (await request(ingredientsAPI)).data
 );
 
-export const showIngredientDetails = createAction<Ingredient>(
-	'SHOW_INGREDIENT_DETAILS'
-);
-
-export const hideIngredientDetails = createAction('HIDE_INGREDIENT_DETAILS');
-
 export const addIngredient = createAction<{
 	ingredient: Ingredient;
 	uid: string;

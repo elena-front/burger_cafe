@@ -11,10 +11,10 @@ const AppHeader = () => {
 	return (
 		<header className={styles.appHeader + ' pb-4 pt-4'}>
 			<div className={styles.appHeaderLeft}>
-				<div className={styles.appHeaderItem}>
+				<Link to='/' className={styles.appHeaderItem}>
 					<BurgerIcon type='primary' />
 					<span className='text text_type_main-default'>Конструктор</span>
-				</div>
+				</Link>
 
 				<div className={styles.appHeaderItem}>
 					<ListIcon type='secondary' />
@@ -27,14 +27,12 @@ const AppHeader = () => {
 			<Logo />
 
 			<div className={styles.appHeaderRight}>
-				<div className={styles.appHeaderItem}>
+				<Link to='/profile' className={styles.appHeaderItem}>
 					<ProfileIcon type='secondary' />
-					<Link
-						to='/profile'
-						className='text text_type_main-default text_color_inactive '>
+					<div className='text text_type_main-default text_color_inactive '>
 						Личный кабинет
-					</Link>
-				</div>
+					</div>
+				</Link>
 			</div>
 		</header>
 	);

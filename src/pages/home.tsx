@@ -1,10 +1,10 @@
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import { BurgerConstructor } from '../burger-constructor/burger-constructor';
+import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
+import { BurgerConstructor } from '../components/burger-constructor/burger-constructor';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import styles from '../pages/styles.module.css';
+import styles from './styles.module.css';
 
-export default function Main() {
+export function Home() {
 	return (
 		<div>
 			<main className={styles.burgerSet}>

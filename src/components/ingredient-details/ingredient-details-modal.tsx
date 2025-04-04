@@ -3,19 +3,22 @@ import { shallowEqual } from 'react-redux';
 import Modal from '../modal/modal';
 import IngredientDetails from './ingredient-details';
 import { useCallback } from 'react';
-import { hideIngredientDetails } from '../../services/actions';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppSelector } from '../hooks';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const IngredientDetailsModal = () => {
+	const { id } = useParams();
+
+	const navigate = useNavigate();
+
 	const ingredientDetails = useAppSelector<Ingredient | null>(
-		(state) => state.ingredientDetails,
+		(state) =>
+			state.ingredients.find((ingredient) => ingredient._id === id) || null,
 		shallowEqual
 	);
 
-	const dispatch = useAppDispatch();
-
 	const handleClose = useCallback(() => {
-		dispatch(hideIngredientDetails());
+		navigate(-1);
 	}, []);
 
 	return (

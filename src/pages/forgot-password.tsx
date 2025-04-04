@@ -5,8 +5,8 @@ import {
 import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../hooks';
-import { passwordReset } from '../../services/actions';
+import { useAppDispatch } from '../components/hooks';
+import { passwordReset } from '../services/actions';
 
 export function ForgotPassword() {
 	const [email, setEmail] = useState('');

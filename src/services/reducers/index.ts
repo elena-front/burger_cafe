@@ -3,7 +3,6 @@ import {
 	addIngredient,
 	closeOrderDetails,
 	getUserInfo,
-	hideIngredientDetails,
 	loadIngredients,
 	login,
 	logout,
@@ -12,7 +11,6 @@ import {
 	refresh,
 	register,
 	removeFilling,
-	showIngredientDetails,
 	updateUserInfo,
 } from '../actions';
 import { BurgerState, Ingredient, Order, User } from '../../types';
@@ -61,14 +59,6 @@ const burgerReducer = createReducer<BurgerState>(
 			.addCase(placeOrder.fulfilled, () => {
 				return { bun: null, filling: [] };
 			})
-);
-
-const ingredientDetailsReducer = createReducer<Ingredient | null>(
-	null,
-	(builder) =>
-		builder
-			.addCase(showIngredientDetails, (_state, action) => action.payload)
-			.addCase(hideIngredientDetails, () => null)
 );
 
 const orderReducer = createReducer<Order | null>(null, (builder) =>
@@ -126,7 +116,6 @@ const userReducer = createReducer<User | null>(null, (builder) => {
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
-	ingredientDetails: ingredientDetailsReducer,
 	order: orderReducer,
 	user: userReducer,
 });

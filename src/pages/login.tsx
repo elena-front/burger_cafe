@@ -6,8 +6,8 @@ import {
 import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../hooks';
-import { useAuth } from '../../services/auth';
+import { useAppDispatch } from '../components/hooks';
+import { useAuth } from '../services/auth';
 
 export function LoginPage() {
 	const [email, setEmail] = useState('');

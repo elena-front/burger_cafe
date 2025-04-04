@@ -6,8 +6,8 @@ import {
 import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './reset-password.module.css';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../hooks';
-import { setNewPassword } from '../../services/actions';
+import { useAppDispatch } from '../components/hooks';
+import { setNewPassword } from '../services/actions';
 
 export function ResetPassword() {
 	const [password, setPassword] = useState('');

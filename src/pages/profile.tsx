@@ -7,11 +7,11 @@ import {
 import React, { ChangeEvent, useCallback } from 'react';
 import styles from './profile.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { UpdateUserInfoRequest, User } from '../../types';
+import { useAppDispatch, useAppSelector } from '../components/hooks';
+import { UpdateUserInfoRequest, User } from '../types';
 import { shallowEqual } from 'react-redux';
-import { useAuth } from '../../services/auth';
-import { updateUserInfo } from '../../services/actions';
+import { useAuth } from '../services/auth';
+import { updateUserInfo } from '../services/actions';
 
 export function Profile() {
 	const user = useAppSelector<User | null>((store) => store.user, shallowEqual);
@@ -57,7 +57,7 @@ export function Profile() {
 			update.password = password;
 		}
 		dispatch(updateUserInfo(update));
-	}, []);
+	}, [name, email, password]);
 
 	return (
 		<div className={styles.profilePage}>

@@ -7,8 +7,8 @@ import {
 import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './register.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../hooks';
-import { useAuth } from '../../services/auth';
+import { useAppDispatch } from '../components/hooks';
+import { useAuth } from '../services/auth';
 
 export function Register() {
 	const [name, setName] = useState('');
@@ -35,7 +35,7 @@ export function Register() {
 		signUp(name, email, password)
 			.then(() => navigate('/'))
 			.catch(() => console.error('не удалось зарегистрироваться'));
-	}, []);
+	}, [name, email, password]);
 
 	return (
 		<div className={styles.registerPage}>
