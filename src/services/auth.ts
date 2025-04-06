@@ -1,7 +1,5 @@
-import Cookies from 'js-cookie';
 import { login, logout, register } from './actions';
 import { AppDispatch } from './store';
-import { LoginRequest, LoginResponse } from '../types';
 
 export const useAuth = (dispatch: AppDispatch) => {
 	const signIn = async (email: string, password: string) => {
@@ -9,10 +7,11 @@ export const useAuth = (dispatch: AppDispatch) => {
 			login({ email: email, password: password })
 		).unwrap();
 		if (response.success) {
-			Cookies.set('accessToken', response.accessToken.slice('Bearer '.length), {
-				expires: new Date(Date.now() + 20 * 60 * 1000),
-			});
-			Cookies.set('refreshToken', response.refreshToken);
+			localStorage.setItem(
+				'accessToken',
+				response.accessToken.slice('Bearer '.length)
+			);
+			localStorage.setItem('refreshToken', response.refreshToken);
 		}
 		return response;
 	};
@@ -20,7 +19,8 @@ export const useAuth = (dispatch: AppDispatch) => {
 	const signOut = async () => {
 		const response = await dispatch(logout()).unwrap();
 		if (response.success) {
-			Cookies.remove('refreshToken');
+			localStorage.removeItem('accessToken');
+			localStorage.removeItem('refreshToken');
 		}
 		return response;
 	};
@@ -30,10 +30,11 @@ export const useAuth = (dispatch: AppDispatch) => {
 			register({ name: name, email: email, password: password })
 		).unwrap();
 		if (response.success) {
-			Cookies.set('accessToken', response.accessToken.slice('Bearer '.length), {
-				expires: new Date(Date.now() + 20 * 60 * 1000),
-			});
-			Cookies.set('refreshToken', response.refreshToken);
+			localStorage.setItem(
+				'accessToken',
+				response.accessToken.slice('Bearer '.length)
+			);
+			localStorage.setItem('refreshToken', response.refreshToken);
 		}
 		return response;
 	};

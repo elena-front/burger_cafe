@@ -12,10 +12,8 @@ import {
 	RegisterResponse,
 	UpdateUserInfoRequest,
 	UpdateUserInfoResponse,
-	User,
 } from '../../types';
-import { request } from '../../utils/index';
-import Cookies from 'js-cookie';
+import { requestWithRefresh as request } from '../../utils/index';
 
 const orderAPI = 'orders';
 const ingredientsAPI = 'ingredients';
@@ -116,7 +114,9 @@ export const login = createAsyncThunk<LoginResponse, LoginRequest>(
 export const refresh = createAsyncThunk<RefreshResponse>(
 	'REFRESH',
 	async () => {
-		const body = JSON.stringify({ token: Cookies.get('refreshToken') });
+		const body = JSON.stringify({
+			token: localStorage.getItem('refreshToken'),
+		});
 		const options = {
 			headers: {
 				'content-type': 'application/json',
@@ -129,7 +129,7 @@ export const refresh = createAsyncThunk<RefreshResponse>(
 );
 
 export const logout = createAsyncThunk<LogoutResponse>('LOGOUT', async () => {
-	const body = JSON.stringify({ token: Cookies.get('refreshToken') });
+	const body = JSON.stringify({ token: localStorage.getItem('refreshToken') });
 	const options = {
 		headers: {
 			'content-type': 'application/json',
@@ -146,7 +146,7 @@ export const getUserInfo = createAsyncThunk<GetUserInfoResponse>(
 		const options = {
 			headers: {
 				'content-type': 'application/json',
-				authorization: 'Bearer ' + Cookies.get('accessToken'),
+				authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			},
 			method: 'GET',
 		};
@@ -162,7 +162,7 @@ export const updateUserInfo = createAsyncThunk<
 	const options = {
 		headers: {
 			'content-type': 'application/json',
-			authorization: 'Bearer ' + Cookies.get('accessToken'),
+			authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		},
 		method: 'PATCH',
 		body: body,

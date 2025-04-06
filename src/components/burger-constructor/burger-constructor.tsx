@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './burger-constructor.module.css';
 import { useCallback, useMemo } from 'react';
 import { shallowEqual } from 'react-redux';
-import { DraggingIngredient, FillingItem, Ingredient } from '../../types';
+import { DraggingIngredient, FillingItem, Ingredient, User } from '../../types';
 import {
 	addIngredient,
 	placeOrder,
@@ -16,22 +16,26 @@ import {
 import { useDrop } from 'react-dnd';
 import { FillingBar } from './filling-bar';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { useNavigate } from 'react-router-dom';
+import ConstructorElementPlaceholder from './constructor-element-placeholder';
 
 type SelectedState = {
 	bun: Ingredient | null;
 	filling: FillingItem[];
 	ingredients: Ingredient[];
+	user: User | null;
 };
 
 export const BurgerConstructor = () => {
 	const dispatch = useAppDispatch();
 
-	const { bun, filling, ingredients } = useAppSelector<SelectedState>(
+	const { bun, filling, ingredients, user } = useAppSelector<SelectedState>(
 		(store) => {
 			return {
 				bun: store.burger.bun,
 				filling: store.burger.filling,
 				ingredients: store.ingredients,
+				user: store.user,
 			};
 		},
 		shallowEqual
@@ -58,15 +62,33 @@ export const BurgerConstructor = () => {
 		dispatch(removeFilling(uid));
 	}, []);
 
-	const myBurgerItems = filling.map((item) => (
-		<FillingBar key={item.uid} item={item} onClose={onCloseClick} />
-	));
+	const myBurgerItems = (
+		<>
+			{filling.length === 0 && (
+				<div className={styles.constructorItem}>
+					<div className={styles.dragIcon}></div>
+					<ConstructorElementPlaceholder text='Выберите начинку' />
+				</div>
+			)}
+			{filling.map((item) => (
+				<FillingBar key={item.uid} uid={item.uid}>
+					<ConstructorElement
+						isLocked={false}
+						text={item.ingredient.name}
+						price={item.ingredient.price}
+						thumbnail={item.ingredient.image}
+						handleClose={() => onCloseClick(item.uid)}
+					/>
+				</FillingBar>
+			))}
+		</>
+	);
 
 	const content = (
 		<div>
-			{bun && (
-				<div className={styles.constructorItem + ' pt-25 pb-4'}>
-					<div className={styles.dragIcon}></div>
+			<div className={styles.constructorItem + ' pt-25 pb-4'}>
+				<div className={styles.dragIcon}></div>
+				{bun && (
 					<ConstructorElement
 						type='top'
 						isLocked={true}
@@ -74,12 +96,15 @@ export const BurgerConstructor = () => {
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
-				</div>
-			)}
+				)}
+				{!bun && (
+					<ConstructorElementPlaceholder type='top' text='Выберите булку' />
+				)}
+			</div>
 			<ul className={styles.myBurger + ' custom-scroll'}>{myBurgerItems}</ul>
-			{bun && (
-				<div className={styles.constructorItem + ' pt-4'}>
-					<div className={styles.dragIcon}></div>
+			<div className={styles.constructorItem + ' pt-4'}>
+				<div className={styles.dragIcon}></div>
+				{bun && (
 					<ConstructorElement
 						type='bottom'
 						isLocked={true}
@@ -87,13 +112,20 @@ export const BurgerConstructor = () => {
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
-				</div>
-			)}
+				)}
+				{!bun && (
+					<ConstructorElementPlaceholder text='Выберите булку' type='bottom' />
+				)}
+			</div>
 		</div>
 	);
 
+	const navigate = useNavigate();
+
 	const handlePlaceOrder = () => {
-		if (bun) {
+		if (user === null) {
+			navigate('/login');
+		} else if (bun) {
 			const ids = [bun, ...filling.map((item) => item.ingredient), bun].map(
 				(item) => item._id
 			);
@@ -113,21 +145,19 @@ export const BurgerConstructor = () => {
 	return (
 		<div ref={drop} className={styles.burgerConstructor}>
 			{content}
-			{bun != null && (
-				<div className={styles.footer}>
-					<div className={styles.total}>
-						<span className='text text_type_main-large pr-2'>{total}</span>
-						<CurrencyIcon type='primary' className={styles.currencyIcon} />
-					</div>
-					<Button
-						htmlType='button'
-						type='primary'
-						size='large'
-						onClick={handlePlaceOrder}>
-						Оформить заказ
-					</Button>
+			<div className={styles.footer}>
+				<div className={styles.total}>
+					<span className='text text_type_main-large pr-2'>{total}</span>
+					<CurrencyIcon type='primary' className={styles.currencyIcon} />
 				</div>
-			)}
+				<Button
+					htmlType='button'
+					type='primary'
+					size='large'
+					onClick={handlePlaceOrder}>
+					Оформить заказ
+				</Button>
+			</div>
 		</div>
 	);
 };

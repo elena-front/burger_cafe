@@ -31,7 +31,7 @@ export function LoginPage() {
 		signIn(email, password)
 			.then(() => navigate('/'))
 			.catch(() => console.error('не удалось войти'));
-	}, []);
+	}, [email, password]);
 
 	return (
 		<div className={styles.loginPage}>
