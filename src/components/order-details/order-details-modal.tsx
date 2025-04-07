@@ -5,6 +5,7 @@ import OrderDetails from './order-details';
 import { useCallback } from 'react';
 import { closeOrderDetails } from '../../services/actions';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { RotatingLines } from 'react-loader-spinner';
 
 type SelectedState = {
 	order: Order | null;
@@ -31,7 +32,20 @@ const OrderDetailsModal = () => {
 			{(order != null || loading) && (
 				<Modal onClose={handleClose}>
 					{order != null && <OrderDetails orderId={order.order.number} />}
-					{loading && <div>LOADING... </div>}
+					{loading && (
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								gap: '40px',
+							}}>
+							<div className='text text_type_main-large'>
+								Оформляем заказ...
+							</div>
+							<RotatingLines visible={true} strokeColor='gray' />
+						</div>
+					)}
 				</Modal>
 			)}
 		</>

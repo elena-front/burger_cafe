@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './modal.module.css';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 type ModalProps = {
-	children: React.ReactNode;
+	children: ReactNode;
 	title?: string;
 	onClose: () => void;
 };
@@ -14,7 +14,7 @@ const Modal = ({ children, title, onClose }: ModalProps) => {
 	const [domReady, setDomReady] = useState(false);
 
 	const handleKeyDown = useCallback(
-		(e: any) => {
+		(e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
 				onClose();
 			}

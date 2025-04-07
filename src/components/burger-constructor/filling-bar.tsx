@@ -4,10 +4,11 @@ import styles from './burger-constructor.module.css';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { moveFilling } from '../../services/actions';
 import { useAppDispatch } from '../hooks';
+import { ReactNode } from 'react';
 
 type FillingBarProps = {
 	uid: string;
-	children: any;
+	children: ReactNode;
 };
 
 export const FillingBar = ({ uid, children }: FillingBarProps) => {
