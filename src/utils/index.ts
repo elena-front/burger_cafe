@@ -17,6 +17,8 @@ export const requestWithRefresh = async (
 				},
 			};
 			return await request(path, options);
+		} else {
+			throw err;
 		}
 	}
 };

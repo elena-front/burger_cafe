@@ -41,6 +41,7 @@ export const placeOrder = createAsyncThunk<Order, string[]>(
 		const options = {
 			headers: {
 				'content-type': 'application/json',
+				authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			},
 			method: 'POST',
 			body: body,
@@ -143,11 +144,15 @@ export const logout = createAsyncThunk<LogoutResponse>('LOGOUT', async () => {
 export const getUserInfo = createAsyncThunk<GetUserInfoResponse>(
 	'GET_USER_INFO',
 	async () => {
+		let headers: HeadersInit = {
+			'content-type': 'application/json',
+		};
+		const accessToken = localStorage.getItem('accessToken');
+		if (accessToken != null) {
+			headers = { ...headers, authorization: 'Bearer ' + accessToken };
+		}
 		const options = {
-			headers: {
-				'content-type': 'application/json',
-				authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-			},
+			headers: headers,
 			method: 'GET',
 		};
 		return await request('auth/user', options);

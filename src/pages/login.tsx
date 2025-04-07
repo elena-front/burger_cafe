@@ -3,7 +3,7 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import styles from './login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../components/hooks';
@@ -27,15 +27,19 @@ export function LoginPage() {
 
 	const navigate = useNavigate();
 
-	const handleClick = useCallback(() => {
-		signIn(email, password)
-			.then(() => navigate('/'))
-			.catch(() => console.error('не удалось войти'));
-	}, [email, password]);
+	const handleSubmit = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			signIn(email, password)
+				.then(() => navigate('/'))
+				.catch(() => console.error('не удалось войти'));
+		},
+		[email, password]
+	);
 
 	return (
 		<div className={styles.loginPage}>
-			<div className={styles.inputs}>
+			<form className={styles.inputs} onSubmit={handleSubmit}>
 				<div className='text text_type_main-medium'>Вход</div>
 				<Input
 					onChange={onChangeEmail}
@@ -50,15 +54,10 @@ export function LoginPage() {
 					name={'password'}
 					extraClass='mb-2'
 				/>
-
-				<Button
-					htmlType='button'
-					type='primary'
-					size='large'
-					onClick={handleClick}>
+				<Button htmlType='submit' type='primary' size='large'>
 					Войти
 				</Button>
-			</div>
+			</form>
 
 			<div className={styles.questions}>
 				<div>

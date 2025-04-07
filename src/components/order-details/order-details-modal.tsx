@@ -6,9 +6,17 @@ import { useCallback } from 'react';
 import { closeOrderDetails } from '../../services/actions';
 import { useAppDispatch, useAppSelector } from '../hooks';
 
+type SelectedState = {
+	order: Order | null;
+	loading: boolean;
+};
+
 const OrderDetailsModal = () => {
-	const order = useAppSelector<Order | null>(
-		(state) => state.order,
+	const { order, loading } = useAppSelector<SelectedState>(
+		(state) => ({
+			order: state.order,
+			loading: state.loading,
+		}),
 		shallowEqual
 	);
 
@@ -20,9 +28,10 @@ const OrderDetailsModal = () => {
 
 	return (
 		<>
-			{order != null && (
+			{(order != null || loading) && (
 				<Modal onClose={handleClose}>
-					<OrderDetails orderId={order.order.number} />
+					{order != null && <OrderDetails orderId={order.order.number} />}
+					{loading && <div>LOADING... </div>}
 				</Modal>
 			)}
 		</>

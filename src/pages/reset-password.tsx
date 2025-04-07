@@ -3,9 +3,15 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useCallback, useState } from 'react';
+import {
+	ChangeEvent,
+	FormEvent,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import styles from './reset-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../components/hooks';
 import { setNewPassword } from '../services/actions';
 
@@ -21,14 +27,24 @@ export function ResetPassword() {
 	const onChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
 		setCode(e.target.value);
 	};
+	const navigate = useNavigate();
 
-	const handleClick = useCallback(() => {
-		dispatch(setNewPassword({ password: password, token: code }));
+	useEffect(() => {
+		if (localStorage.getItem('resetPassword') !== 'true') {
+			navigate('/forgot-password', { replace: true });
+		}
+	}, []);
+
+	const handleSubmit = useCallback((e: FormEvent) => {
+		e.preventDefault();
+		dispatch(setNewPassword({ password: password, token: code }))
+			.unwrap()
+			.then(() => {});
 	}, []);
 
 	return (
 		<div className={styles.page}>
-			<div className={styles.inputs}>
+			<form className={styles.inputs} onSubmit={handleSubmit}>
 				<div className='text text_type_main-medium'>Восстановление пароля</div>
 
 				<PasswordInput
@@ -47,14 +63,10 @@ export function ResetPassword() {
 					extraClass='mb-2'
 				/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='large'
-					onClick={handleClick}>
+				<Button htmlType='submit' type='primary' size='large'>
 					Сохранить
 				</Button>
-			</div>
+			</form>
 
 			<div>
 				<span className='text text_type_main-default text_color_inactive'>

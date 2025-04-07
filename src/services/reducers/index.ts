@@ -113,9 +113,17 @@ const userReducer = createReducer<User | null>(null, (builder) => {
 		});
 });
 
+const loadingReducer = createReducer<boolean>(false, (builder) => {
+	builder
+		.addCase(placeOrder.pending, () => true)
+		.addCase(placeOrder.fulfilled, () => false)
+		.addCase(placeOrder.rejected, () => false);
+});
+
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
 	order: orderReducer,
+	loading: loadingReducer,
 	user: userReducer,
 });

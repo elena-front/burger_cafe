@@ -1,0 +1,10 @@
+.inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
+	width: 480px;
+}
+.buttons {
+	align-self: flex-end;
+}

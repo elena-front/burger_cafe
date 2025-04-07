@@ -2,7 +2,7 @@ import {
 	Button,
 	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../components/hooks';
@@ -18,16 +18,20 @@ export function ForgotPassword() {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const handleClick = useCallback(() => {
+	const handleSubmit = useCallback((e: FormEvent) => {
+		e.preventDefault();
 		dispatch(passwordReset(email))
 			.unwrap()
-			.then(() => navigate('/reset-password'))
+			.then(() => {
+				localStorage.setItem('resetPassword', 'true');
+				return navigate('/reset-password');
+			})
 			.catch(() => console.error('не удалось'));
 	}, []);
 
 	return (
 		<div className={styles.forgotPassword}>
-			<div className={styles.input}>
+			<form className={styles.input} onSubmit={handleSubmit}>
 				<div className='text text_type_main-medium'>Восстановление пароля</div>
 
 				<EmailInput
@@ -37,14 +41,10 @@ export function ForgotPassword() {
 					extraClass='mb-2'
 				/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='large'
-					onClick={handleClick}>
+				<Button htmlType='submit' type='primary' size='large'>
 					Восстановить
 				</Button>
-			</div>
+			</form>
 
 			<div>
 				<span className='text text_type_main-default text_color_inactive'>

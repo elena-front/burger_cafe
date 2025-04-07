@@ -4,7 +4,7 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import styles from './register.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../components/hooks';
@@ -31,15 +31,19 @@ export function Register() {
 
 	const navigate = useNavigate();
 
-	const handleClick = useCallback(() => {
-		signUp(name, email, password)
-			.then(() => navigate('/'))
-			.catch(() => console.error('не удалось зарегистрироваться'));
-	}, [name, email, password]);
+	const handleSubmit = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			signUp(name, email, password)
+				.then(() => navigate('/'))
+				.catch(() => console.error('не удалось зарегистрироваться'));
+		},
+		[name, email, password]
+	);
 
 	return (
 		<div className={styles.registerPage}>
-			<div className={styles.inputs}>
+			<form className={styles.inputs} onSubmit={handleSubmit}>
 				<div className='text text_type_main-medium'>Регистрация</div>
 
 				<Input
@@ -67,14 +71,10 @@ export function Register() {
 					extraClass='mb-2'
 				/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='large'
-					onClick={handleClick}>
+				<Button htmlType='submit' type='primary' size='large'>
 					Зарегистрироваться
 				</Button>
-			</div>
+			</form>
 
 			<div>
 				<span className='text text_type_main-default text_color_inactive'>

@@ -14,10 +14,20 @@ import { Register } from '../../pages/register';
 import { ResetPassword } from '../../pages/reset-password';
 import { NotFound404 } from '../../pages/not-found404';
 import { ProtectedRouteElement } from '../protected-route-component/protected-route-component';
+import { useEffect } from 'react';
+import { getUserInfo } from '../../services/actions';
+import { useAppDispatch } from '../hooks';
+import { Account } from '../account/account';
 
 const App = () => {
 	const location = useLocation();
 	const background = location.state?.background;
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(getUserInfo());
+	}, []);
 
 	return (
 		<div className={styles.app}>
@@ -38,8 +48,10 @@ const App = () => {
 					path='/profile'
 					element={
 						<ProtectedRouteElement isAuth={true} element={<Profile />} />
-					}
-				/>
+					}>
+					<Route path='' element={<Account />} />
+					<Route path='orders' element={<>Здесь будет история заказов</>} />
+				</Route>
 				<Route
 					path='/register'
 					element={

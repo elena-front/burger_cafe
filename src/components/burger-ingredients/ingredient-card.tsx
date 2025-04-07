@@ -41,7 +41,7 @@ const IngredientCard = ({ ingredient }: IngredientCardProps) => {
 			state={{ background: location }}
 			to={`/ingredients/${ingredient._id}`}
 			ref={drag}
-			className={styles.card}>
+			className={styles.card + ' text_color_primary'}>
 			{count > 0 && (
 				<Counter
 					count={count}
