@@ -1,21 +1,20 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { User } from '../../types';
 import { getUserInfo } from '../../services/actions';
 
 export function ProtectedRouteElement({
 	element,
-	isAuth,
+	anonymous = false,
 }: {
 	element?: React.ReactNode | null;
-	isAuth: boolean;
+	anonymous?: boolean;
 }) {
 	const dispatch = useAppDispatch();
 
-	const user = useAppSelector<User | null>((store) => store.user);
+	const isLoggedIn = useAppSelector<boolean>((store) => store.user != null);
 
-	const [isUserLoaded, setUserLoaded] = useState(user != null);
+	const [isUserLoaded, setUserLoaded] = useState(isLoggedIn);
 
 	useEffect(() => {
 		if (!isUserLoaded) {
@@ -30,9 +29,16 @@ export function ProtectedRouteElement({
 		return null;
 	}
 
-	if (isAuth) {
-		return user ? element : <Navigate to='/login' replace />;
-	} else {
-		return user ? <Navigate to='/' replace /> : element;
+	const location = useLocation();
+	const from = location.state?.from || '/';
+
+	if (anonymous && isLoggedIn) {
+		return <Navigate to={from} />;
 	}
+
+	if (!anonymous && !isLoggedIn) {
+		return <Navigate to='/login' state={{ from: location }} />;
+	}
+
+	return element;
 }

@@ -4,27 +4,24 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback } from 'react';
 import styles from './register.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../components/hooks';
+import { useAppDispatch, useForm } from '../components/hooks';
 import { useAuth } from '../services/auth';
 
+type FormState = {
+	email: string;
+	name: string;
+	password: string;
+};
+
 export function Register() {
-	const [name, setName] = useState('');
-	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-		setName(e.target.value);
-	};
-
-	const [email, setEmail] = useState('');
-	const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	};
-
-	const [password, setPassword] = useState('');
-	const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	};
+	const { values, handleChange } = useForm<FormState>({
+		email: '',
+		name: '',
+		password: '',
+	});
 
 	const dispatch = useAppDispatch();
 	const { signUp } = useAuth(dispatch);
@@ -34,11 +31,11 @@ export function Register() {
 	const handleSubmit = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
-			signUp(name, email, password)
+			signUp(values.name, values.email, values.password)
 				.then(() => navigate('/'))
 				.catch(() => console.error('не удалось зарегистрироваться'));
 		},
-		[name, email, password]
+		[values]
 	);
 
 	return (
@@ -49,23 +46,23 @@ export function Register() {
 				<Input
 					type={'text'}
 					placeholder={'Имя'}
-					onChange={onChangeName}
-					value={name}
+					onChange={handleChange}
+					value={values.name}
 					error={false}
 					errorText={'Ошибка'}
 					extraClass='ml-1'
 				/>
 
 				<EmailInput
-					onChange={onChangeEmail}
-					value={email}
+					onChange={handleChange}
+					value={values.email}
 					name={'email'}
 					isIcon={false}
 				/>
 
 				<PasswordInput
-					onChange={onChangePassword}
-					value={password}
+					onChange={handleChange}
+					value={values.password}
 					name={'password'}
 					placeholder='Пароль'
 					extraClass='mb-2'

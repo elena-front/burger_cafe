@@ -3,30 +3,24 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import {
-	ChangeEvent,
-	FormEvent,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import { FormEvent, useCallback, useEffect } from 'react';
 import styles from './reset-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../components/hooks';
+import { useAppDispatch, useForm } from '../components/hooks';
 import { setNewPassword } from '../services/actions';
 
+type FormState = {
+	password: string;
+	code: string;
+};
+
 export function ResetPassword() {
-	const [password, setPassword] = useState('');
-	const onChangeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	};
+	const { values, handleChange } = useForm<FormState>({
+		password: '',
+		code: '',
+	});
 
 	const dispatch = useAppDispatch();
-
-	const [code, setCode] = useState('');
-	const onChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
-		setCode(e.target.value);
-	};
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -37,7 +31,7 @@ export function ResetPassword() {
 
 	const handleSubmit = useCallback((e: FormEvent) => {
 		e.preventDefault();
-		dispatch(setNewPassword({ password: password, token: code }))
+		dispatch(setNewPassword({ password: values.password, token: values.code }))
 			.unwrap()
 			.then(() => {});
 	}, []);
@@ -48,16 +42,16 @@ export function ResetPassword() {
 				<div className='text text_type_main-medium'>Восстановление пароля</div>
 
 				<PasswordInput
-					onChange={onChangeNewPassword}
-					value={password}
+					onChange={handleChange}
+					value={values.password}
 					name={'newPassword'}
 					extraClass='mb-2'
 					placeholder='Введите новый пароль'
 				/>
 
 				<Input
-					onChange={onChangeCode}
-					value={code}
+					onChange={handleChange}
+					value={values.code}
 					name={'code'}
 					placeholder='Введите код из письма'
 					extraClass='mb-2'

@@ -55,7 +55,9 @@ const AppHeader = () => {
 				/>
 			</div>
 
-			<Logo />
+			<Link to='/'>
+				<Logo />
+			</Link>
 
 			<div className={styles.appHeaderRight}>
 				<ProfileItem

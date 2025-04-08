@@ -1,4 +1,4 @@
-const baseURL = 'https://norma.nomoreparties.space/api';
+const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 export const requestWithRefresh = async (
 	path: string,
@@ -25,9 +25,13 @@ export const requestWithRefresh = async (
 
 const request = async (path: string, options?: RequestInit): Promise<any> => {
 	try {
-		const res = await fetch(`${baseURL}/${path}`, options);
+		const res = await fetch(`${BASE_URL}/${path}`, options);
 		if (res.ok) {
-			return await res.json();
+			const json = await res.json();
+			if (json?.success === false) {
+				throw new Error('Response is not successful');
+			}
+			return json;
 		} else {
 			const error = await res.json();
 			throw new Error(error);
@@ -48,10 +52,6 @@ const refreshToken = async () => {
 			token: localStorage.getItem('refreshToken'),
 		}),
 	});
-	if (!response.success) {
-		throw new Error(response);
-	}
-
 	localStorage.setItem('refreshToken', response.refreshToken);
 	localStorage.setItem('accessToken', response.accessToken);
 	return response;

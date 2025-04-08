@@ -3,38 +3,40 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback } from 'react';
 import styles from './login.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../components/hooks';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useForm } from '../components/hooks';
 import { useAuth } from '../services/auth';
 
+type FormState = {
+	email: string;
+	password: string;
+};
+
 export function LoginPage() {
-	const [email, setEmail] = useState('');
-
-	const onChangeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	}, []);
-
-	const [password, setPassword] = useState('');
-
-	const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	}, []);
+	const { values, handleChange } = useForm<FormState>({
+		email: '',
+		password: '',
+	});
 
 	const dispatch = useAppDispatch();
 	const { signIn } = useAuth(dispatch);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleSubmit = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
-			signIn(email, password)
-				.then(() => navigate('/'))
+			signIn(values.email, values.password)
+				.then(() => {
+					const nextLocation = location.state?.from || '/';
+					return navigate(nextLocation, { replace: true });
+				})
 				.catch(() => console.error('не удалось войти'));
 		},
-		[email, password]
+		[values]
 	);
 
 	return (
@@ -42,15 +44,15 @@ export function LoginPage() {
 			<form className={styles.inputs} onSubmit={handleSubmit}>
 				<div className='text text_type_main-medium'>Вход</div>
 				<Input
-					onChange={onChangeEmail}
-					value={email}
+					onChange={handleChange}
+					value={values.email}
 					name={'email'}
 					placeholder='Логин'
 					extraClass='mb-2'
 				/>
 				<PasswordInput
-					onChange={onChangePassword}
-					value={password}
+					onChange={handleChange}
+					value={values.password}
 					name={'password'}
 					extraClass='mb-2'
 				/>

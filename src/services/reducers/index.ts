@@ -70,47 +70,29 @@ const orderReducer = createReducer<Order | null>(null, (builder) =>
 
 const userReducer = createReducer<User | null>(null, (builder) => {
 	builder
-		.addCase(logout.fulfilled, (state, action) => {
-			return action.payload.success ? null : state;
-		})
-		.addCase(login.fulfilled, (state, action) => {
-			return action.payload.success
-				? {
-						email: action.payload.user.email,
-						login: action.payload.user.name,
-				  }
-				: state;
-		})
+		.addCase(logout.fulfilled, () => null)
+		.addCase(login.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
 		.addCase(refresh.fulfilled, (state, action) => {
-			if (state != null && action.payload.success) {
+			if (state != null) {
 				return { ...state, accessToken: action.payload.accessToken };
 			}
 			return state;
 		})
-		.addCase(register.fulfilled, (state, action) => {
-			return action.payload.success
-				? {
-						email: action.payload.user.email,
-						login: action.payload.user.name,
-				  }
-				: state;
-		})
-		.addCase(getUserInfo.fulfilled, (state, action) => {
-			return action.payload.success
-				? {
-						email: action.payload.user.email,
-						login: action.payload.user.name,
-				  }
-				: state;
-		})
-		.addCase(updateUserInfo.fulfilled, (state, action) => {
-			return action.payload.success
-				? {
-						email: action.payload.user.email,
-						login: action.payload.user.name,
-				  }
-				: state;
-		});
+		.addCase(register.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
+		.addCase(getUserInfo.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
+		.addCase(updateUserInfo.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}));
 });
 
 const loadingReducer = createReducer<boolean>(false, (builder) => {

@@ -6,22 +6,18 @@ export const useAuth = (dispatch: AppDispatch) => {
 		const response = await dispatch(
 			login({ email: email, password: password })
 		).unwrap();
-		if (response.success) {
-			localStorage.setItem(
-				'accessToken',
-				response.accessToken.slice('Bearer '.length)
-			);
-			localStorage.setItem('refreshToken', response.refreshToken);
-		}
+		localStorage.setItem(
+			'accessToken',
+			response.accessToken.slice('Bearer '.length)
+		);
+		localStorage.setItem('refreshToken', response.refreshToken);
 		return response;
 	};
 
 	const signOut = async () => {
 		const response = await dispatch(logout()).unwrap();
-		if (response.success) {
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('refreshToken');
-		}
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
 		return response;
 	};
 
@@ -29,13 +25,11 @@ export const useAuth = (dispatch: AppDispatch) => {
 		const response = await dispatch(
 			register({ name: name, email: email, password: password })
 		).unwrap();
-		if (response.success) {
-			localStorage.setItem(
-				'accessToken',
-				response.accessToken.slice('Bearer '.length)
-			);
-			localStorage.setItem('refreshToken', response.refreshToken);
-		}
+		localStorage.setItem(
+			'accessToken',
+			response.accessToken.slice('Bearer '.length)
+		);
+		localStorage.setItem('refreshToken', response.refreshToken);
 		return response;
 	};
 

@@ -2,25 +2,25 @@ import {
 	Button,
 	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../components/hooks';
+import { useAppDispatch, useForm } from '../components/hooks';
 import { passwordReset } from '../services/actions';
 
+type FormState = {
+	email: string;
+};
+
 export function ForgotPassword() {
-	const [email, setEmail] = useState('');
-
-	const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	};
-
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
+	const { values, handleChange } = useForm<FormState>({ email: '' });
+
 	const handleSubmit = useCallback((e: FormEvent) => {
 		e.preventDefault();
-		dispatch(passwordReset(email))
+		dispatch(passwordReset(values.email))
 			.unwrap()
 			.then(() => {
 				localStorage.setItem('resetPassword', 'true');
@@ -35,8 +35,8 @@ export function ForgotPassword() {
 				<div className='text text_type_main-medium'>Восстановление пароля</div>
 
 				<EmailInput
-					onChange={onChangeEmail}
-					value={email}
+					onChange={handleChange}
+					value={values.email}
 					name={'forgotPassword'}
 					extraClass='mb-2'
 				/>

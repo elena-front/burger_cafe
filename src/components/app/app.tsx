@@ -15,7 +15,7 @@ import { ResetPassword } from '../../pages/reset-password';
 import { NotFound404 } from '../../pages/not-found404';
 import { ProtectedRouteElement } from '../protected-route-component/protected-route-component';
 import { useEffect } from 'react';
-import { getUserInfo } from '../../services/actions';
+import { getUserInfo, loadIngredients } from '../../services/actions';
 import { useAppDispatch } from '../hooks';
 import { Account } from '../account/account';
 
@@ -27,6 +27,7 @@ const App = () => {
 
 	useEffect(() => {
 		dispatch(getUserInfo());
+		dispatch(loadIngredients());
 	}, []);
 
 	return (
@@ -40,22 +41,20 @@ const App = () => {
 				<Route
 					path='/login'
 					element={
-						<ProtectedRouteElement isAuth={false} element={<LoginPage />} />
+						<ProtectedRouteElement anonymous={true} element={<LoginPage />} />
 					}
 				/>
 				<Route path='/' element={<Home />} />
 				<Route
 					path='/profile'
-					element={
-						<ProtectedRouteElement isAuth={true} element={<Profile />} />
-					}>
+					element={<ProtectedRouteElement element={<Profile />} />}>
 					<Route path='' element={<Account />} />
 					<Route path='orders' element={<>Здесь будет история заказов</>} />
 				</Route>
 				<Route
 					path='/register'
 					element={
-						<ProtectedRouteElement isAuth={false} element={<Register />} />
+						<ProtectedRouteElement anonymous={true} element={<Register />} />
 					}
 				/>
 				<Route path='/reset-password' element={<ResetPassword />} />
