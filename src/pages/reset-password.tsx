@@ -10,8 +10,8 @@ import { useAppDispatch, useForm } from '../components/hooks';
 import { setNewPassword } from '../services/actions';
 
 type FormState = {
-	password: string;
-	code: string;
+	readonly password: string;
+	readonly code: string;
 };
 
 export function ResetPassword() {

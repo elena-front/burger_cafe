@@ -2,7 +2,7 @@ import styles from './order-details.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 type OrderDetailsProps = {
-	orderId: number;
+	readonly orderId: number;
 };
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {

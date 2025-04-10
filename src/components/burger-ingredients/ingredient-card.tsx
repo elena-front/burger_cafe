@@ -1,4 +1,4 @@
-import { DraggingIngredient, Ingredient } from '../../types';
+import { DraggingIngredient, Ingredient, IngredientType } from '../../types';
 import styles from './ingredient-card.module.css';
 import {
 	Counter,
@@ -9,7 +9,7 @@ import { useAppSelector } from '../hooks';
 import { Link, useLocation } from 'react-router-dom';
 
 type IngredientCardProps = {
-	ingredient: Ingredient;
+	readonly ingredient: Ingredient;
 };
 
 const IngredientCard = ({ ingredient }: IngredientCardProps) => {
@@ -17,12 +17,12 @@ const IngredientCard = ({ ingredient }: IngredientCardProps) => {
 
 	const count = useAppSelector<number>((state) => {
 		if (
-			ingredient.type === 'bun' &&
+			ingredient.type === IngredientType.BUN &&
 			state.burger.bun != null &&
 			state.burger.bun._id === ingredient._id
 		) {
 			return 2;
-		} else if (ingredient.type !== 'bun') {
+		} else if (ingredient.type !== IngredientType.BUN) {
 			return state.burger.filling.filter(
 				(item) => item.ingredient._id === ingredient._id
 			).length;

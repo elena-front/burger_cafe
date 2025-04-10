@@ -7,8 +7,8 @@ import { useAppDispatch } from '../hooks';
 import { ReactNode } from 'react';
 
 type FillingBarProps = {
-	uid: string;
-	children: ReactNode;
+	readonly uid: string;
+	readonly children: ReactNode;
 };
 
 export const FillingBar = ({ uid, children }: FillingBarProps) => {

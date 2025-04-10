@@ -1,13 +1,15 @@
+import { IRefreshResponse, IResponse } from '../types';
+
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-export const requestWithRefresh = async (
+export const requestWithRefresh = async <T extends IResponse>(
 	path: string,
 	options?: RequestInit
-) => {
+): Promise<T> => {
 	try {
-		return await request(path, options);
-	} catch (err: any) {
-		if (err?.message === 'jwt expired') {
+		return await request<T>(path, options);
+	} catch (exception: unknown) {
+		if (exception instanceof Error && exception.message === 'jwt expired') {
 			const refreshData = await refreshToken();
 			options = {
 				...(options || {}),
@@ -16,19 +18,19 @@ export const requestWithRefresh = async (
 					authorization: refreshData.accessToken,
 				},
 			};
-			return await request(path, options);
-		} else {
-			throw err;
+			return await request<T>(path, options);
 		}
+
+		throw exception;
 	}
 };
 
-const request = async (path: string, options?: RequestInit): Promise<any> => {
+const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
 	try {
 		const res = await fetch(`${BASE_URL}/${path}`, options);
 		if (res.ok) {
 			const json = await res.json();
-			if (json?.success === false) {
+			if ((json as IResponse)?.success === false) {
 				throw new Error('Response is not successful');
 			}
 			return json;
@@ -43,7 +45,7 @@ const request = async (path: string, options?: RequestInit): Promise<any> => {
 };
 
 const refreshToken = async () => {
-	const response = await request('auth/token', {
+	const response = await request<IRefreshResponse>('auth/token', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

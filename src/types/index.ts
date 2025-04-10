@@ -1,111 +1,110 @@
-export type Ingredient = {
-	_id: string;
-	name: string;
-	type: string;
-	proteins: number;
-	fat: number;
-	carbohydrates: number;
-	calories: number;
-	price: number;
-	image: string;
-	image_mobile: string;
-	image_large: string;
-	__v: number;
-};
+export enum IngredientType {
+	BUN = 'bun',
+	MAIN = 'main',
+	SAUCE = 'sauce',
+}
 
-export type Order = {
-	name: string;
-	order: {
-		number: number;
-	};
-	success: boolean;
+export type Ingredient = {
+	readonly _id: string;
+	readonly name: string;
+	readonly type: IngredientType;
+	readonly proteins: number;
+	readonly fat: number;
+	readonly carbohydrates: number;
+	readonly calories: number;
+	readonly price: number;
+	readonly image: string;
+	readonly image_mobile: string;
+	readonly image_large: string;
+	readonly __v: number;
 };
 
 export type User = {
-	email: string;
-	login: string;
+	readonly email: string;
+	readonly name: string;
 };
 
 export type FillingItem = {
-	uid: string;
-	ingredient: Ingredient;
+	readonly uid: string;
+	readonly ingredient: Ingredient;
 };
 
 export type BurgerState = {
-	bun: Ingredient | null;
-	filling: FillingItem[];
+	readonly bun: Ingredient | null;
+	readonly filling: ReadonlyArray<FillingItem>;
 };
 
 export type DraggingIngredient = {
-	id: string;
+	readonly id: string;
 };
 
 export type DraggingFilling = {
-	uid: string;
+	readonly uid: string;
 };
 
-export type PasswordResetResult = {
-	success: boolean;
-	message: string;
-};
+export interface ITokenResponse {
+	readonly accessToken: string;
+	readonly refreshToken: string;
+}
 
-export type RegisterResponse = {
-	success: boolean;
-	user: {
-		email: string;
-		name: string;
-	};
-	accessToken: string;
-	refreshToken: string;
-};
+export interface IUserResponse {
+	readonly user: User;
+}
+
+export interface IPasswordResetResponse extends IResponse {
+	readonly message: string;
+}
+
+export interface IRegisterResponse
+	extends IResponse,
+		ITokenResponse,
+		IUserResponse {}
 
 export type RegisterRequest = {
-	email: string;
-	password: string;
-	name: string;
+	readonly email: string;
+	readonly name: string;
+	readonly password: string;
 };
 
-export type LoginResponse = {
-	success: boolean;
-	accessToken: string;
-	refreshToken: string;
-	user: {
-		email: string;
-		name: string;
-	};
+export interface ILoginResponse
+	extends IResponse,
+		ITokenResponse,
+		IUserResponse {}
+
+export type LoginRequest = {
+	readonly email: string;
+	readonly password: string;
 };
 
-export type LoginRequest = { email: string; password: string };
+export interface IRefreshResponse extends IResponse, ITokenResponse {}
 
-export type RefreshResponse = {
-	success: boolean;
-	accessToken: string;
-	refreshToken: string;
-};
+export interface ILogoutResponse extends IResponse {
+	readonly message: string;
+}
 
-export type LogoutResponse = {
-	success: boolean;
-	message: string;
-};
-
-export type GetUserInfoResponse = {
-	success: boolean;
-	user: {
-		email: string;
-		name: string;
-	};
-};
+export interface IGetUserInfoResponse extends IResponse, IUserResponse {}
 
 export type UpdateUserInfoRequest = {
-	name?: string;
-	email?: string;
-	password?: string;
+	readonly name?: string;
+	readonly email?: string;
+	readonly password?: string;
 };
 
-export type UpdateUserInfoResponse = {
-	success: boolean;
-	user: {
-		email: string;
-		name: string;
-	};
+export interface IUpdateUserInfoResponse extends IResponse, IUserResponse {}
+
+export interface IResponse {
+	readonly success: boolean;
+}
+
+export interface IIngredientsResponse extends IResponse {
+	readonly data: ReadonlyArray<Ingredient>;
+}
+
+export type Order = {
+	readonly number: number;
 };
+
+export interface IOrderResponse extends IResponse {
+	readonly name: string;
+	readonly order: Order;
+}

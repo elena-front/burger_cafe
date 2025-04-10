@@ -2,24 +2,30 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Category from './category';
+import { IngredientType } from '../../types';
 
-const categories = [
+type CategoryHeader = {
+	readonly value: IngredientType;
+	readonly title: string;
+};
+
+const categories: ReadonlyArray<CategoryHeader> = [
 	{
-		value: 'bun',
+		value: IngredientType.BUN,
 		title: 'Булки',
 	},
 	{
-		value: 'main',
+		value: IngredientType.MAIN,
 		title: 'Начинки',
 	},
 	{
-		value: 'sauce',
+		value: IngredientType.SAUCE,
 		title: 'Соусы',
 	},
 ];
 
 type BurgerIngredientsState = {
-	current: string;
+	readonly current: string;
 };
 
 const BurgerIngredients = () => {

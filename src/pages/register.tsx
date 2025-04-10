@@ -11,9 +11,9 @@ import { useAppDispatch, useForm } from '../components/hooks';
 import { useAuth } from '../services/auth';
 
 type FormState = {
-	email: string;
-	name: string;
-	password: string;
+	readonly email: string;
+	readonly name: string;
+	readonly password: string;
 };
 
 export function Register() {
