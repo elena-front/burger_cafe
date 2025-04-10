@@ -9,7 +9,7 @@ import { useAppDispatch, useForm } from '../components/hooks';
 import { passwordReset } from '../services/actions';
 
 type FormState = {
-	email: string;
+	readonly email: string;
 };
 
 export function ForgotPassword() {

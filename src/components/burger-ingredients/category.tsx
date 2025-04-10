@@ -5,12 +5,12 @@ import { shallowEqual } from 'react-redux';
 import { useAppSelector } from '../hooks';
 
 type CategoryProps = {
-	title: string;
-	value: string;
+	readonly title: string;
+	readonly value: string;
 };
 
 const Category = ({ title, value }: CategoryProps) => {
-	const items = useAppSelector<Ingredient[]>(
+	const items = useAppSelector<ReadonlyArray<Ingredient>>(
 		(state) => state.ingredients.filter((item) => item.type === value),
 		shallowEqual
 	);

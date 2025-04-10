@@ -1,7 +1,7 @@
 import styles from './modal-overlay.module.css';
 
 type ModalOverlayProps = {
-	onClose: () => void;
+	readonly onClose: () => void;
 };
 
 const ModalOverlay = ({ onClose }: ModalOverlayProps) => {

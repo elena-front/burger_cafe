@@ -2,9 +2,14 @@ import { Ingredient } from '../../types';
 import styles from './ingredient-details.module.css';
 import NutritionValue from './nutrition-value';
 
-export type NutritionValueProps = { name: string; value: Number };
+export type NutritionValueProps = {
+	readonly name: string;
+	readonly value: number;
+};
 
-type IngredientDetailsProps = { ingredient: Ingredient };
+type IngredientDetailsProps = {
+	readonly ingredient: Ingredient;
+};
 
 const IngredientDetails = ({ ingredient }: IngredientDetailsProps) => {
 	return (

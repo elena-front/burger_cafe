@@ -5,55 +5,51 @@ import {
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './account.module.css';
-import React, { ChangeEvent, useCallback } from 'react';
+import { useCallback } from 'react';
 import { updateUserInfo } from '../../services/actions';
-import { UpdateUserInfoRequest, User } from '../../types';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { User } from '../../types';
+import { useAppDispatch, useAppSelector, useForm } from '../hooks';
 import { shallowEqual } from 'react-redux';
+
+type FormState = {
+	readonly name: string;
+	readonly email: string;
+	readonly password: string;
+};
 
 export function Account() {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector<User | null>((store) => store.user, shallowEqual);
 
-	const [name, setName] = React.useState(user?.login || '');
-	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-		setName(e.target.value);
+	const initState: FormState = {
+		name: user?.name || '',
+		email: user?.email || '',
+		password: '',
 	};
 
-	const [email, setEmail] = React.useState(user?.email || '');
-	const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	};
-
-	const [password, setPassword] = React.useState('');
-	const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	};
+	const { values, handleChange, setValues } = useForm<FormState>(initState);
 
 	const handleCancelClick = useCallback(() => {
-		setName(user?.login || '');
-		setEmail(user?.email || '');
-		setPassword('');
-	}, []);
+		setValues(initState);
+	}, [initState]);
 
 	const handleSaveClick = useCallback(() => {
-		const update: UpdateUserInfoRequest = {
-			name: name,
-			email: email,
-			password: password,
-		};
-		dispatch(updateUserInfo(update));
-	}, [name, email, password]);
+		dispatch(updateUserInfo(values));
+	}, [values]);
 
 	const isChanged = () => {
-		return password != '' || name != user?.login || email != user?.email;
+		return (
+			values.password != initState.password ||
+			values.name != initState.name ||
+			values.email != initState.email
+		);
 	};
 
 	return (
 		<div className={styles.inputs}>
 			<Input
-				onChange={onChangeName}
-				value={name}
+				onChange={handleChange}
+				value={values.name}
 				name={'name'}
 				placeholder='Имя'
 				icon='EditIcon'
@@ -61,8 +57,8 @@ export function Account() {
 			/>
 
 			<EmailInput
-				onChange={onChangeEmail}
-				value={email}
+				onChange={handleChange}
+				value={values.email}
 				name={'email'}
 				placeholder='Логин'
 				isIcon={true}
@@ -70,8 +66,8 @@ export function Account() {
 			/>
 
 			<PasswordInput
-				onChange={onChangePassword}
-				value={password}
+				onChange={handleChange}
+				value={values.password}
 				name={'password'}
 				icon='EditIcon'
 				placeholder='Пароль'
