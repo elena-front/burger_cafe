@@ -1,20 +1,19 @@
-import { useCallback } from 'react';
 import { DraggingIngredient, Ingredient } from '../../types';
 import styles from './ingredient-card.module.css';
-import { showIngredientDetails } from '../../services/actions';
 import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppSelector } from '../hooks';
+import { Link, useLocation } from 'react-router-dom';
 
 type IngredientCardProps = {
 	ingredient: Ingredient;
 };
 
 const IngredientCard = ({ ingredient }: IngredientCardProps) => {
-	const dispatch = useAppDispatch();
+	const location = useLocation();
 
 	const count = useAppSelector<number>((state) => {
 		if (
@@ -37,12 +36,12 @@ const IngredientCard = ({ ingredient }: IngredientCardProps) => {
 		item: { id: ingredient._id },
 	});
 
-	const handleItemClick = useCallback(() => {
-		dispatch(showIngredientDetails(ingredient));
-	}, []);
-
 	return (
-		<li ref={drag} className={styles.card} onClick={handleItemClick}>
+		<Link
+			state={{ background: location }}
+			to={`/ingredients/${ingredient._id}`}
+			ref={drag}
+			className={styles.card + ' text_color_primary'}>
 			{count > 0 && (
 				<Counter
 					count={count}
@@ -57,7 +56,7 @@ const IngredientCard = ({ ingredient }: IngredientCardProps) => {
 				<CurrencyIcon type='primary' />
 			</div>
 			<div className='text text_type_main-default'>{ingredient.name}</div>
-		</li>
+		</Link>
 	);
 };
 

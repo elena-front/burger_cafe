@@ -1,0 +1,22 @@
+.placeholder {
+	padding: 16px 24px;
+	display: flex;
+	flex-direction: column;
+	border-radius: 40px;
+	background: #2f2f37;
+	max-width: 536px;
+	width: 100%;
+	min-height: 80px;
+	color: #f2f2f3;
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: center;
+}
+
+.top {
+	border-radius: 88px 88px 40px 40px;
+}
+
+.bottom {
+	border-radius: 40px 40px 88px 88px;
+}

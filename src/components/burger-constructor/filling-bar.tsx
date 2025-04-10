@@ -1,19 +1,17 @@
 import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
-import { DraggingFilling, FillingItem } from '../../types';
+import { DraggingFilling } from '../../types';
 import styles from './burger-constructor.module.css';
-import {
-	ConstructorElement,
-	DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { moveFilling } from '../../services/actions';
 import { useAppDispatch } from '../hooks';
+import { ReactNode } from 'react';
 
 type FillingBarProps = {
-	item: FillingItem;
-	onClose: (uid: string) => void;
+	uid: string;
+	children: ReactNode;
 };
 
-export const FillingBar = ({ item, onClose }: FillingBarProps) => {
+export const FillingBar = ({ uid, children }: FillingBarProps) => {
 	const [{ isDrag }, drag] = useDrag<
 		DraggingFilling,
 		unknown,
@@ -21,12 +19,12 @@ export const FillingBar = ({ item, onClose }: FillingBarProps) => {
 	>(
 		{
 			type: 'filling',
-			item: { uid: item.uid },
+			item: { uid: uid },
 			collect: (monitor) => ({
 				isDrag: monitor.isDragging(),
 			}),
 		},
-		[item]
+		[uid]
 	);
 
 	const dispatch = useAppDispatch();
@@ -34,7 +32,7 @@ export const FillingBar = ({ item, onClose }: FillingBarProps) => {
 	const [, drop] = useDrop<DraggingFilling>({
 		accept: 'filling',
 		drop: (sourceItem) => {
-			dispatch(moveFilling({ source: sourceItem.uid, dest: item.uid }));
+			dispatch(moveFilling({ source: sourceItem.uid, dest: uid }));
 		},
 	});
 
@@ -46,17 +44,11 @@ export const FillingBar = ({ item, onClose }: FillingBarProps) => {
 	return (
 		<>
 			{!isDrag && (
-				<li ref={attachRef} key={item.uid} className={styles.constructorItem}>
+				<li ref={attachRef} key={uid} className={styles.constructorItem}>
 					<div className={styles.dragIcon}>
 						<DragIcon type='primary' />
 					</div>
-					<ConstructorElement
-						isLocked={false}
-						text={item.ingredient.name}
-						price={item.ingredient.price}
-						thumbnail={item.ingredient.image}
-						handleClose={() => onClose(item.uid)}
-					/>
+					{children}
 				</li>
 			)}
 		</>

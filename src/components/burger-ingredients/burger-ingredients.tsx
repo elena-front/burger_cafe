@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { loadIngredients } from '../../services/actions';
 import Category from './category';
-import { useAppDispatch } from '../hooks';
 
 const categories = [
 	{
@@ -25,8 +23,6 @@ type BurgerIngredientsState = {
 };
 
 const BurgerIngredients = () => {
-	const dispatch = useAppDispatch();
-
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	const [state, setState] = useState<BurgerIngredientsState>({
@@ -54,7 +50,6 @@ const BurgerIngredients = () => {
 	}, [state, setState]);
 
 	useEffect(() => {
-		dispatch(loadIngredients());
 		scrollRef.current?.addEventListener('scroll', handleScroll);
 		return () => {
 			scrollRef.current?.removeEventListener('scroll', handleScroll);

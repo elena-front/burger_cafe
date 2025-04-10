@@ -2,14 +2,18 @@ import { combineReducers } from 'redux';
 import {
 	addIngredient,
 	closeOrderDetails,
-	hideIngredientDetails,
+	getUserInfo,
 	loadIngredients,
+	login,
+	logout,
 	moveFilling,
 	placeOrder,
+	refresh,
+	register,
 	removeFilling,
-	showIngredientDetails,
+	updateUserInfo,
 } from '../actions';
-import { BurgerState, Ingredient, Order } from '../../types';
+import { BurgerState, Ingredient, Order, User } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
 
 const ingredientsReducer = createReducer<Ingredient[]>([], (builder) =>
@@ -57,14 +61,6 @@ const burgerReducer = createReducer<BurgerState>(
 			})
 );
 
-const ingredientDetailsReducer = createReducer<Ingredient | null>(
-	null,
-	(builder) =>
-		builder
-			.addCase(showIngredientDetails, (_state, action) => action.payload)
-			.addCase(hideIngredientDetails, () => null)
-);
-
 const orderReducer = createReducer<Order | null>(null, (builder) =>
 	builder
 		.addCase(closeOrderDetails, () => null)
@@ -72,9 +68,44 @@ const orderReducer = createReducer<Order | null>(null, (builder) =>
 		.addCase(placeOrder.rejected, () => null)
 );
 
+const userReducer = createReducer<User | null>(null, (builder) => {
+	builder
+		.addCase(logout.fulfilled, () => null)
+		.addCase(login.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
+		.addCase(refresh.fulfilled, (state, action) => {
+			if (state != null) {
+				return { ...state, accessToken: action.payload.accessToken };
+			}
+			return state;
+		})
+		.addCase(register.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
+		.addCase(getUserInfo.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}))
+		.addCase(updateUserInfo.fulfilled, (_state, action) => ({
+			email: action.payload.user.email,
+			login: action.payload.user.name,
+		}));
+});
+
+const loadingReducer = createReducer<boolean>(false, (builder) => {
+	builder
+		.addCase(placeOrder.pending, () => true)
+		.addCase(placeOrder.fulfilled, () => false)
+		.addCase(placeOrder.rejected, () => false);
+});
+
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
-	ingredientDetails: ingredientDetailsReducer,
 	order: orderReducer,
+	loading: loadingReducer,
+	user: userReducer,
 });
