@@ -7,7 +7,7 @@ export function ProtectedRouteElement({
 	element,
 	anonymous = false,
 }: {
-	element?: React.ReactNode | null;
+	element?: React.ReactNode;
 	anonymous?: boolean;
 }) {
 	const dispatch = useAppDispatch();
@@ -25,12 +25,12 @@ export function ProtectedRouteElement({
 		}
 	}, []);
 
+	const location = useLocation();
+	const from = location.state?.from || '/';
+
 	if (!isUserLoaded) {
 		return null;
 	}
-
-	const location = useLocation();
-	const from = location.state?.from || '/';
 
 	if (anonymous && isLoggedIn) {
 		return <Navigate to={from} />;

@@ -10,9 +10,9 @@ import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/d
 import { ComponentType } from 'react';
 
 type HeaderItemProps = {
-	to: string;
-	active: boolean;
-	text: string;
+	readonly to: string;
+	readonly active: boolean;
+	readonly text: string;
 };
 
 function toHeaderItem(IconComponent: ComponentType<TIconProps>) {

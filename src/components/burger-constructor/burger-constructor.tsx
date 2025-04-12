@@ -20,10 +20,10 @@ import { useNavigate } from 'react-router-dom';
 import ConstructorElementPlaceholder from './constructor-element-placeholder';
 
 type SelectedState = {
-	bun: Ingredient | null;
-	filling: FillingItem[];
-	ingredients: Ingredient[];
-	user: User | null;
+	readonly bun: Ingredient | null;
+	readonly filling: ReadonlyArray<FillingItem>;
+	readonly ingredients: ReadonlyArray<Ingredient>;
+	readonly user: User | null;
 };
 
 export const BurgerConstructor = () => {

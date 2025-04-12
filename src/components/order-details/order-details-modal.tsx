@@ -8,8 +8,8 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { RotatingLines } from 'react-loader-spinner';
 
 type SelectedState = {
-	order: Order | null;
-	loading: boolean;
+	readonly order: Order | null;
+	readonly loading: boolean;
 };
 
 const OrderDetailsModal = () => {
@@ -31,7 +31,7 @@ const OrderDetailsModal = () => {
 		<>
 			{(order != null || loading) && (
 				<Modal onClose={handleClose}>
-					{order != null && <OrderDetails orderId={order.order.number} />}
+					{order && <OrderDetails orderId={order.number} />}
 					{loading && (
 						<div
 							style={{

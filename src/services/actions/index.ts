@@ -1,26 +1,24 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import {
-	GetUserInfoResponse as GetUserInfoResponse,
+	IGetUserInfoResponse as IGetUserInfoResponse,
 	Ingredient,
+	IIngredientsResponse,
 	LoginRequest,
-	LoginResponse,
-	LogoutResponse,
-	Order,
-	PasswordResetResult,
-	RefreshResponse,
+	ILoginResponse,
+	ILogoutResponse,
+	IOrderResponse,
+	IPasswordResetResponse,
+	IRefreshResponse,
 	RegisterRequest,
-	RegisterResponse,
+	IRegisterResponse,
 	UpdateUserInfoRequest,
-	UpdateUserInfoResponse,
+	IUpdateUserInfoResponse,
 } from '../../types';
 import { requestWithRefresh as request } from '../../utils/index';
 
-const orderAPI = 'orders';
-const ingredientsAPI = 'ingredients';
-
-export const loadIngredients = createAsyncThunk<Ingredient[]>(
+export const loadIngredients = createAsyncThunk<ReadonlyArray<Ingredient>>(
 	'LOAD_INGREDIENTS',
-	async () => (await request(ingredientsAPI)).data
+	async () => (await request<IIngredientsResponse>('ingredients')).data
 );
 
 export const addIngredient = createAction<{
@@ -34,7 +32,7 @@ export const moveFilling = createAction<{ source: string; dest: string }>(
 	'MOVE_FILLING'
 );
 
-export const placeOrder = createAsyncThunk<Order, string[]>(
+export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
 	'PLACE_ORDER',
 	async (ids) => {
 		const body = JSON.stringify({ ingredients: ids });
@@ -46,13 +44,13 @@ export const placeOrder = createAsyncThunk<Order, string[]>(
 			method: 'POST',
 			body: body,
 		};
-		return await request(orderAPI, options);
+		return await request<IOrderResponse>('orders', options);
 	}
 );
 
 export const closeOrderDetails = createAction('CLOSE_ORDER_DETAILS');
 
-export const passwordReset = createAsyncThunk<PasswordResetResult, string>(
+export const passwordReset = createAsyncThunk<IPasswordResetResponse, string>(
 	'PASSWORD_RESET',
 	async (email: string) => {
 		const body = JSON.stringify({ email: email });
@@ -63,12 +61,12 @@ export const passwordReset = createAsyncThunk<PasswordResetResult, string>(
 			method: 'POST',
 			body: body,
 		};
-		return await request('password-reset', options);
+		return await request<IPasswordResetResponse>('password-reset', options);
 	}
 );
 
 export const setNewPassword = createAsyncThunk<
-	PasswordResetResult,
+	IPasswordResetResponse,
 	{ password: string; token: string }
 >('SET_NEW_PASSWORD', async (data) => {
 	const body = JSON.stringify(data);
@@ -79,10 +77,10 @@ export const setNewPassword = createAsyncThunk<
 		method: 'POST',
 		body: body,
 	};
-	return await request('password-reset/reset', options);
+	return await request<IPasswordResetResponse>('password-reset/reset', options);
 });
 
-export const register = createAsyncThunk<RegisterResponse, RegisterRequest>(
+export const register = createAsyncThunk<IRegisterResponse, RegisterRequest>(
 	'REGISTER',
 	async (data) => {
 		const body = JSON.stringify(data);
@@ -93,11 +91,11 @@ export const register = createAsyncThunk<RegisterResponse, RegisterRequest>(
 			method: 'POST',
 			body: body,
 		};
-		return await request('auth/register', options);
+		return await request<IRegisterResponse>('auth/register', options);
 	}
 );
 
-export const login = createAsyncThunk<LoginResponse, LoginRequest>(
+export const login = createAsyncThunk<ILoginResponse, LoginRequest>(
 	'LOGIN',
 	async (data) => {
 		const body = JSON.stringify(data);
@@ -108,11 +106,11 @@ export const login = createAsyncThunk<LoginResponse, LoginRequest>(
 			method: 'POST',
 			body: body,
 		};
-		return await request('auth/login', options);
+		return await request<ILoginResponse>('auth/login', options);
 	}
 );
 
-export const refresh = createAsyncThunk<RefreshResponse>(
+export const refresh = createAsyncThunk<IRefreshResponse>(
 	'REFRESH',
 	async () => {
 		const body = JSON.stringify({
@@ -125,11 +123,11 @@ export const refresh = createAsyncThunk<RefreshResponse>(
 			method: 'POST',
 			body: body,
 		};
-		return await request('auth/token', options);
+		return await request<IRefreshResponse>('auth/token', options);
 	}
 );
 
-export const logout = createAsyncThunk<LogoutResponse>('LOGOUT', async () => {
+export const logout = createAsyncThunk<ILogoutResponse>('LOGOUT', async () => {
 	const body = JSON.stringify({ token: localStorage.getItem('refreshToken') });
 	const options = {
 		headers: {
@@ -138,10 +136,10 @@ export const logout = createAsyncThunk<LogoutResponse>('LOGOUT', async () => {
 		method: 'POST',
 		body: body,
 	};
-	return await request('auth/logout', options);
+	return await request<ILogoutResponse>('auth/logout', options);
 });
 
-export const getUserInfo = createAsyncThunk<GetUserInfoResponse>(
+export const getUserInfo = createAsyncThunk<IGetUserInfoResponse>(
 	'GET_USER_INFO',
 	async () => {
 		let headers: HeadersInit = {
@@ -155,12 +153,12 @@ export const getUserInfo = createAsyncThunk<GetUserInfoResponse>(
 			headers: headers,
 			method: 'GET',
 		};
-		return await request('auth/user', options);
+		return await request<IGetUserInfoResponse>('auth/user', options);
 	}
 );
 
 export const updateUserInfo = createAsyncThunk<
-	UpdateUserInfoResponse,
+	IUpdateUserInfoResponse,
 	UpdateUserInfoRequest
 >('UPDATE_USER_INFO', async (data) => {
 	const body = JSON.stringify(data);
@@ -172,5 +170,5 @@ export const updateUserInfo = createAsyncThunk<
 		method: 'PATCH',
 		body: body,
 	};
-	return await request('auth/user', options);
+	return await request<IUpdateUserInfoResponse>('auth/user', options);
 });
