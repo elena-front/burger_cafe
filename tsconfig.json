@@ -19,7 +19,6 @@
 		"sourceMap": true,
 		"allowJs": true /* Allow javascript files to be compiled. Useful when migrating JS to TS */,
 		"noFallthroughCasesInSwitch": true,
-		"noEmit": true,
 		// "checkJs": true /* Report errors in .js files. Works in tandem with allowJs. */,
 		"plugins": [{ "name": "typescript-plugin-css-modules" }],
 		"paths": {
