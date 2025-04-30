@@ -2,7 +2,7 @@ import AppHeader from '../app-header/app-header';
 
 import styles from './app.module.css';
 
-import OrderDetailsModal from '../order-details/order-details-modal';
+import OrderAcceptedModal from '../order-accepted/order-accepted-modal';
 import IngredientDetailsModal from '../ingredient-details/ingredient-details-modal';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { LoginPage } from '../../pages/login';
@@ -18,6 +18,11 @@ import { useEffect } from 'react';
 import { getUserInfo, loadIngredients } from '../../services/actions';
 import { useAppDispatch } from '../hooks';
 import { Account } from '../account/account';
+import { Feed } from '../../pages/feed';
+import OrderInfoPage from '../../pages/order-info-page';
+import FeedPage from '../../pages/feed-page';
+import { OrderHistoryPage } from '../../pages/order-history-page';
+import OrderInfoModal from '../order-info/order-info-modal';
 
 const App = () => {
 	const location = useLocation();
@@ -33,7 +38,7 @@ const App = () => {
 	return (
 		<div className={styles.app}>
 			<AppHeader />
-			<OrderDetailsModal />
+			<OrderAcceptedModal />
 
 			<Routes location={background || location}>
 				<Route path='/forgot-password' element={<ForgotPassword />} />
@@ -49,7 +54,7 @@ const App = () => {
 					path='/profile'
 					element={<ProtectedRouteElement element={<Profile />} />}>
 					<Route path='' element={<Account />} />
-					<Route path='orders' element={<>Здесь будет история заказов</>} />
+					<Route path='orders' element={<OrderHistoryPage />} />
 				</Route>
 				<Route
 					path='/register'
@@ -58,12 +63,19 @@ const App = () => {
 					}
 				/>
 				<Route path='/reset-password' element={<ResetPassword />} />
+				<Route path='/feed' element={<FeedPage />}>
+					<Route path='' element={<Feed />} />
+					<Route path=':id' element={<OrderInfoPage />}></Route>
+				</Route>
+
 				<Route path='*' element={<NotFound404 />} />
 			</Routes>
 
 			{background && (
 				<Routes>
 					<Route path='/ingredients/:id' element={<IngredientDetailsModal />} />
+					<Route path='/feed/:id' element={<OrderInfoModal />} />
+					<Route path='/profile/orders/:id' element={<OrderInfoModal />} />
 				</Routes>
 			)}
 		</div>

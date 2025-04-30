@@ -15,12 +15,15 @@ import {
 } from '../actions';
 import {
 	BurgerState,
+	Feed,
 	Ingredient,
 	IngredientType,
 	Order,
+	OrderDetails,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
+import { feed, feedOrders } from '../../data';
 
 const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 	[],
@@ -113,10 +116,15 @@ const loadingReducer = createReducer<boolean>(false, (builder) => {
 		.addCase(placeOrder.rejected, () => false);
 });
 
+const feedReducer = createReducer<Feed>(feed, (builder) => {
+	builder;
+});
+
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
 	order: orderReducer,
 	loading: loadingReducer,
 	user: userReducer,
+	feed: feedReducer,
 });

@@ -108,3 +108,32 @@ export interface IOrderResponse extends IResponse {
 	readonly name: string;
 	readonly order: Order;
 }
+
+export type OrderDetails = {
+	readonly name: string;
+	readonly number: number;
+	readonly ingredients: ReadonlyArray<string>;
+	readonly total: number;
+	readonly timestamp: Date;
+	readonly status?: OrderStatus;
+};
+
+export enum OrderStatus {
+	CREATED,
+	INPROGRESS,
+	COMPLETED,
+	CANCELED,
+}
+
+export type OrderStatisticData = {
+	readonly done: ReadonlyArray<number>;
+	readonly inprogress: ReadonlyArray<number>;
+	readonly total: number;
+	readonly doneToday: number;
+};
+
+export type Feed = {
+	readonly orders: ReadonlyArray<OrderDetails>;
+	readonly total: number;
+	readonly totalToday: number;
+};

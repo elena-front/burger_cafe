@@ -1,7 +1,7 @@
 import { Order } from '../../types';
 import { shallowEqual } from 'react-redux';
 import Modal from '../modal/modal';
-import OrderDetails from './order-details';
+import OrderAccepted from './order-accepted';
 import { useCallback } from 'react';
 import { closeOrderDetails } from '../../services/actions';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -12,7 +12,7 @@ type SelectedState = {
 	readonly loading: boolean;
 };
 
-const OrderDetailsModal = () => {
+const OrderAcceptedModal = () => {
 	const { order, loading } = useAppSelector<SelectedState>(
 		(state) => ({
 			order: state.order,
@@ -31,7 +31,7 @@ const OrderDetailsModal = () => {
 		<>
 			{(order != null || loading) && (
 				<Modal onClose={handleClose}>
-					{order && <OrderDetails orderId={order.number} />}
+					{order && <OrderAccepted orderId={order.number} />}
 					{loading && (
 						<div
 							style={{
@@ -52,4 +52,4 @@ const OrderDetailsModal = () => {
 	);
 };
 
-export default OrderDetailsModal;
+export default OrderAcceptedModal;

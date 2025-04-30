@@ -1,0 +1,72 @@
+.canceled {
+	color: red;
+}
+
+.completed {
+	color: #00cccc;
+}
+
+.listItem {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 24px;
+
+	background-color: #1c1c21;
+	border-radius: 40px;
+}
+.itemProps {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 24px;
+}
+.name {
+	height: 30px;
+}
+.total {
+	display: flex;
+	justify-content: space-between;
+	height: 64px;
+	align-items: center;
+}
+.price {
+	display: flex;
+}
+.ingredient {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	display: block;
+	object-fit: cover;
+	object-position: center;
+}
+.iconContainer {
+	width: 64px;
+	height: 64px;
+	position: relative;
+	margin-left: -30px;
+}
+
+.iconContainer:first-child {
+	margin-left: 0;
+}
+
+.iconContainer::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: 50%;
+	padding: 2px;
+	background: linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%);
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+}
+
+.ingredientsRow {
+	display: flex;
+	flex-direction: row;
+}

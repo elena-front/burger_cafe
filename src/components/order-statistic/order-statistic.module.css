@@ -1,0 +1,23 @@
+.containerStat {
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+}
+.status {
+	display: flex;
+	gap: 36px;
+}
+.orderStatus {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+.done {
+	display: flex;
+	flex-direction: column;
+}
+
+.glow {
+	text-shadow: 0px 4px 32px #3333ff80, 0px 0px 8px #3333ff40,
+		0px 0px 16px #3333ff40;
+}

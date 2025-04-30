@@ -1,11 +1,11 @@
-import styles from './order-details.module.css';
+import styles from './order-accepted.module.css';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-type OrderDetailsProps = {
+type Props = {
 	readonly orderId: number;
 };
 
-const OrderDetails = ({ orderId }: OrderDetailsProps) => {
+const OrderAccepted = ({ orderId }: Props) => {
 	return (
 		<div className={styles.modalOrderModal}>
 			<div className='text text_type_digits-large mt-20'>
@@ -26,4 +26,4 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
 	);
 };
 
-export default OrderDetails;
+export default OrderAccepted;
