@@ -58,3 +58,51 @@ const refreshToken = async () => {
 	localStorage.setItem('accessToken', response.accessToken);
 	return response;
 };
+
+const dayDiff = (date1: Date, date2: Date): number => {
+	const t1 = Date.UTC(
+		date1.getUTCFullYear(),
+		date1.getUTCMonth(),
+		date1.getUTCDate()
+	);
+	const t2 = Date.UTC(
+		date2.getUTCFullYear(),
+		date2.getUTCMonth(),
+		date2.getUTCDate()
+	);
+	return Math.floor((t1 - t2) / (1000 * 60 * 60 * 24));
+};
+
+export const getRelativeDateTime = (date: Date): string => {
+	return `${getRelativeDate(date)}, ${toShortTime(date)}`;
+};
+
+const getRelativeDate = (date: Date): string => {
+	const now = new Date();
+	const days = dayDiff(now, date);
+	if (days === 0) {
+		return 'Сегодня';
+	}
+
+	if (days === 1) {
+		return 'Вчера';
+	}
+
+	const remain = days % 10;
+	if (remain === 1) {
+		return `${days} день назад`;
+	}
+
+	if (remain >= 2 && remain <= 4) {
+		return `${days} дня назад`;
+	}
+
+	return `${days} дней назад`;
+};
+
+const toShortTime = (date: Date): string => {
+	return `${date.getHours().toString().padStart(2, '0')}:${date
+		.getMinutes()
+		.toString()
+		.padStart(2, '0')}`;
+};

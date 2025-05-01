@@ -2,6 +2,8 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { Ingredient, OrderDetails } from '../../types';
 import { useAppSelector } from '../hooks';
 import styles from './order-info.module.css';
+import Info from './info';
+import { getRelativeDateTime } from '@utils/index';
 
 type Props = {
 	order: OrderDetails;
@@ -22,27 +24,11 @@ export function OrderInfo({ order }: Props) {
 	);
 
 	return (
-		<div className={styles.orderPage}>
+		<div>
+			<Info name={order.name} status={order.status} />
+			<div className='text text_type_main-medium mt-15'>Состав:</div>
 			<div
-				className='text text_type_digits-default mb-7'
-				style={{ alignSelf: 'center' }}>
-				#{order.number.toString().padStart(6, '0')}
-			</div>
-
-			<div className='text text_type_main-medium'>{order.name}</div>
-
-			<div
-				className='text text_type_main-small mb-10'
-				style={{ color: '#00CCCC' }}>
-				there will be order's status
-			</div>
-
-			<div className='text text_type_main-medium mt-2 mb-3'>Состав:</div>
-
-			<div
-				className={
-					styles.itemsList + ' text text_type_main-small mb-1 custom-scroll'
-				}>
+				className={`${styles.ingredientListContainer} text text_type_main-small mt-6 custom-scroll`}>
 				<ul className={styles.ingredientList}>
 					{ingredients.map((ingredient, index) => (
 						<li key={index} className={styles.ingredientRow}>
@@ -62,11 +48,11 @@ export function OrderInfo({ order }: Props) {
 				</ul>
 			</div>
 
-			<div className={styles.orderInfo + ' mt-6'}>
+			<div className={`${styles.timePrice} mt-10`}>
 				<span className='text text_type_main-default text_color_inactive'>
-					{order.timestamp.toDateString()}
+					{getRelativeDateTime(order.timestamp)}
 				</span>
-				<span className={styles.price + ' text text_type_digits-default'}>
+				<span className={`${styles.price} text text_type_digits-default`}>
 					{order.total} <CurrencyIcon type='primary' className='ml-2' />
 				</span>
 			</div>

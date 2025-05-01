@@ -2,8 +2,9 @@ import { useParams } from 'react-router-dom';
 import IngredientDetails from '../components/ingredient-details/ingredient-details';
 import { useAppSelector } from '../components/hooks';
 import { shallowEqual } from 'react-redux';
+import styles from './ingredient-details-page.module.css';
 
-export function Ingredient() {
+export function IngredientDetailsPage() {
 	const { id } = useParams();
 
 	const ingredient = useAppSelector(
@@ -14,7 +15,10 @@ export function Ingredient() {
 
 	return (
 		ingredient && (
-			<div className='mt-30'>
+			<div className={styles.content}>
+				<div className={`${styles.header} text text_type_main-large`}>
+					Детали ингредиента
+				</div>
 				<IngredientDetails ingredient={ingredient} />
 			</div>
 		)

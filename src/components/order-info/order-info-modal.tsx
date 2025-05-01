@@ -22,7 +22,13 @@ export default function OrderInfoModal() {
 	return (
 		<>
 			{orderInfo != null && (
-				<Modal onClose={handleClose}>
+				<Modal
+					onClose={handleClose}
+					title={
+						<span className='text text_type_digits-default'>
+							#{orderInfo.number.toString().padStart(6, '0')}
+						</span>
+					}>
 					<OrderInfo order={orderInfo} />
 				</Modal>
 			)}

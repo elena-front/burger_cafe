@@ -6,7 +6,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 type ModalProps = {
 	readonly children: ReactNode;
-	readonly title?: string;
+	readonly title?: ReactNode;
 	readonly onClose: () => void;
 };
 
@@ -36,7 +36,7 @@ const Modal = ({ children, title, onClose }: ModalProps) => {
 					<ModalOverlay onClose={onClose} />
 					<div className={styles.modal}>
 						<div className={styles.modalHeader}>
-							<div className='text text_type_main-large'>{title}</div>
+							{title}
 							<CloseIcon type='primary' onClick={onClose} />
 						</div>
 						{children}

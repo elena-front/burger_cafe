@@ -1,11 +1,3 @@
-.canceled {
-	color: red;
-}
-
-.completed {
-	color: #00cccc;
-}
-
 .listItem {
 	display: flex;
 	flex-direction: column;

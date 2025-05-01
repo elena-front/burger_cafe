@@ -24,7 +24,13 @@ const IngredientDetailsModal = () => {
 	return (
 		<>
 			{ingredientDetails != null && (
-				<Modal onClose={handleClose} title='Детали ингредиента'>
+				<Modal
+					onClose={handleClose}
+					title={
+						<span className='text text_type_main-large'>
+							Детали ингредиента
+						</span>
+					}>
 					<IngredientDetails ingredient={ingredientDetails} />
 				</Modal>
 			)}

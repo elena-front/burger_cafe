@@ -1,22 +1,7 @@
-.orderPage {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	margin-top: 122px;
-	max-width: 640px;
-}
-.orderInfo {
-	display: flex;
-	justify-content: space-between;
-	width: 640px;
-	align-items: baseline;
-}
-.itemsList {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+.ingredientListContainer {
 	max-height: 376px;
 }
+
 .price {
 	display: flex;
 }
@@ -69,4 +54,9 @@
 	display: flex;
 	gap: 16px;
 	flex-direction: column;
+}
+
+.timePrice {
+	display: flex;
+	justify-content: space-between;
 }

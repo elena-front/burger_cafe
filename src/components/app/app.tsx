@@ -7,7 +7,7 @@ import IngredientDetailsModal from '../ingredient-details/ingredient-details-mod
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { LoginPage } from '../../pages/login';
 import { ForgotPassword } from '../../pages/forgot-password';
-import { Ingredient } from '../../pages/ingredient';
+import { IngredientDetailsPage } from '../../pages/ingredient-details-page';
 import { Home } from '../../pages/home';
 import { Profile } from '../../pages/profile';
 import { Register } from '../../pages/register';
@@ -20,7 +20,6 @@ import { useAppDispatch } from '../hooks';
 import { Account } from '../account/account';
 import { Feed } from '../../pages/feed';
 import OrderInfoPage from '../../pages/order-info-page';
-import FeedPage from '../../pages/feed-page';
 import { OrderHistoryPage } from '../../pages/order-history-page';
 import OrderInfoModal from '../order-info/order-info-modal';
 
@@ -42,7 +41,7 @@ const App = () => {
 
 			<Routes location={background || location}>
 				<Route path='/forgot-password' element={<ForgotPassword />} />
-				<Route path='/ingredients/:id' element={<Ingredient />} />
+				<Route path='/ingredients/:id' element={<IngredientDetailsPage />} />
 				<Route
 					path='/login'
 					element={
@@ -57,17 +56,18 @@ const App = () => {
 					<Route path='orders' element={<OrderHistoryPage />} />
 				</Route>
 				<Route
+					path='/profile/orders/:id'
+					element={<ProtectedRouteElement element={<OrderInfoPage />} />}
+				/>
+				<Route
 					path='/register'
 					element={
 						<ProtectedRouteElement anonymous={true} element={<Register />} />
 					}
 				/>
 				<Route path='/reset-password' element={<ResetPassword />} />
-				<Route path='/feed' element={<FeedPage />}>
-					<Route path='' element={<Feed />} />
-					<Route path=':id' element={<OrderInfoPage />}></Route>
-				</Route>
-
+				<Route path='/feed' element={<Feed />}></Route>
+				<Route path='/feed/:id' element={<OrderInfoPage />} />
 				<Route path='*' element={<NotFound404 />} />
 			</Routes>
 
