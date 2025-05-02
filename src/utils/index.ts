@@ -44,7 +44,7 @@ const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
 	}
 };
 
-const refreshToken = async () => {
+export const refreshToken = async () => {
 	const response = await request<IRefreshResponse>('auth/token', {
 		method: 'POST',
 		headers: {
@@ -55,7 +55,10 @@ const refreshToken = async () => {
 		}),
 	});
 	localStorage.setItem('refreshToken', response.refreshToken);
-	localStorage.setItem('accessToken', response.accessToken);
+	localStorage.setItem(
+		'accessToken',
+		response.accessToken.slice('Bearer '.length)
+	);
 	return response;
 };
 

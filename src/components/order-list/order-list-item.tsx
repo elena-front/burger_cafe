@@ -10,10 +10,20 @@ type Props = {
 	showStatus: boolean;
 };
 
+type State = {
+	ingredients: ReadonlyArray<Ingredient>;
+	total: number;
+};
+
 export function OrderListItem({ order, showStatus }: Props) {
-	const orderIngredients = useAppSelector<ReadonlyArray<Ingredient>>((state) =>
-		state.ingredients.filter((i) => order.ingredients.includes(i._id))
-	);
+	const { ingredients, total } = useAppSelector<State>((state) => ({
+		ingredients: state.ingredients.filter((i) =>
+			order.ingredients.includes(i._id)
+		),
+		total: order.ingredients
+			.map((id) => state.ingredients.find((i) => i._id === id)?.price || 0)
+			.reduce((a, b) => a + b),
+	}));
 
 	return (
 		<div className={styles.listItem}>
@@ -30,7 +40,7 @@ export function OrderListItem({ order, showStatus }: Props) {
 
 			<div className={styles.total}>
 				<div className={styles.ingredientsRow}>
-					{orderIngredients.map((ingredient, index) => (
+					{ingredients.map((ingredient, index) => (
 						<div className={styles.iconContainer}>
 							<img
 								key={index}
@@ -42,7 +52,7 @@ export function OrderListItem({ order, showStatus }: Props) {
 				</div>
 
 				<span className={styles.price}>
-					<span className='text text_type_digits-default'>{order.total}</span>
+					<span className='text text_type_digits-default'>{total}</span>
 					<CurrencyIcon type='primary' className='ml-2' />
 				</span>
 			</div>

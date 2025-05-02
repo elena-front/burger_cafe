@@ -1,15 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { AppDispatch, AppStore, RootState } from '../services/store';
-import {
-	TypedUseSelectorHook,
-	useDispatch,
-	useSelector,
-	useStore,
-} from 'react-redux';
+import { AppDispatch, RootState } from '../services/store';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-export const useAppStore: () => AppStore = useStore;
+export const useAppDispatch: () => AppDispatch = useDispatch<AppDispatch>;
+export const useAppSelector: TypedUseSelectorHook<RootState> =
+	useSelector<RootState>;
 
 export const useForm = <T>(input: T) => {
 	const [values, setValues] = useState<T>(input);

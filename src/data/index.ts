@@ -10,7 +10,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa0948',
 		],
 		status: OrderStatus.CREATED,
-		total: 480,
 		timestamp: new Date(2025, 4, 1, 8, 20, 0),
 	},
 	{
@@ -22,7 +21,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.COMPLETED,
-		total: 5698,
 		timestamp: new Date(2025, 3, 30, 16, 20, 0),
 	},
 	{
@@ -34,7 +32,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.COMPLETED,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -46,7 +43,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.CANCELED,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -58,7 +54,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.INPROGRESS,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -70,7 +65,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.INPROGRESS,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -82,7 +76,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.INPROGRESS,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -94,7 +87,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.COMPLETED,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -106,7 +98,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.INPROGRESS,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 	{
@@ -118,7 +109,6 @@ export const feedOrders: ReadonlyArray<OrderDetails> = [
 			'643d69a5c3f7b9001cfa094a',
 		],
 		status: OrderStatus.INPROGRESS,
-		total: 5698,
 		timestamp: new Date(2025, 3, 25, 16, 20, 0),
 	},
 ];

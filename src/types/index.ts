@@ -113,16 +113,15 @@ export type OrderDetails = {
 	readonly name: string;
 	readonly number: number;
 	readonly ingredients: ReadonlyArray<string>;
-	readonly total: number;
 	readonly timestamp: Date;
-	readonly status?: OrderStatus;
+	readonly status: OrderStatus;
 };
 
 export enum OrderStatus {
-	CREATED,
-	INPROGRESS,
-	COMPLETED,
-	CANCELED,
+	CREATED = 'created',
+	INPROGRESS = 'inprogress',
+	COMPLETED = 'done',
+	CANCELED = 'canceled',
 }
 
 export type OrderStatisticData = {
@@ -137,3 +136,19 @@ export type Feed = {
 	readonly total: number;
 	readonly totalToday: number;
 };
+
+export type OrderResponse = {
+	readonly createdAt: string;
+	readonly ingredients: ReadonlyArray<string>;
+	readonly name: string;
+	readonly number: number;
+	readonly status: string;
+	readonly updatedAt: string;
+	readonly _id: string;
+};
+
+export interface FeedResponse extends IResponse {
+	readonly orders: ReadonlyArray<OrderResponse>;
+	readonly total: number;
+	readonly totalDay: number;
+}

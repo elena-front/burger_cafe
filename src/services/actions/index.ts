@@ -13,6 +13,7 @@ import {
 	IRegisterResponse,
 	UpdateUserInfoRequest,
 	IUpdateUserInfoResponse,
+	FeedResponse,
 } from '../../types';
 import { requestWithRefresh as request } from '../../utils/index';
 
@@ -26,7 +27,9 @@ export const addIngredient = createAction<{
 	uid: string;
 }>('ADD_INGREDIENT');
 
-export const removeFilling = createAction<string>('REMOVE_FILLING');
+export const removeFilling = createAction<string, 'REMOVE_FILLING'>(
+	'REMOVE_FILLING'
+);
 
 export const moveFilling = createAction<{ source: string; dest: string }>(
 	'MOVE_FILLING'
@@ -45,6 +48,13 @@ export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
 			body: body,
 		};
 		return await request<IOrderResponse>('orders', options);
+	}
+);
+
+export const getOrderByNumber = createAsyncThunk<IOrderResponse, number>(
+	'GET_ORDER_BY_NUMBER',
+	async (id) => {
+		return await request<IOrderResponse>(`orders/${id}`);
 	}
 );
 
@@ -172,3 +182,36 @@ export const updateUserInfo = createAsyncThunk<
 	};
 	return await request<IUpdateUserInfoResponse>('auth/user', options);
 });
+
+export const feedConnect = createAction<string, 'feed/connect'>('feed/connect');
+export const feedDisconnect = createAction('feed/disconnect');
+export const feedError = createAction<string, 'feed/error'>('feed/error');
+export const feedMessage = createAction<FeedResponse, 'feed/message'>(
+	'feed/message'
+);
+
+export const profileFeedConnect = createAction<string, 'porfileFeed/connect'>(
+	'porfileFeed/connect'
+);
+export const profileFeedDisconnect = createAction('profileFeed/disconnect');
+export const profileFeedError = createAction<string, 'profileFeed/error'>(
+	'profileFeed/error'
+);
+export const profileFeedMessage = createAction<
+	FeedResponse,
+	'profileFeed/message'
+>('profileFeed/message');
+
+export type AppActions =
+	| ReturnType<typeof moveFilling>
+	| ReturnType<typeof addIngredient>
+	| ReturnType<typeof closeOrderDetails>
+	| ReturnType<typeof removeFilling>
+	| ReturnType<typeof feedConnect>
+	| ReturnType<typeof feedDisconnect>
+	| ReturnType<typeof feedError>
+	| ReturnType<typeof feedMessage>
+	| ReturnType<typeof profileFeedConnect>
+	| ReturnType<typeof profileFeedDisconnect>
+	| ReturnType<typeof profileFeedError>
+	| ReturnType<typeof profileFeedMessage>;

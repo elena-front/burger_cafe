@@ -2,12 +2,14 @@ import { combineReducers } from 'redux';
 import {
 	addIngredient,
 	closeOrderDetails,
+	feedMessage,
 	getUserInfo,
 	loadIngredients,
 	login,
 	logout,
 	moveFilling,
 	placeOrder,
+	profileFeedMessage,
 	refresh,
 	register,
 	removeFilling,
@@ -20,10 +22,11 @@ import {
 	IngredientType,
 	Order,
 	OrderDetails,
+	OrderResponse,
+	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
-import { feed, feedOrders } from '../../data';
 
 const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 	[],
@@ -33,6 +36,8 @@ const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 			(_state, action) => action.payload
 		)
 );
+
+const emptyFeed: Feed = { orders: [], total: 0, totalToday: 0 };
 
 const burgerReducer = createReducer<BurgerState>(
 	{ bun: null, filling: [] },
@@ -116,9 +121,45 @@ const loadingReducer = createReducer<boolean>(false, (builder) => {
 		.addCase(placeOrder.rejected, () => false);
 });
 
-const feedReducer = createReducer<Feed>(feed, (builder) => {
-	builder;
+const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
+	builder.addCase(feedMessage, (state, action) => {
+		if (action.payload.success) {
+			return {
+				...state,
+				orders: action.payload.orders.map((order) => toOrderDetails(order)),
+				total: action.payload.total,
+				totalToday: action.payload.totalDay,
+			};
+		}
+
+		return state;
+	});
 });
+
+const feedProfileReducer = createReducer<Feed>(emptyFeed, (builder) => {
+	builder.addCase(profileFeedMessage, (state, action) => {
+		if (action.payload.success) {
+			return {
+				...state,
+				orders: action.payload.orders.map((order) => toOrderDetails(order)),
+				total: action.payload.total,
+				totalToday: action.payload.totalDay,
+			};
+		}
+
+		return state;
+	});
+});
+
+const toOrderDetails = (response: OrderResponse): OrderDetails => {
+	return {
+		ingredients: response.ingredients,
+		name: response.name,
+		number: response.number,
+		timestamp: new Date(response.createdAt),
+		status: response.status as OrderStatus,
+	};
+};
 
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
@@ -127,4 +168,5 @@ export const rootReducer = combineReducers({
 	loading: loadingReducer,
 	user: userReducer,
 	feed: feedReducer,
+	feedProfile: feedProfileReducer,
 });

@@ -9,12 +9,20 @@ type Props = {
 	order: OrderDetails;
 };
 
+type State = {
+	readonly ingredients: ReadonlyArray<Ingredient>;
+	readonly total: number;
+};
+
 export function OrderInfo({ order }: Props) {
-	const ingredients = useAppSelector<ReadonlyArray<Ingredient>>((state) =>
-		state.ingredients.filter((ingredient) =>
-			order.ingredients.includes(ingredient._id)
-		)
-	);
+	const { ingredients, total } = useAppSelector<State>((state) => ({
+		ingredients: state.ingredients.filter((i) =>
+			order.ingredients.includes(i._id)
+		),
+		total: order.ingredients
+			.map((id) => state.ingredients.find((i) => i._id === id)?.price || 0)
+			.reduce((a, b) => a + b),
+	}));
 
 	const counts = order.ingredients.reduce(
 		(cnt: { [key: string]: number }, cur: string) => (
@@ -53,7 +61,7 @@ export function OrderInfo({ order }: Props) {
 					{getRelativeDateTime(order.timestamp)}
 				</span>
 				<span className={`${styles.price} text text_type_digits-default`}>
-					{order.total} <CurrencyIcon type='primary' className='ml-2' />
+					{total} <CurrencyIcon type='primary' className='ml-2' />
 				</span>
 			</div>
 		</div>
