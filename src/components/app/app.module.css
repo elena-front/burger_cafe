@@ -4,6 +4,8 @@
 }
 
 .content {
+	display: flex;
+	flex-direction: column;
 	width: 1240px;
 	align-self: center;
 }

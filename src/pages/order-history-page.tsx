@@ -3,6 +3,7 @@ import { OrderList } from '../components/order-list/order-list';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../components/hooks';
 import { profileFeedConnect, profileFeedDisconnect } from '../services/actions';
+import styles from './order-history-page.module.css';
 
 const PROFILE_FEED_URL = 'wss://norma.nomoreparties.space/orders';
 
@@ -33,6 +34,7 @@ export function OrderHistoryPage() {
 
 	return (
 		<OrderList
+			className={styles.list}
 			orders={orders}
 			showStatus={true}
 			onItemClick={handleItemClick}

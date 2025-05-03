@@ -32,6 +32,7 @@ export function Feed() {
 			<div className='text text_type_main-large'>Лента заказов</div>
 			<div className={styles.content}>
 				<OrderList
+					className={styles.feed}
 					orders={feed.orders}
 					showStatus={false}
 					onItemClick={handleItemClick}
