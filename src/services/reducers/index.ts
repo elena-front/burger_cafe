@@ -3,6 +3,7 @@ import {
 	addIngredient,
 	closeOrderDetails,
 	feedMessage,
+	getOrderByNumber,
 	getUserInfo,
 	loadIngredients,
 	login,
@@ -21,9 +22,6 @@ import {
 	Ingredient,
 	IngredientType,
 	Order,
-	OrderDetails,
-	OrderResponse,
-	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
@@ -80,7 +78,7 @@ const burgerReducer = createReducer<BurgerState>(
 			})
 );
 
-const orderReducer = createReducer<Order | null>(null, (builder) =>
+const newOrderReducer = createReducer<Order | null>(null, (builder) =>
 	builder
 		.addCase(closeOrderDetails, () => null)
 		.addCase(placeOrder.fulfilled, (_state, action) => action.payload.order)
@@ -124,12 +122,7 @@ const loadingReducer = createReducer<boolean>(false, (builder) => {
 const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
 	builder.addCase(feedMessage, (state, action) => {
 		if (action.payload.success) {
-			return {
-				...state,
-				orders: action.payload.orders.map((order) => toOrderDetails(order)),
-				total: action.payload.total,
-				totalToday: action.payload.totalDay,
-			};
+			return action.payload;
 		}
 
 		return state;
@@ -139,34 +132,27 @@ const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
 const feedProfileReducer = createReducer<Feed>(emptyFeed, (builder) => {
 	builder.addCase(profileFeedMessage, (state, action) => {
 		if (action.payload.success) {
-			return {
-				...state,
-				orders: action.payload.orders.map((order) => toOrderDetails(order)),
-				total: action.payload.total,
-				totalToday: action.payload.totalDay,
-			};
+			return action.payload;
 		}
 
 		return state;
 	});
 });
 
-const toOrderDetails = (response: OrderResponse): OrderDetails => {
-	return {
-		ingredients: response.ingredients,
-		name: response.name,
-		number: response.number,
-		timestamp: new Date(response.createdAt),
-		status: response.status as OrderStatus,
-	};
-};
+const ordersReducer = createReducer<ReadonlyArray<Order>>([], (builder) => {
+	builder.addCase(
+		getOrderByNumber.fulfilled,
+		(_state, action) => action.payload.orders
+	);
+});
 
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
-	order: orderReducer,
+	newOrder: newOrderReducer,
 	loading: loadingReducer,
 	user: userReducer,
 	feed: feedReducer,
 	feedProfile: feedProfileReducer,
+	orders: ordersReducer,
 });

@@ -6,14 +6,16 @@ import {
 	LoginRequest,
 	ILoginResponse,
 	ILogoutResponse,
-	IOrderResponse,
 	IPasswordResetResponse,
 	IRefreshResponse,
 	RegisterRequest,
 	IRegisterResponse,
 	UpdateUserInfoRequest,
 	IUpdateUserInfoResponse,
-	FeedResponse,
+	Response,
+	Feed,
+	IPlaceOrderResponse,
+	IGetOrdersResponse,
 } from '../../types';
 import { requestWithRefresh as request } from '../../utils/index';
 
@@ -35,7 +37,7 @@ export const moveFilling = createAction<{ source: string; dest: string }>(
 	'MOVE_FILLING'
 );
 
-export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
+export const placeOrder = createAsyncThunk<IPlaceOrderResponse, string[]>(
 	'PLACE_ORDER',
 	async (ids) => {
 		const body = JSON.stringify({ ingredients: ids });
@@ -47,14 +49,14 @@ export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
 			method: 'POST',
 			body: body,
 		};
-		return await request<IOrderResponse>('orders', options);
+		return await request<IPlaceOrderResponse>('orders', options);
 	}
 );
 
-export const getOrderByNumber = createAsyncThunk<IOrderResponse, number>(
+export const getOrderByNumber = createAsyncThunk<IGetOrdersResponse, number>(
 	'GET_ORDER_BY_NUMBER',
 	async (id) => {
-		return await request<IOrderResponse>(`orders/${id}`);
+		return await request<IGetOrdersResponse>(`orders/${id}`);
 	}
 );
 
@@ -186,7 +188,7 @@ export const updateUserInfo = createAsyncThunk<
 export const feedConnect = createAction<string, 'feed/connect'>('feed/connect');
 export const feedDisconnect = createAction('feed/disconnect');
 export const feedError = createAction<string, 'feed/error'>('feed/error');
-export const feedMessage = createAction<FeedResponse, 'feed/message'>(
+export const feedMessage = createAction<Feed & Response, 'feed/message'>(
 	'feed/message'
 );
 
@@ -198,7 +200,7 @@ export const profileFeedError = createAction<string, 'profileFeed/error'>(
 	'profileFeed/error'
 );
 export const profileFeedMessage = createAction<
-	FeedResponse,
+	Feed & Response,
 	'profileFeed/message'
 >('profileFeed/message');
 

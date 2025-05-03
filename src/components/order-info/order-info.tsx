@@ -1,12 +1,12 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient, OrderDetails } from '../../types';
+import { Ingredient, Order } from '../../types';
 import { useAppSelector } from '../hooks';
 import styles from './order-info.module.css';
 import Info from './info';
 import { getRelativeDateTime } from '@utils/index';
 
 type Props = {
-	order: OrderDetails;
+	order: Order;
 };
 
 type State = {
@@ -58,7 +58,7 @@ export function OrderInfo({ order }: Props) {
 
 			<div className={`${styles.timePrice} mt-10`}>
 				<span className='text text_type_main-default text_color_inactive'>
-					{getRelativeDateTime(order.timestamp)}
+					{getRelativeDateTime(new Date(order.createdAt))}
 				</span>
 				<span className={`${styles.price} text text_type_digits-default`}>
 					{total} <CurrencyIcon type='primary' className='ml-2' />

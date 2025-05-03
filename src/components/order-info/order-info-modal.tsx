@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { OrderDetails } from '../../types';
+import { Order } from '../../types';
 import { useAppSelector } from '../hooks';
 import { OrderInfo } from './order-info';
 import { shallowEqual } from 'react-redux';
@@ -7,11 +7,13 @@ import { useCallback } from 'react';
 import Modal from '../modal/modal';
 
 export default function OrderInfoModal() {
-	const { id } = useParams();
+	const number = +useParams().number!;
 	const navigate = useNavigate();
-	const orderInfo = useAppSelector<OrderDetails | null>(
+	const orderInfo = useAppSelector<Order | undefined>(
 		(state) =>
-			state.feed.orders.find((order) => order.number.toString() === id) || null,
+			state.feed.orders.find((order) => order.number === number) ||
+			state.feedProfile.orders.find((order) => order.number === number) ||
+			state.orders.find((order) => order.number === number),
 		shallowEqual
 	);
 

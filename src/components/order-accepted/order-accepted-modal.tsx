@@ -15,7 +15,7 @@ type SelectedState = {
 const OrderAcceptedModal = () => {
 	const { order, loading } = useAppSelector<SelectedState>(
 		(state) => ({
-			order: state.order,
+			order: state.newOrder,
 			loading: state.loading,
 		}),
 		shallowEqual

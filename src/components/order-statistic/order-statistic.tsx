@@ -1,11 +1,11 @@
-import { OrderDetails } from '../../types';
+import { Order } from '../../types';
 import styles from './order-statistic.module.css';
 
 type Props = {
 	total: number;
 	totalToday: number;
-	done: ReadonlyArray<OrderDetails>;
-	inprogress: ReadonlyArray<OrderDetails>;
+	done: ReadonlyArray<Order>;
+	inprogress: ReadonlyArray<Order>;
 };
 
 export function OrderStatistic({ total, totalToday, done, inprogress }: Props) {

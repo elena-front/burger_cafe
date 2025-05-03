@@ -44,8 +44,6 @@ const App = () => {
 	return (
 		<div className={styles.app}>
 			<AppHeader />
-			<OrderAcceptedModal />
-
 			<Routes location={background || location}>
 				<Route path='/forgot-password' element={<ForgotPassword />} />
 				<Route path='/ingredients/:id' element={<IngredientDetailsPage />} />
@@ -63,7 +61,7 @@ const App = () => {
 					<Route path='orders' element={<OrderHistoryPage />} />
 				</Route>
 				<Route
-					path='/profile/orders/:id'
+					path='/profile/orders/:number'
 					element={<ProtectedRouteElement element={<OrderInfoPage />} />}
 				/>
 				<Route
@@ -74,15 +72,18 @@ const App = () => {
 				/>
 				<Route path='/reset-password' element={<ResetPassword />} />
 				<Route path='/feed' element={<Feed />}></Route>
-				<Route path='/feed/:id' element={<OrderInfoPage />} />
+				<Route path='/feed/:number' element={<OrderInfoPage />} />
 				<Route path='*' element={<NotFound404 />} />
 			</Routes>
 
 			{background && (
 				<Routes>
 					<Route path='/ingredients/:id' element={<IngredientDetailsModal />} />
-					<Route path='/feed/:id' element={<OrderInfoModal />} />
-					<Route path='/profile/orders/:id' element={<OrderInfoModal />} />
+					<Route path='/feed/:number' element={<OrderInfoModal />} />
+					<Route
+						path='/profile/orders/:number'
+						element={<ProtectedRouteElement element={<OrderInfoModal />} />}
+					/>
 				</Routes>
 			)}
 		</div>

@@ -1,9 +1,9 @@
-import { OrderDetails } from '../../types';
+import { Order } from '../../types';
 import { OrderListItem } from './order-list-item';
 import styles from './order-list.module.css';
 
 type Props = {
-	orders: ReadonlyArray<OrderDetails>;
+	orders: ReadonlyArray<Order>;
 	showStatus: boolean;
 	onItemClick?: (number: number) => void;
 };

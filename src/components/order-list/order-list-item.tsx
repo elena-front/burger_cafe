@@ -1,12 +1,12 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient, OrderDetails, OrderStatus } from '../../types';
+import { Ingredient, Order, OrderStatus } from '../../types';
 import styles from './order-list-item.module.css';
 import { useAppSelector } from '../hooks';
 import Info from '../order-info/info';
 import { getRelativeDateTime } from '@utils/index';
 
 type Props = {
-	order: OrderDetails;
+	order: Order;
 	showStatus: boolean;
 };
 
@@ -32,7 +32,7 @@ export function OrderListItem({ order, showStatus }: Props) {
 					#{order.number.toString().padStart(6, '0')}
 				</span>
 				<span className='text text_type_main-default text_color_inactive'>
-					{getRelativeDateTime(order.timestamp)}
+					{getRelativeDateTime(new Date(order.createdAt))}
 				</span>
 			</div>
 
