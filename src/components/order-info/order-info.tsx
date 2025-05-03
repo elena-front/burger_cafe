@@ -58,7 +58,7 @@ export function OrderInfo({ order }: Props) {
 
 			<div className={`${styles.timePrice} mt-10`}>
 				<span className='text text_type_main-default text_color_inactive'>
-					{getRelativeDateTime(new Date(order.createdAt))}
+					{getRelativeDateTime(new Date(order.updatedAt))}
 				</span>
 				<span className={`${styles.price} text text_type_digits-default`}>
 					{total} <CurrencyIcon type='primary' className='ml-2' />

@@ -126,7 +126,7 @@ export interface IPlaceOrderResponse extends IResponse {
 
 export enum OrderStatus {
 	CREATED = 'created',
-	INPROGRESS = 'inprogress',
+	PENDING = 'pending',
 	COMPLETED = 'done',
 	CANCELED = 'canceled',
 }

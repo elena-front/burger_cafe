@@ -1,5 +1,9 @@
 .app {
 	display: flex;
 	flex-direction: column;
-	min-width: 1240px;
+}
+
+.content {
+	width: 1240px;
+	align-self: center;
 }

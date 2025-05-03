@@ -32,7 +32,7 @@ export function OrderListItem({ order, showStatus }: Props) {
 					#{order.number.toString().padStart(6, '0')}
 				</span>
 				<span className='text text_type_main-default text_color_inactive'>
-					{getRelativeDateTime(new Date(order.createdAt))}
+					{getRelativeDateTime(new Date(order.updatedAt))}
 				</span>
 			</div>
 

@@ -14,7 +14,7 @@ const getStatusName = (orderStatus: OrderStatus): string => {
 			return 'Отменен';
 		case OrderStatus.COMPLETED:
 			return 'Выполнен';
-		case OrderStatus.INPROGRESS:
+		case OrderStatus.PENDING:
 			return 'Готовится';
 	}
 };

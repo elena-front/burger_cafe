@@ -17,7 +17,7 @@ export function Feed() {
 	);
 
 	const inprogress = feed.orders.filter(
-		(order) => order.status === OrderStatus.INPROGRESS
+		(order) => order.status === OrderStatus.PENDING
 	);
 
 	const handleItemClick = useCallback(

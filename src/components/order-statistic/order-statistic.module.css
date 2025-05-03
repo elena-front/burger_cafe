@@ -21,3 +21,17 @@
 	text-shadow: 0px 4px 32px #3333ff80, 0px 0px 8px #3333ff40,
 		0px 0px 16px #3333ff40;
 }
+
+.orderList {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	width: 280px;
+	gap: 8px;
+	height: 320px;
+	overflow-x: auto;
+}
+
+.completed {
+	color: #00cccc;
+}

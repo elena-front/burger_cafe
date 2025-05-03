@@ -14,21 +14,25 @@ export function OrderStatistic({ total, totalToday, done, inprogress }: Props) {
 			<div className={styles.status}>
 				<div className={styles.orderStatus}>
 					<div className='text text_type_main-medium'>Готовы:</div>
-					<div
-						className='text text_type_digits-default'
-						style={{ color: '#00CCCC' }}>
+					<ul className={`${styles.orderList} custom-scroll`}>
 						{done.map((item, index) => (
-							<div key={index}>{item.number.toString().padStart(6, '0')}</div>
+							<li
+								key={index}
+								className={`text text_type_digits-default ${styles.completed}`}>
+								{item.number.toString().padStart(6, '0')}
+							</li>
 						))}
-					</div>
+					</ul>
 				</div>
 				<div className={styles.orderStatus}>
 					<div className='text text_type_main-medium'>В работе:</div>
-					<div className='text text_type_digits-default'>
+					<ul className={`${styles.orderList} custom-scroll`}>
 						{inprogress.map((item, index) => (
-							<div key={index}>{item.number.toString().padStart(6, '0')}</div>
+							<li key={index} className='text text_type_digits-default'>
+								{item.number.toString().padStart(6, '0')}
+							</li>
 						))}
-					</div>
+					</ul>
 				</div>
 			</div>
 

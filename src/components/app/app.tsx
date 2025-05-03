@@ -2,7 +2,6 @@ import AppHeader from '../app-header/app-header';
 
 import styles from './app.module.css';
 
-import OrderAcceptedModal from '../order-accepted/order-accepted-modal';
 import IngredientDetailsModal from '../ingredient-details/ingredient-details-modal';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { LoginPage } from '../../pages/login';
@@ -17,6 +16,7 @@ import { ProtectedRouteElement } from '../protected-route-component/protected-ro
 import { useEffect } from 'react';
 import {
 	feedConnect,
+	feedDisconnect,
 	getUserInfo,
 	loadIngredients,
 } from '../../services/actions';
@@ -39,54 +39,73 @@ const App = () => {
 		dispatch(getUserInfo());
 		dispatch(loadIngredients());
 		dispatch(feedConnect(FEED_WS_URL));
+		return () => {
+			dispatch(feedDisconnect());
+		};
 	}, []);
 
 	return (
-		<div className={styles.app}>
-			<AppHeader />
-			<Routes location={background || location}>
-				<Route path='/forgot-password' element={<ForgotPassword />} />
-				<Route path='/ingredients/:id' element={<IngredientDetailsPage />} />
-				<Route
-					path='/login'
-					element={
-						<ProtectedRouteElement anonymous={true} element={<LoginPage />} />
-					}
-				/>
-				<Route path='/' element={<Home />} />
-				<Route
-					path='/profile'
-					element={<ProtectedRouteElement element={<Profile />} />}>
-					<Route path='' element={<Account />} />
-					<Route path='orders' element={<OrderHistoryPage />} />
-				</Route>
-				<Route
-					path='/profile/orders/:number'
-					element={<ProtectedRouteElement element={<OrderInfoPage />} />}
-				/>
-				<Route
-					path='/register'
-					element={
-						<ProtectedRouteElement anonymous={true} element={<Register />} />
-					}
-				/>
-				<Route path='/reset-password' element={<ResetPassword />} />
-				<Route path='/feed' element={<Feed />}></Route>
-				<Route path='/feed/:number' element={<OrderInfoPage />} />
-				<Route path='*' element={<NotFound404 />} />
-			</Routes>
+		<>
+			<div className={styles.app}>
+				<AppHeader />
+				<main className={styles.content}>
+					<Routes location={background || location}>
+						<Route path='/forgot-password' element={<ForgotPassword />} />
+						<Route
+							path='/ingredients/:id'
+							element={<IngredientDetailsPage />}
+						/>
+						<Route
+							path='/login'
+							element={
+								<ProtectedRouteElement
+									anonymous={true}
+									element={<LoginPage />}
+								/>
+							}
+						/>
+						<Route path='/' element={<Home />} />
+						<Route
+							path='/profile'
+							element={<ProtectedRouteElement element={<Profile />} />}>
+							<Route path='' element={<Account />} />
+							<Route path='orders' element={<OrderHistoryPage />} />
+						</Route>
+						<Route
+							path='/profile/orders/:number'
+							element={<ProtectedRouteElement element={<OrderInfoPage />} />}
+						/>
+						<Route
+							path='/register'
+							element={
+								<ProtectedRouteElement
+									anonymous={true}
+									element={<Register />}
+								/>
+							}
+						/>
+						<Route path='/reset-password' element={<ResetPassword />} />
+						<Route path='/feed' element={<Feed />}></Route>
+						<Route path='/feed/:number' element={<OrderInfoPage />} />
+						<Route path='*' element={<NotFound404 />} />
+					</Routes>
 
-			{background && (
-				<Routes>
-					<Route path='/ingredients/:id' element={<IngredientDetailsModal />} />
-					<Route path='/feed/:number' element={<OrderInfoModal />} />
-					<Route
-						path='/profile/orders/:number'
-						element={<ProtectedRouteElement element={<OrderInfoModal />} />}
-					/>
-				</Routes>
-			)}
-		</div>
+					{background && (
+						<Routes>
+							<Route
+								path='/ingredients/:id'
+								element={<IngredientDetailsModal />}
+							/>
+							<Route path='/feed/:number' element={<OrderInfoModal />} />
+							<Route
+								path='/profile/orders/:number'
+								element={<ProtectedRouteElement element={<OrderInfoModal />} />}
+							/>
+						</Routes>
+					)}
+				</main>
+			</div>
+		</>
 	);
 };
 

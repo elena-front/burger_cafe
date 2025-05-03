@@ -42,29 +42,31 @@ const AppHeader = () => {
 
 	return (
 		<header className={styles.appHeader + ' pb-4 pt-4'}>
-			<div className={styles.appHeaderLeft}>
-				<BurgerItem
-					to='/'
-					active={location.pathname === '/'}
-					text='Конструктор'
-				/>
-				<FeedItem
-					to='/feed'
-					active={location.pathname.startsWith('/feed')}
-					text='Лента заказов'
-				/>
-			</div>
+			<div className={styles.items}>
+				<div className={styles.appHeaderLeft}>
+					<BurgerItem
+						to='/'
+						active={location.pathname === '/'}
+						text='Конструктор'
+					/>
+					<FeedItem
+						to='/feed'
+						active={location.pathname.startsWith('/feed')}
+						text='Лента заказов'
+					/>
+				</div>
 
-			<Link to='/'>
-				<Logo />
-			</Link>
+				<Link to='/'>
+					<Logo />
+				</Link>
 
-			<div className={styles.appHeaderRight}>
-				<ProfileItem
-					to='/profile'
-					active={location.pathname.startsWith('/profile')}
-					text='Личный кабинет'
-				/>
+				<div className={styles.appHeaderRight}>
+					<ProfileItem
+						to='/profile'
+						active={location.pathname.startsWith('/profile')}
+						text='Личный кабинет'
+					/>
+				</div>
 			</div>
 		</header>
 	);
