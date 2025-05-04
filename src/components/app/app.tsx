@@ -14,20 +14,13 @@ import { ResetPassword } from '../../pages/reset-password';
 import { NotFound404 } from '../../pages/not-found404';
 import { ProtectedRouteElement } from '../protected-route-component/protected-route-component';
 import { useEffect } from 'react';
-import {
-	feedConnect,
-	feedDisconnect,
-	getUserInfo,
-	loadIngredients,
-} from '../../services/actions';
+import { getUserInfo, loadIngredients } from '../../services/actions';
 import { useAppDispatch } from '../hooks';
 import { Account } from '../account/account';
 import { Feed } from '../../pages/feed';
 import OrderInfoPage from '../../pages/order-info-page';
 import { OrderHistoryPage } from '../../pages/order-history-page';
 import OrderInfoModal from '../order-info/order-info-modal';
-
-const FEED_WS_URL = 'wss://norma.nomoreparties.space/orders/all';
 
 const App = () => {
 	const location = useLocation();
@@ -38,10 +31,6 @@ const App = () => {
 	useEffect(() => {
 		dispatch(getUserInfo());
 		dispatch(loadIngredients());
-		dispatch(feedConnect(FEED_WS_URL));
-		return () => {
-			dispatch(feedDisconnect());
-		};
 	}, []);
 
 	return (

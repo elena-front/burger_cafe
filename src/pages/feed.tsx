@@ -1,14 +1,18 @@
-import { useCallback } from 'react';
-import { useAppSelector } from '../components/hooks';
+import { useCallback, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../components/hooks';
 import { OrderList } from '../components/order-list/order-list';
 import { OrderStatistic } from '../components/order-statistic/order-statistic';
 import { Feed as FeedType, OrderStatus } from '../types';
 import styles from './feed.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { feedConnect, feedDisconnect } from '../services/actions';
+
+const FEED_WS_URL = 'wss://norma.nomoreparties.space/orders/all';
 
 export function Feed() {
 	const feed = useAppSelector<FeedType>((state) => state.feed);
 
+	const dispatch = useAppDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
 
@@ -26,6 +30,13 @@ export function Feed() {
 		},
 		[navigate]
 	);
+
+	useEffect(() => {
+		dispatch(feedConnect(FEED_WS_URL));
+		return () => {
+			dispatch(feedDisconnect());
+		};
+	}, []);
 
 	return (
 		<div className={styles.feedPage}>
