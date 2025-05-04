@@ -25,7 +25,22 @@
 .price {
 	display: flex;
 }
+
+.ingredientsContainer {
+	display: flex;
+	direction: rtl;
+}
+
 .ingredient {
+	position: relative;
+	margin-left: -16px;
+}
+
+.ingredient:last-of-type {
+	margin-left: 0;
+}
+
+.icon {
 	width: 100%;
 	height: 100%;
 	border-radius: 50%;
@@ -33,15 +48,16 @@
 	object-fit: cover;
 	object-position: center;
 }
+
+.iconMore {
+	opacity: 60%;
+}
+
 .iconContainer {
 	width: 64px;
 	height: 64px;
-	position: relative;
-	margin-left: -30px;
-}
-
-.iconContainer:first-child {
-	margin-left: 0;
+	background: #1c1c21;
+	border-radius: 50%;
 }
 
 .iconContainer::before {
@@ -58,7 +74,9 @@
 	-webkit-mask-composite: xor;
 }
 
-.ingredientsRow {
-	display: flex;
-	flex-direction: row;
+.counter {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }

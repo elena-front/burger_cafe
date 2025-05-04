@@ -36,8 +36,8 @@ const Modal = ({ children, title, onClose }: ModalProps) => {
 					<ModalOverlay onClose={onClose} />
 					<div className={styles.modal}>
 						<div className={styles.modalHeader}>
-							{title}
 							<CloseIcon type='primary' onClick={onClose} />
+							{title}
 						</div>
 						{children}
 					</div>

@@ -22,6 +22,7 @@ import {
 	Ingredient,
 	IngredientType,
 	Order,
+	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';

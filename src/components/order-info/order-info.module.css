@@ -1,5 +1,6 @@
 .ingredientListContainer {
 	max-height: 376px;
+	overflow-y: auto;
 }
 
 .price {

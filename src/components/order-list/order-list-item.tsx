@@ -15,6 +15,8 @@ type State = {
 	total: number;
 };
 
+const MAX_ITEMS_IN_ROW = 5;
+
 export function OrderListItem({ order, showStatus }: Props) {
 	const { ingredients, total } = useAppSelector<State>((state) => ({
 		ingredients: state.ingredients.filter((i) =>
@@ -24,6 +26,8 @@ export function OrderListItem({ order, showStatus }: Props) {
 			.map((id) => state.ingredients.find((i) => i._id === id)?.price || 0)
 			.reduce((a, b) => a + b),
 	}));
+
+	const hasMore = ingredients.length > MAX_ITEMS_IN_ROW;
 
 	return (
 		<div className={styles.listItem}>
@@ -39,16 +43,29 @@ export function OrderListItem({ order, showStatus }: Props) {
 			<Info name={order.name} status={showStatus ? order.status : undefined} />
 
 			<div className={styles.total}>
-				<div className={styles.ingredientsRow}>
-					{ingredients.map((ingredient, index) => (
-						<div className={styles.iconContainer}>
-							<img
-								key={index}
-								className={styles.ingredient}
-								src={ingredient.image}
-							/>
-						</div>
-					))}
+				<div className={styles.ingredientsContainer}>
+					{ingredients
+						.slice(0, MAX_ITEMS_IN_ROW + 1)
+						.toReversed()
+						.map((ingredient, index) => (
+							<div key={index} className={styles.ingredient}>
+								<div className={styles.iconContainer}>
+									<img
+										key={index}
+										className={`${styles.icon} ${
+											hasMore && index === 0 ? styles.iconMore : ''
+										}`}
+										src={ingredient.image}
+									/>
+								</div>
+								{hasMore && index === 0 && (
+									<div
+										className={`${styles.counter} text text_type_main-default`}>
+										+{ingredients.length - MAX_ITEMS_IN_ROW}
+									</div>
+								)}
+							</div>
+						))}
 				</div>
 
 				<span className={styles.price}>

@@ -36,7 +36,10 @@ const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
 			return json;
 		} else {
 			const error = await res.json();
-			throw new Error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			}
+			throw new Error('Error fetching API');
 		}
 	} catch (exception) {
 		console.error('error fetching API', exception);
