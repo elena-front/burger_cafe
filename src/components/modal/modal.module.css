@@ -6,11 +6,14 @@
 	background-color: #1c1c21;
 	border-radius: 40px;
 	padding: 40px 40px 40px 60px;
+	max-width: 720px;
+	box-sizing: border-box;
 }
 
 .modalHeader {
 	display: flex;
+	flex-direction: row-reverse;
 	align-items: center;
 	justify-content: space-between;
-	width: 640px;
+	height: 64px;
 }

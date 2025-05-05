@@ -2,12 +2,15 @@ import { combineReducers } from 'redux';
 import {
 	addIngredient,
 	closeOrderDetails,
+	feedMessage,
+	getOrderByNumber,
 	getUserInfo,
 	loadIngredients,
 	login,
 	logout,
 	moveFilling,
 	placeOrder,
+	profileFeedMessage,
 	refresh,
 	register,
 	removeFilling,
@@ -15,9 +18,11 @@ import {
 } from '../actions';
 import {
 	BurgerState,
+	Feed,
 	Ingredient,
 	IngredientType,
 	Order,
+	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
@@ -30,6 +35,8 @@ const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 			(_state, action) => action.payload
 		)
 );
+
+const emptyFeed: Feed = { orders: [], total: 0, totalToday: 0 };
 
 const burgerReducer = createReducer<BurgerState>(
 	{ bun: null, filling: [] },
@@ -72,7 +79,7 @@ const burgerReducer = createReducer<BurgerState>(
 			})
 );
 
-const orderReducer = createReducer<Order | null>(null, (builder) =>
+const newOrderReducer = createReducer<Order | null>(null, (builder) =>
 	builder
 		.addCase(closeOrderDetails, () => null)
 		.addCase(placeOrder.fulfilled, (_state, action) => action.payload.order)
@@ -113,10 +120,40 @@ const loadingReducer = createReducer<boolean>(false, (builder) => {
 		.addCase(placeOrder.rejected, () => false);
 });
 
+const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
+	builder.addCase(feedMessage, (state, action) => {
+		if (action.payload.success) {
+			return action.payload;
+		}
+
+		return state;
+	});
+});
+
+const feedProfileReducer = createReducer<Feed>(emptyFeed, (builder) => {
+	builder.addCase(profileFeedMessage, (state, action) => {
+		if (action.payload.success) {
+			return action.payload;
+		}
+
+		return state;
+	});
+});
+
+const ordersReducer = createReducer<ReadonlyArray<Order>>([], (builder) => {
+	builder.addCase(
+		getOrderByNumber.fulfilled,
+		(_state, action) => action.payload.orders
+	);
+});
+
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,
 	burger: burgerReducer,
-	order: orderReducer,
+	newOrder: newOrderReducer,
 	loading: loadingReducer,
 	user: userReducer,
+	feed: feedReducer,
+	feedProfile: feedProfileReducer,
+	orders: ordersReducer,
 });

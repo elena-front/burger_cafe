@@ -19,6 +19,16 @@ export type Ingredient = {
 	readonly __v: number;
 };
 
+export type Order = {
+	readonly createdAt: string;
+	readonly ingredients: ReadonlyArray<string>;
+	readonly name: string;
+	readonly number: number;
+	readonly status: OrderStatus;
+	readonly updatedAt: string;
+	readonly _id: string;
+};
+
 export type User = {
 	readonly email: string;
 	readonly name: string;
@@ -40,6 +50,11 @@ export type DraggingIngredient = {
 
 export type DraggingFilling = {
 	readonly uid: string;
+};
+
+export type Token = {
+	readonly accessToken: string;
+	readonly refreshToken: string;
 };
 
 export interface ITokenResponse {
@@ -100,11 +115,28 @@ export interface IIngredientsResponse extends IResponse {
 	readonly data: ReadonlyArray<Ingredient>;
 }
 
-export type Order = {
-	readonly number: number;
+export interface IGetOrdersResponse extends IResponse {
+	readonly orders: ReadonlyArray<Order>;
+}
+
+export interface IPlaceOrderResponse extends IResponse {
+	name: string;
+	order: Order;
+}
+
+export enum OrderStatus {
+	CREATED = 'created',
+	PENDING = 'pending',
+	COMPLETED = 'done',
+	CANCELED = 'canceled',
+}
+
+export type Feed = {
+	readonly orders: ReadonlyArray<Order>;
+	readonly total: number;
+	readonly totalToday: number;
 };
 
-export interface IOrderResponse extends IResponse {
-	readonly name: string;
-	readonly order: Order;
-}
+export type Response = {
+	readonly success: boolean;
+};

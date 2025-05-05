@@ -6,13 +6,16 @@ import {
 	LoginRequest,
 	ILoginResponse,
 	ILogoutResponse,
-	IOrderResponse,
 	IPasswordResetResponse,
 	IRefreshResponse,
 	RegisterRequest,
 	IRegisterResponse,
 	UpdateUserInfoRequest,
 	IUpdateUserInfoResponse,
+	Response,
+	Feed,
+	IPlaceOrderResponse,
+	IGetOrdersResponse,
 } from '../../types';
 import { requestWithRefresh as request } from '../../utils/index';
 
@@ -26,13 +29,15 @@ export const addIngredient = createAction<{
 	uid: string;
 }>('ADD_INGREDIENT');
 
-export const removeFilling = createAction<string>('REMOVE_FILLING');
+export const removeFilling = createAction<string, 'REMOVE_FILLING'>(
+	'REMOVE_FILLING'
+);
 
 export const moveFilling = createAction<{ source: string; dest: string }>(
 	'MOVE_FILLING'
 );
 
-export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
+export const placeOrder = createAsyncThunk<IPlaceOrderResponse, string[]>(
 	'PLACE_ORDER',
 	async (ids) => {
 		const body = JSON.stringify({ ingredients: ids });
@@ -44,7 +49,14 @@ export const placeOrder = createAsyncThunk<IOrderResponse, string[]>(
 			method: 'POST',
 			body: body,
 		};
-		return await request<IOrderResponse>('orders', options);
+		return await request<IPlaceOrderResponse>('orders', options);
+	}
+);
+
+export const getOrderByNumber = createAsyncThunk<IGetOrdersResponse, number>(
+	'GET_ORDER_BY_NUMBER',
+	async (id) => {
+		return await request<IGetOrdersResponse>(`orders/${id}`);
 	}
 );
 
@@ -172,3 +184,36 @@ export const updateUserInfo = createAsyncThunk<
 	};
 	return await request<IUpdateUserInfoResponse>('auth/user', options);
 });
+
+export const feedConnect = createAction<string, 'feed/connect'>('feed/connect');
+export const feedDisconnect = createAction('feed/disconnect');
+export const feedError = createAction<string, 'feed/error'>('feed/error');
+export const feedMessage = createAction<Feed & Response, 'feed/message'>(
+	'feed/message'
+);
+
+export const profileFeedConnect = createAction<string, 'porfileFeed/connect'>(
+	'porfileFeed/connect'
+);
+export const profileFeedDisconnect = createAction('profileFeed/disconnect');
+export const profileFeedError = createAction<string, 'profileFeed/error'>(
+	'profileFeed/error'
+);
+export const profileFeedMessage = createAction<
+	Feed & Response,
+	'profileFeed/message'
+>('profileFeed/message');
+
+export type AppActions =
+	| ReturnType<typeof moveFilling>
+	| ReturnType<typeof addIngredient>
+	| ReturnType<typeof closeOrderDetails>
+	| ReturnType<typeof removeFilling>
+	| ReturnType<typeof feedConnect>
+	| ReturnType<typeof feedDisconnect>
+	| ReturnType<typeof feedError>
+	| ReturnType<typeof feedMessage>
+	| ReturnType<typeof profileFeedConnect>
+	| ReturnType<typeof profileFeedDisconnect>
+	| ReturnType<typeof profileFeedError>
+	| ReturnType<typeof profileFeedMessage>;

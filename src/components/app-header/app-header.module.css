@@ -1,8 +1,7 @@
 .appHeader {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	background: #1c1c21;
-	align-items: center;
 }
 
 .appHeaderLeft {
@@ -24,4 +23,11 @@
 	display: flex;
 	gap: 8px;
 	padding: 20px;
+}
+
+.items {
+	align-items: center;
+	display: flex;
+	width: 1240px;
+	justify-content: space-between;
 }
