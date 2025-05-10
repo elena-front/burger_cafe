@@ -22,7 +22,6 @@ import {
 	Ingredient,
 	IngredientType,
 	Order,
-	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
@@ -38,7 +37,7 @@ const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 
 const emptyFeed: Feed = { orders: [], total: 0, totalToday: 0 };
 
-const burgerReducer = createReducer<BurgerState>(
+export const burgerReducer = createReducer<BurgerState>(
 	{ bun: null, filling: [] },
 	(builder) =>
 		builder
