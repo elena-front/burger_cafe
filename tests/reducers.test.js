@@ -55,6 +55,10 @@ const sauce1 = {
 };
 
 describe('burger reducer', () => {
+	it('initial', () => {
+		expect(burgerReducer(undefined, {})).toEqual({ bun: null, filling: [] })
+	})
+
 	it('add bun', () => {
 		const initialState = { bun: null, filling: [] };
 		expect(burgerReducer(initialState, addIngredient({ ingredient: bun1, uid: 'abcd' })))

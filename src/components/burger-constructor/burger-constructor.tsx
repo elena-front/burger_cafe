@@ -151,6 +151,7 @@ export const BurgerConstructor = () => {
 					<CurrencyIcon type='primary' className={styles.currencyIcon} />
 				</div>
 				<Button
+					data-testid={`button-put-order`}
 					htmlType='button'
 					type='primary'
 					size='large'

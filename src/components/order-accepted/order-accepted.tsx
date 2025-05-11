@@ -7,15 +7,16 @@ type Props = {
 
 const OrderAccepted = ({ orderId }: Props) => {
 	return (
-		<div className={styles.modalOrderModal}>
-			<div className='text text_type_digits-large mt-20'>
+		<div className={styles.modalOrderModal} data-testid='order-accepted'>
+			<div
+				className='text text_type_digits-large mt-20'
+				data-testid='order-number'>
 				{orderId.toString().padStart(6, '0')}
 			</div>
 			<div className='text text_type_main-default mt-8'>
 				идентификатор заказа
 			</div>
 			<CheckMarkIcon type='primary' className='mt-15' />
-			{/*<img className='mt-15'></img>*/}
 			<div className='text text_type_main-small mt-15'>
 				Ваш заказ начали готовить
 			</div>
