@@ -14,12 +14,12 @@ describe('template spec', () => {
 	});
 
 	it('display ingredient details modal', () => {
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
 		cy.get('@bun').click();
 		cy.wait(500);
 
 		cy.location().should((loc) => {
-			expect(loc.pathname).to.eq('/ingredients/643d69a5c3f7b9001cfa093c');
+			expect(loc.hash).to.eq('#/ingredients/643d69a5c3f7b9001cfa093c');
 		});
 
 		cy.get('[data-testid="modal-header"]').should(
@@ -37,12 +37,12 @@ describe('template spec', () => {
 	});
 
 	it('create burger', () => {
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
 		cy.get('[data-testid="burger-placeholder-top"]').as('top-placeholder');
 		cy.get('@bun').trigger('dragstart');
 		cy.get('@top-placeholder').trigger('drop');
 
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa0941"]').as('filling');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0941"]').as('filling');
 		cy.get('[data-testid="burger-placeholder"]').as('filling-placeholder');
 		cy.get('@filling').trigger('dragstart');
 		cy.get('@filling-placeholder').trigger('drop');
@@ -60,22 +60,22 @@ describe('template spec', () => {
 	});
 
 	it('change burger ingredients', () => {
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun-1');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun-1');
 		cy.get('[data-testid="burger-placeholder-top"]').as('top-placeholder');
 		cy.get('@bun-1').trigger('dragstart');
 		cy.get('@top-placeholder').trigger('drop');
 
 		cy.get('.constructor-element:nth(1)').as('first-filling');
 
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa0949"]').as('main-1');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0949"]').as('main-1');
 		cy.get('@main-1').trigger('dragstart');
 		cy.get('@first-filling').trigger('drop');
 
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa0943"]').as('sauce');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0943"]').as('sauce');
 		cy.get('@sauce').trigger('dragstart');
 		cy.get('@first-filling').trigger('drop');
 
-		cy.get('[href="/ingredients/643d69a5c3f7b9001cfa0940"]').as('main-2');
+		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0940"]').as('main-2');
 		cy.get('@main-2').trigger('dragstart');
 		cy.get('@first-filling').trigger('drop');
 
