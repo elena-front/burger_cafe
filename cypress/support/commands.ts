@@ -35,3 +35,13 @@
 //     }
 //   }
 // }
+Cypress.Commands.add('dragDrop', (src: string, dest: string) => {
+	cy.get(src).trigger('dragstart');
+	cy.get(dest).trigger('drop');
+});
+
+declare namespace Cypress {
+	interface Chainable {
+		dragDrop(src: string, dest: string): Chainable<Element>;
+	}
+}

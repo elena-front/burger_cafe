@@ -1,21 +1,32 @@
+const BUN_1 = '[href="#/ingredients/643d69a5c3f7b9001cfa093c"]';
+const MAIN_1 = '[href="#/ingredients/643d69a5c3f7b9001cfa0949"]';
+const MAIN_2 = '[href="#/ingredients/643d69a5c3f7b9001cfa0940"]';
+const SAUCE = '[href="#/ingredients/643d69a5c3f7b9001cfa0943"]';
+const TOP_BUN = '[data-testid="bun-top"]';
+const BOTTOM_BUN = '[data-testid="bun-bottom"]';
+const FILLING_1 = '[data-testid*="filling-"]:nth(0)';
+const FILLING_2 = '[data-testid*="filling-"]:nth(1)';
+const FILLING_3 = '[data-testid*="filling-"]:nth(2)';
+const PLACEHOLDER = '[data-testid="burger-placeholder"]:first';
+const ORDER_NUMBER = '[data-testid="order-number"]';
+
 describe('template spec', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 960);
-		cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+		cy.intercept('GET', 'api/ingredients', {
 			fixture: 'ingredients',
 		});
-		cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
+		cy.intercept('GET', 'api/auth/user', {
 			fixture: 'user',
 		});
-		cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
+		cy.intercept('POST', 'api/orders', {
 			fixture: 'orders',
 		});
 		cy.visit('./');
 	});
 
 	it('display ingredient details modal', () => {
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
-		cy.get('@bun').click();
+		cy.get(BUN_1).click();
 		cy.wait(500);
 
 		cy.location().should((loc) => {
@@ -37,83 +48,40 @@ describe('template spec', () => {
 	});
 
 	it('create burger', () => {
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun');
-		cy.get('[data-testid="burger-placeholder-top"]').as('top-placeholder');
-		cy.get('@bun').trigger('dragstart');
-		cy.get('@top-placeholder').trigger('drop');
-
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0941"]').as('filling');
-		cy.get('[data-testid="burger-placeholder"]').as('filling-placeholder');
-		cy.get('@filling').trigger('dragstart');
-		cy.get('@filling-placeholder').trigger('drop');
-
-		cy.get('.constructor-element:nth(1)').as('first-filling');
-		cy.get('@filling').trigger('dragstart');
-		cy.get('@first-filling').trigger('drop');
+		cy.dragDrop(BUN_1, PLACEHOLDER);
+		cy.dragDrop(SAUCE, PLACEHOLDER);
+		cy.dragDrop(MAIN_1, FILLING_1);
 
 		cy.get('[data-testid="button-put-order"]').click();
 		cy.wait(500);
-		cy.get('[data-testid="order-number"]').should('have.text', '076781');
+		cy.get(ORDER_NUMBER).should('have.text', '076781');
 
 		cy.get('body').type('{esc}');
-		cy.get('[data-testid="order-number"]').should('not.exist');
+		cy.get(ORDER_NUMBER).should('not.exist');
 	});
 
 	it('change burger ingredients', () => {
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa093c"]').as('bun-1');
-		cy.get('[data-testid="burger-placeholder-top"]').as('top-placeholder');
-		cy.get('@bun-1').trigger('dragstart');
-		cy.get('@top-placeholder').trigger('drop');
+		cy.dragDrop(BUN_1, PLACEHOLDER);
+		cy.dragDrop(MAIN_1, PLACEHOLDER);
+		cy.dragDrop(SAUCE, FILLING_1);
+		cy.dragDrop(MAIN_2, FILLING_1);
 
-		cy.get('.constructor-element:nth(1)').as('first-filling');
+		cy.get(TOP_BUN).should('contains.text', 'Краторная булка');
+		cy.get(FILLING_1).should('contains.text', 'Мини-салат');
+		cy.get(FILLING_2).should('contains.text', 'Соус фирменный');
+		cy.get(FILLING_3).should('contains.text', 'Говяжий метеорит');
+		cy.get(BOTTOM_BUN).should('contains.text', 'Краторная булка');
 
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0949"]').as('main-1');
-		cy.get('@main-1').trigger('dragstart');
-		cy.get('@first-filling').trigger('drop');
+		cy.dragDrop(FILLING_3, FILLING_1);
+		cy.wait(500);
 
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0943"]').as('sauce');
-		cy.get('@sauce').trigger('dragstart');
-		cy.get('@first-filling').trigger('drop');
+		cy.dragDrop(FILLING_2, FILLING_1);
+		cy.wait(500);
 
-		cy.get('[href="#/ingredients/643d69a5c3f7b9001cfa0940"]').as('main-2');
-		cy.get('@main-2').trigger('dragstart');
-		cy.get('@first-filling').trigger('drop');
-
-		cy.get('.constructor-element:nth(0)')
-			.as('bun-top')
-			.should('contains.text', 'Краторная булка');
-		cy.get('.constructor-element:nth(1)')
-			.as('filling-1')
-			.should('contains.text', 'Мини-салат');
-		cy.get('.constructor-element:nth(2)')
-			.as('filling-2')
-			.should('contains.text', 'Соус фирменный');
-		cy.get('.constructor-element:nth(3)')
-			.as('filling-3')
-			.should('contains.text', 'Говяжий метеорит');
-		cy.get('.constructor-element:nth(4)')
-			.as('bun-bottom')
-			.should('contains.text', 'Краторная булка');
-
-		cy.get('@filling-3').trigger('dragstart');
-		cy.get('@filling-1').trigger('drop');
-		cy.get('@filling-2').trigger('dragstart');
-		cy.get('@filling-3').trigger('drop');
-
-		cy.get('.constructor-element:nth(0)')
-			.as('bun-top')
-			.should('contains.text', 'Краторная булка');
-		cy.get('.constructor-element:nth(1)')
-			.as('filling-3')
-			.should('contains.text', 'Говяжий метеорит');
-		cy.get('.constructor-element:nth(2)')
-			.as('filling-1')
-			.should('contains.text', 'Мини-салат');
-		cy.get('.constructor-element:nth(3)')
-			.as('filling-2')
-			.should('contains.text', 'Соус фирменный');
-		cy.get('.constructor-element:nth(4)')
-			.as('bun-bottom')
-			.should('contains.text', 'Краторная булка');
+		cy.get(TOP_BUN).should('contains.text', 'Краторная булка');
+		cy.get(FILLING_1).should('contains.text', 'Мини-салат');
+		cy.get(FILLING_2).should('contains.text', 'Говяжий метеорит');
+		cy.get(FILLING_3).should('contains.text', 'Соус фирменный');
+		cy.get(BOTTOM_BUN).should('contains.text', 'Краторная булка');
 	});
 });

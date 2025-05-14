@@ -72,13 +72,15 @@ export const BurgerConstructor = () => {
 			)}
 			{filling.map((item) => (
 				<FillingBar key={item.uid} uid={item.uid}>
-					<ConstructorElement
-						isLocked={false}
-						text={item.ingredient.name}
-						price={item.ingredient.price}
-						thumbnail={item.ingredient.image}
-						handleClose={() => onCloseClick(item.uid)}
-					/>
+					<div data-testid={`filling-${item.uid}`}>
+						<ConstructorElement
+							isLocked={false}
+							text={item.ingredient.name}
+							price={item.ingredient.price}
+							thumbnail={item.ingredient.image}
+							handleClose={() => onCloseClick(item.uid)}
+						/>
+					</div>
 				</FillingBar>
 			))}
 		</>
@@ -89,13 +91,15 @@ export const BurgerConstructor = () => {
 			<div className={styles.constructorItem + ' pt-25 pb-4'}>
 				<div className={styles.dragIcon}></div>
 				{bun && (
-					<ConstructorElement
-						type='top'
-						isLocked={true}
-						text={`${bun.name} (верх)`}
-						price={bun.price}
-						thumbnail={bun.image}
-					/>
+					<div data-testid='bun-top'>
+						<ConstructorElement
+							type='top'
+							isLocked={true}
+							text={`${bun.name} (верх)`}
+							price={bun.price}
+							thumbnail={bun.image}
+						/>
+					</div>
 				)}
 				{!bun && (
 					<ConstructorElementPlaceholder type='top' text='Выберите булку' />
@@ -105,13 +109,15 @@ export const BurgerConstructor = () => {
 			<div className={styles.constructorItem + ' pt-4'}>
 				<div className={styles.dragIcon}></div>
 				{bun && (
-					<ConstructorElement
-						type='bottom'
-						isLocked={true}
-						text={`${bun.name} (низ)`}
-						price={bun.price}
-						thumbnail={bun.image}
-					/>
+					<div data-testid='bun-bottom'>
+						<ConstructorElement
+							type='bottom'
+							isLocked={true}
+							text={`${bun.name} (низ)`}
+							price={bun.price}
+							thumbnail={bun.image}
+						/>
+					</div>
 				)}
 				{!bun && (
 					<ConstructorElementPlaceholder text='Выберите булку' type='bottom' />
@@ -151,7 +157,7 @@ export const BurgerConstructor = () => {
 					<CurrencyIcon type='primary' className={styles.currencyIcon} />
 				</div>
 				<Button
-					data-testid={`button-put-order`}
+					data-testid='button-put-order'
 					htmlType='button'
 					type='primary'
 					size='large'

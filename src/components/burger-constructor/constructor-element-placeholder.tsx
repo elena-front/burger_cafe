@@ -11,7 +11,7 @@ export default function ConstructorElementPlaceholder(props: Props) {
 	return (
 		<div
 			className={`${styles.placeholder} ${type && styles[type]}`}
-			data-testid={`burger-placeholder${(type && '-' + type) || ''}`}>
+			data-testid='burger-placeholder'>
 			<span className='text text_type_main-default'>{text}</span>
 		</div>
 	);
