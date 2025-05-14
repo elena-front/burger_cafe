@@ -26,7 +26,8 @@
 			"@components/*": ["./src/component/*"],
 			"@services/*": ["./src/services/*"],
 			"@utils/*": ["./src/utils/*"]
-		}
+		},
+		"types": ["@testing-library/jest-dom"]
 	},
 	"outDir": "./dist/",
 	"include": ["src/**/*"]
