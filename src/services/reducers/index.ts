@@ -22,12 +22,11 @@ import {
 	Ingredient,
 	IngredientType,
 	Order,
-	OrderStatus,
 	User,
 } from '../../types';
 import { createReducer } from '@reduxjs/toolkit';
 
-const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
+export const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 	[],
 	(builder) =>
 		builder.addCase(
@@ -36,9 +35,9 @@ const ingredientsReducer = createReducer<ReadonlyArray<Ingredient>>(
 		)
 );
 
-const emptyFeed: Feed = { orders: [], total: 0, totalToday: 0 };
+export const emptyFeed: Feed = { orders: [], total: 0, totalToday: 0 };
 
-const burgerReducer = createReducer<BurgerState>(
+export const burgerReducer = createReducer<BurgerState>(
 	{ bun: null, filling: [] },
 	(builder) =>
 		builder
@@ -79,14 +78,14 @@ const burgerReducer = createReducer<BurgerState>(
 			})
 );
 
-const newOrderReducer = createReducer<Order | null>(null, (builder) =>
+export const newOrderReducer = createReducer<Order | null>(null, (builder) =>
 	builder
 		.addCase(closeOrderDetails, () => null)
 		.addCase(placeOrder.fulfilled, (_state, action) => action.payload.order)
 		.addCase(placeOrder.rejected, () => null)
 );
 
-const userReducer = createReducer<User | null>(null, (builder) => {
+export const userReducer = createReducer<User | null>(null, (builder) => {
 	builder
 		.addCase(logout.fulfilled, () => null)
 		.addCase(login.fulfilled, (_state, action) => ({
@@ -113,39 +112,43 @@ const userReducer = createReducer<User | null>(null, (builder) => {
 		}));
 });
 
-const loadingReducer = createReducer<boolean>(false, (builder) => {
+export const loadingReducer = createReducer<boolean>(false, (builder) => {
 	builder
 		.addCase(placeOrder.pending, () => true)
 		.addCase(placeOrder.fulfilled, () => false)
 		.addCase(placeOrder.rejected, () => false);
 });
 
-const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
+export const feedReducer = createReducer<Feed>(emptyFeed, (builder) => {
 	builder.addCase(feedMessage, (state, action) => {
-		if (action.payload.success) {
-			return action.payload;
+		const { success, ...feed } = action.payload;
+		if (success) {
+			return feed;
 		}
-
 		return state;
 	});
 });
 
-const feedProfileReducer = createReducer<Feed>(emptyFeed, (builder) => {
+export const feedProfileReducer = createReducer<Feed>(emptyFeed, (builder) => {
 	builder.addCase(profileFeedMessage, (state, action) => {
-		if (action.payload.success) {
-			return action.payload;
+		const { success, ...feed } = action.payload;
+		if (success) {
+			return feed;
 		}
 
 		return state;
 	});
 });
 
-const ordersReducer = createReducer<ReadonlyArray<Order>>([], (builder) => {
-	builder.addCase(
-		getOrderByNumber.fulfilled,
-		(_state, action) => action.payload.orders
-	);
-});
+export const ordersReducer = createReducer<ReadonlyArray<Order>>(
+	[],
+	(builder) => {
+		builder.addCase(
+			getOrderByNumber.fulfilled,
+			(_state, action) => action.payload.orders
+		);
+	}
+);
 
 export const rootReducer = combineReducers({
 	ingredients: ingredientsReducer,

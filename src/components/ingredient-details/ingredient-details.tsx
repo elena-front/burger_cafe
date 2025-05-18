@@ -15,7 +15,11 @@ const IngredientDetails = ({ ingredient }: IngredientDetailsProps) => {
 	return (
 		<div className={styles.ingredientDetails}>
 			<img src={ingredient.image_large} alt={ingredient.name} />
-			<p className='text text_type_main-medium mt-4'>{ingredient.name}</p>
+			<p
+				className='text text_type_main-medium mt-4'
+				data-testid='ingredient-name'>
+				{ingredient.name}
+			</p>
 			<div className={styles.details + ' mt-8'}>
 				<NutritionValue name='Калории, ккал' value={ingredient.calories} />
 				<NutritionValue name='Белки, г' value={ingredient.proteins} />
