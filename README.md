@@ -106,3 +106,68 @@ Clone the repository:
 ```bash
 git clone https://github.com/elena-front/burger_cafe.git
 cd burger_cafe
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm start
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+## Testing
+
+Run unit tests:
+
+```bash
+npm test
+```
+
+Run Cypress:
+
+```bash
+npm run cypress
+```
+
+## Deployment
+
+The project is deployed using GitHub Pages.
+
+To deploy the current version:
+
+```bash
+npm run deploy
+```
+
+## What I Practiced
+
+During this project I gained hands-on experience with:
+
+- integrating a frontend application with a REST API;
+- working with HTTP requests and JSON responses;
+- implementing authentication and protected routes;
+- working with access and refresh tokens;
+- debugging client-server interactions;
+- managing application state with Redux Toolkit;
+- implementing routing with React Router;
+- working with drag-and-drop interfaces;
+- handling user profile and order data;
+- using Git and GitHub in the development workflow;
+- testing application functionality.
+
+## Project Status
+
+Completed educational project.
+
+The application is deployed on GitHub Pages and uses an external API for backend functionality.
