@@ -1,0 +1,400 @@
+openapi: 3.1.0
+info:
+  title: Burger Cafe Demo API
+  version: 1.0.0
+  description: HTTP contract for the local in-memory backend.
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      responses:
+        '200':
+          description: Process is ready.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /ingredients:
+    get:
+      operationId: getIngredients
+      responses:
+        '200':
+          description: Full ingredient catalog.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngredientsResponse'
+  /auth/register:
+    post:
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /auth/login:
+    post:
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Credentials accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /auth/token:
+    post:
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Tokens rotated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /auth/logout:
+    post:
+      operationId: logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Refresh session revoked or already absent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /auth/user:
+    get:
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    patch:
+      operationId: updateCurrentUser
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Updated profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /password-reset:
+    post:
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '200':
+          description: Generic anti-enumeration response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /password-reset/reset:
+    post:
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+      responses:
+        '200':
+          description: Password changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /orders:
+    post:
+      operationId: createOrder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /orders/{number}:
+    get:
+      operationId: getOrderByNumber
+      parameters:
+        - name: number
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Matching order wrapped in an array for frontend compatibility.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    BadRequest:
+      description: Invalid request.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Unauthorized:
+      description: Missing, invalid or expired credentials.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Conflict:
+      description: Unique value conflict.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+  schemas:
+    Success:
+      type: object
+      required: [success]
+      properties:
+        success: { const: true }
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [success, message]
+      properties:
+        success: { const: false }
+        message: { type: string }
+    HealthResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [status]
+          properties:
+            status: { const: ok }
+    Ingredient:
+      type: object
+      additionalProperties: false
+      required: [_id, name, type, proteins, fat, carbohydrates, calories, price, image, image_mobile, image_large, __v]
+      properties:
+        _id: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [bun, main, sauce] }
+        proteins: { type: number, minimum: 0 }
+        fat: { type: number, minimum: 0 }
+        carbohydrates: { type: number, minimum: 0 }
+        calories: { type: number, minimum: 0 }
+        price: { type: number, minimum: 0 }
+        image: { type: string, format: uri }
+        image_mobile: { type: string, format: uri }
+        image_large: { type: string, format: uri }
+        __v: { type: integer, minimum: 0 }
+    User:
+      type: object
+      additionalProperties: false
+      required: [email, name]
+      properties:
+        email: { type: string, format: email }
+        name: { type: string, minLength: 1, maxLength: 80 }
+    Order:
+      type: object
+      additionalProperties: false
+      required: [_id, ingredients, status, name, number, createdAt, updatedAt]
+      properties:
+        _id: { type: string }
+        ingredients:
+          type: array
+          minItems: 3
+          items: { type: string }
+        status: { type: string, enum: [created, pending, done, canceled] }
+        name: { type: string }
+        number: { type: integer, minimum: 1 }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    IngredientsResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: '#/components/schemas/Ingredient' }
+    UserResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [user]
+          properties:
+            user: { $ref: '#/components/schemas/User' }
+    TokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [accessToken, refreshToken]
+          properties:
+            accessToken:
+              type: string
+              pattern: '^Bearer .+$'
+            refreshToken: { type: string, minLength: 1 }
+    AuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/TokenResponse'
+        - type: object
+          required: [user]
+          properties:
+            user: { $ref: '#/components/schemas/User' }
+    MessageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [message]
+          properties:
+            message: { type: string }
+    OrdersResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [orders]
+          properties:
+            orders:
+              type: array
+              items: { $ref: '#/components/schemas/Order' }
+    CreateOrderResponse:
+      allOf:
+        - $ref: '#/components/schemas/Success'
+        - type: object
+          required: [name, order]
+          properties:
+            name: { type: string }
+            order: { $ref: '#/components/schemas/Order' }
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      required: [email, name, password]
+      properties:
+        email: { type: string, format: email }
+        name: { type: string, minLength: 1, maxLength: 80 }
+        password: { type: string, minLength: 8, maxLength: 128 }
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 1, maxLength: 128 }
+    RefreshTokenRequest:
+      type: object
+      additionalProperties: false
+      required: [token]
+      properties:
+        token: { type: string, minLength: 1 }
+    UpdateUserRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        email: { type: string, format: email }
+        name: { type: string, minLength: 1, maxLength: 80 }
+        password: { type: string, minLength: 8, maxLength: 128 }
+    PasswordResetRequest:
+      type: object
+      additionalProperties: false
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+    PasswordResetConfirmRequest:
+      type: object
+      additionalProperties: false
+      required: [password, token]
+      properties:
+        password: { type: string, minLength: 8, maxLength: 128 }
+        token: { type: string, minLength: 1 }
+    CreateOrderRequest:
+      type: object
+      additionalProperties: false
+      required: [ingredients]
+      properties:
+        ingredients:
+          type: array
+          minItems: 3
+          items: { type: string, minLength: 1 }
+
