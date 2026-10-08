@@ -2,7 +2,7 @@ import {
 	Button,
 	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FormEvent, useCallback } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useForm } from '../components/hooks';
@@ -17,17 +17,24 @@ export function ForgotPassword() {
 	const navigate = useNavigate();
 
 	const { values, handleChange } = useForm<FormState>({ email: '' });
+	const [error, setError] = useState('');
 
-	const handleSubmit = useCallback((e: FormEvent) => {
-		e.preventDefault();
-		dispatch(passwordReset(values.email))
-			.unwrap()
-			.then(() => {
-				localStorage.setItem('resetPassword', 'true');
-				return navigate('/reset-password');
-			})
-			.catch(() => console.error('не удалось'));
-	}, []);
+	const handleSubmit = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			setError('');
+			dispatch(passwordReset(values.email))
+				.unwrap()
+				.then(() => {
+					localStorage.setItem('resetPassword', 'true');
+					return navigate('/reset-password');
+				})
+				.catch(() =>
+					setError('Проверьте адрес электронной почты и попробуйте снова.')
+				);
+		},
+		[dispatch, navigate, values.email]
+	);
 
 	return (
 		<div className={styles.forgotPassword}>
@@ -37,9 +44,14 @@ export function ForgotPassword() {
 				<EmailInput
 					onChange={handleChange}
 					value={values.email}
-					name={'forgotPassword'}
+					name={'email'}
 					extraClass='mb-2'
 				/>
+				{error && (
+					<p className='text text_type_main-default' role='alert'>
+						{error}
+					</p>
+				)}
 
 				<Button htmlType='submit' type='primary' size='large'>
 					Восстановить
