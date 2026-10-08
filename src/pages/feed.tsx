@@ -6,8 +6,9 @@ import { Feed as FeedType, OrderStatus } from '../types';
 import styles from './feed.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { feedConnect, feedDisconnect } from '../services/actions';
+import { WS_BASE_URL } from '../config';
 
-const FEED_WS_URL = 'wss://norma.nomoreparties.space/orders/all';
+const FEED_WS_URL = `${WS_BASE_URL}/orders/all`;
 
 export function Feed() {
 	const feed = useAppSelector<FeedType>((state) => state.feed);

@@ -1,6 +1,6 @@
 # План реализации minimal backend
 
-Статус: `planned`  
+Статус: `in progress` (этапы 1–5 реализованы; проверка приёмки — этап 6)  
 Дата фиксации: 2026-10-07  
 Связанные документы: [техническая спецификация](./SPECIFICATION.md), [OpenAPI](./openapi.yaml), [AsyncAPI](./asyncapi.yaml)
 
@@ -19,19 +19,19 @@ Backend не предназначен для production: все изменяем
 
 ## 2. Принятые решения
 
-| Область | Решение |
-|---|---|
-| Runtime | Node.js 20 LTS или новее |
-| Язык | TypeScript, отдельный `server/tsconfig.json` |
-| HTTP | Express |
-| WebSocket | `ws` на том же HTTP-сервере |
-| Валидация | Zod |
-| Пароли | `bcryptjs` |
-| Access token | JWT, 15 минут |
+| Область       | Решение                                                                      |
+| ------------- | ---------------------------------------------------------------------------- |
+| Runtime       | Node.js 20 LTS или новее                                                     |
+| Язык          | TypeScript, отдельный `server/tsconfig.json`                                 |
+| HTTP          | Express                                                                      |
+| WebSocket     | `ws` на том же HTTP-сервере                                                  |
+| Валидация     | Zod                                                                          |
+| Пароли        | `bcryptjs`                                                                   |
+| Access token  | JWT, 15 минут                                                                |
 | Refresh token | случайный непрозрачный токен, серверная сессия в памяти, ротация при refresh |
-| Хранилище | in-memory repositories + JSON/TS seed-файлы |
-| Тесты | Jest + Supertest, WebSocket smoke test |
-| Документация | OpenAPI 3.1 для HTTP, AsyncAPI 2.6 для WebSocket |
+| Хранилище     | in-memory repositories + JSON/TS seed-файлы                                  |
+| Тесты         | Jest + Supertest, WebSocket smoke test                                       |
+| Документация  | OpenAPI 3.1 для HTTP, AsyncAPI 2.6 для WebSocket                             |
 
 Причина отдельного каталога `server/`, но общего корневого `package.json`: проект остаётся одним npm workspace без второго lock-файла. Серверные зависимости и команды добавляются в существующий package manifest.
 
@@ -178,11 +178,10 @@ docs/backend/
 
 Ориентир для одного разработчика: 2–3 рабочих дня.
 
-| Блок | Оценка |
-|---|---:|
-| Каркас и данные | 0.5 дня |
-| HTTP API и auth | 0.75 дня |
-| WebSocket | 0.5 дня |
-| Интеграция frontend | 0.25 дня |
+| Блок                 |     Оценка |
+| -------------------- | ---------: |
+| Каркас и данные      |    0.5 дня |
+| HTTP API и auth      |   0.75 дня |
+| WebSocket            |    0.5 дня |
+| Интеграция frontend  |   0.25 дня |
 | Тесты и документация | 0.5–1 день |
-

@@ -1,6 +1,5 @@
 import { IRefreshResponse, IResponse } from '../types';
-
-const BASE_URL = 'https://norma.nomoreparties.space/api';
+import { API_BASE_URL } from '../config';
 
 export const requestWithRefresh = async <T extends IResponse>(
 	path: string,
@@ -27,7 +26,7 @@ export const requestWithRefresh = async <T extends IResponse>(
 
 const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
 	try {
-		const res = await fetch(`${BASE_URL}/${path}`, options);
+		const res = await fetch(`${API_BASE_URL}/${path}`, options);
 		if (res.ok) {
 			const json = await res.json();
 			if ((json as IResponse)?.success === false) {

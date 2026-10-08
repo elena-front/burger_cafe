@@ -4,8 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../components/hooks';
 import { profileFeedConnect, profileFeedDisconnect } from '../services/actions';
 import styles from './order-history-page.module.css';
+import { WS_BASE_URL } from '../config';
 
-const PROFILE_FEED_URL = 'wss://norma.nomoreparties.space/orders';
+const PROFILE_FEED_URL = `${WS_BASE_URL}/orders`;
 
 export function OrderHistoryPage() {
 	const location = useLocation();

@@ -94,6 +94,8 @@ module.exports = {
 		}),
 		new webpack.EnvironmentPlugin({
 			NODE_ENV: 'development', // значение по умолчанию 'development' если переменная process.env.NODE_ENV не передана
+			API_BASE_URL: 'http://localhost:3000/api',
+			WS_BASE_URL: 'ws://localhost:3000',
 		}),
 	],
 };

@@ -25,7 +25,7 @@ const profileFeedMiddleware = socketMiddleware({
 	disconnect: profileFeedDisconnect,
 	onError: profileFeedError,
 	onMessage: profileFeedMessage,
-});
+}, true);
 
 export const store = configureStore({
 	reducer: rootReducer,
