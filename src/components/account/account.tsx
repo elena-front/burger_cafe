@@ -34,7 +34,8 @@ export function Account() {
 	}, [initState]);
 
 	const handleSaveClick = useCallback(() => {
-		dispatch(updateUserInfo(values));
+		const { password, ...profile } = values;
+		dispatch(updateUserInfo(password ? values : profile));
 	}, [values]);
 
 	const isChanged = () => {

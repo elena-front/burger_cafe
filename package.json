@@ -83,6 +83,7 @@
 		"start:server": "tsx server/src/server.ts",
 		"typecheck:server": "tsc -p server/tsconfig.json --noEmit",
 		"test:server": "jest --config server/jest.config.js --runInBand",
+		"test:e2e": "cypress run",
 		"stylelint": "stylelint \"src/**/*.css\"",
 		"stylelint:fix": "stylelint \"src/**/*.css\" --fix",
 		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",

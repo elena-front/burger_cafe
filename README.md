@@ -34,11 +34,14 @@ API_BASE_URL=http://localhost:3001/api WS_BASE_URL=ws://localhost:3001 npm run d
 
 Demo-пользователь: `demo@burger.local` / `demo12345`. Код восстановления пароля: `000000`.
 
-Проверки backend:
+Проверки (для Cypress оба сервера должны работать):
 
 ```bash
 npm run typecheck:server
 npm run test:server
+npm test -- --runInBand
+npm run build
+npm run test:e2e
 ```
 
 Переменные окружения перечислены в [`.env.example`](./.env.example). Файл служит образцом: команды npm не загружают его автоматически. В production `JWT_SECRET` обязателен.

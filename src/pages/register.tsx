@@ -45,6 +45,7 @@ export function Register() {
 
 				<Input
 					type={'text'}
+					name={'name'}
 					placeholder={'Имя'}
 					onChange={handleChange}
 					value={values.name}
