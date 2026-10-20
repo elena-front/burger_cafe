@@ -5,6 +5,8 @@ import {
 	ActionCreatorWithPayload,
 } from '@reduxjs/toolkit';
 import { refreshToken } from '@utils/index';
+import { DEMO_MODE } from '../../config';
+import { demoFeed, demoProfileId, subscribeDemoFeed } from '../../demo/api';
 
 const RECONNECT_TIMEOUT = 3000;
 
@@ -38,9 +40,17 @@ export const socketMiddleware = <R, S>(
 		let isConnected = false;
 		let url = '';
 		let reconnectTimer = 0;
+		let unsubscribeDemo: (() => void) | null = null;
 		const { dispatch } = store;
 		return (next) => (action) => {
 			if (connect.match(action)) {
+			if (DEMO_MODE) {
+				unsubscribeDemo?.();
+				const publish = () => dispatch(onMessage(demoFeed(withTokenRefresh ? demoProfileId() ?? '__anonymous__' : undefined) as R));
+				publish();
+				unsubscribeDemo = subscribeDemoFeed(publish);
+				return next(action);
+			}
 				url = action.payload;
 				socket = new WebSocket(action.payload);
 				isConnected = true;
@@ -99,6 +109,10 @@ export const socketMiddleware = <R, S>(
 				} catch (error) {
 					dispatch(onError((error as Error).message));
 				}
+			} else if (DEMO_MODE && disconnect.match(action)) {
+				unsubscribeDemo?.();
+				unsubscribeDemo = null;
+				return next(action);
 			} else if (socket && disconnect?.match(action)) {
 				clearTimeout(reconnectTimer);
 				reconnectTimer = 0;

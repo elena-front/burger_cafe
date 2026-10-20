@@ -5,3 +5,5 @@ export const API_BASE_URL = (
 export const WS_BASE_URL = (
 	process.env.WS_BASE_URL ?? 'ws://localhost:3000'
 ).replace(/\/$/, '');
+
+export const DEMO_MODE = process.env.DEMO_MODE === 'true';

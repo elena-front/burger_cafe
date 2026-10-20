@@ -1,10 +1,12 @@
 import { IRefreshResponse, IResponse } from '../types';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, DEMO_MODE } from '../config';
+import { demoRequest } from '../demo/api';
 
 export const requestWithRefresh = async <T extends IResponse>(
 	path: string,
 	options?: RequestInit
 ): Promise<T> => {
+	if (DEMO_MODE) return demoRequest<T>(path, options);
 	try {
 		return await request<T>(path, options);
 	} catch (exception: unknown) {

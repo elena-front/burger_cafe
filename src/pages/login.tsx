@@ -3,11 +3,12 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FormEvent, useCallback } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import styles from './login.module.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useForm } from '../components/hooks';
 import { useAuth } from '../services/auth';
+import { DEMO_MODE } from '../config';
 
 type FormState = {
 	readonly email: string;
@@ -22,6 +23,7 @@ export function LoginPage() {
 
 	const dispatch = useAppDispatch();
 	const { signIn } = useAuth(dispatch);
+	const [error, setError] = useState('');
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -29,12 +31,13 @@ export function LoginPage() {
 	const handleSubmit = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
+			setError('');
 			signIn(values.email, values.password)
 				.then(() => {
 					const nextLocation = location.state?.from || '/';
 					return navigate(nextLocation, { replace: true });
 				})
-				.catch(() => console.error('не удалось войти'));
+				.catch((reason: Error) => setError(reason.message || 'Не удалось войти'));
 		},
 		[values]
 	);
@@ -59,7 +62,13 @@ export function LoginPage() {
 				<Button htmlType='submit' type='primary' size='large'>
 					Войти
 				</Button>
+				{error && <div role='alert' className='text text_type_main-default'>{error}</div>}
 			</form>
+			{DEMO_MODE && (
+				<p className='text text_type_main-default text_color_inactive'>
+					Демо-режим: demo@burger.local / demo12345. Данные сохраняются только в этом браузере.
+				</p>
+			)}
 
 			<div className={styles.questions}>
 				<div>

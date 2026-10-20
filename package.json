@@ -84,6 +84,7 @@
 		"typecheck:server": "tsc -p server/tsconfig.json --noEmit",
 		"test:server": "jest --config server/jest.config.js --runInBand",
 		"test:e2e": "cypress run",
+		"test:e2e:demo": "cypress run --env DEMO_MODE=true --spec cypress/e2e/demo-mode.cy.ts",
 		"stylelint": "stylelint \"src/**/*.css\"",
 		"stylelint:fix": "stylelint \"src/**/*.css\" --fix",
 		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
@@ -93,7 +94,7 @@
 		"commit": "npm run check && cz",
 		"test": "jest",
 		"cypress": "cypress open",
-		"predeploy": "npm run build",
+		"predeploy": "DEMO_MODE=true npm run build",
 		"deploy": "gh-pages -d dist"
 	},
 	"dependencies": {
